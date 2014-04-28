@@ -1,18 +1,3 @@
-// This file is part of libfte.
-//
-// libfte is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// libfte is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with libfte.  If not, see <http://www.gnu.org/licenses/>.
-
 #include "ranker.h"
 
 #include <assert.h>
@@ -101,7 +86,7 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
         _sigma_reverse.insert( std::pair<char,uint32_t>((char)(_symbols.at(j)), j) );
     }
 
-    // intialize all transitions in our ranker to our dead state
+    // initialize all transitions in our ranker to our dead state
     _delta.resize(_num_states);
     for (j=0; j<_num_states; j++) {
         _delta.at(j).resize(_num_symbols);
@@ -216,32 +201,42 @@ void ranker::_buildTable() {
 
 std::string ranker::unrank( const mpz_class c_in ) {
     std::string retval;
-
-    // throw _exception if input integer is not in range of pre-computed value
-    mpz_class words_in_slice = getNumWordsInLanguage( _fixed_slice, _fixed_slice );
-    if ( c_in > words_in_slice )
-        throw _InvalidUnrankInput;
-
+    
     // walk the ranker subtracting values from c until we have our n symbols
     mpz_class c = c_in;
+    uint32_t n = 0;
+    while (true) {
+        mpz_class words_in_slice = getNumWordsInLanguage( n, n );
+        if ( words_in_slice <= c ) {
+            c -= words_in_slice;
+            n += 1;
+        } else {
+            break;
+        }
+    }
+    
+    if (n>_fixed_slice) {
+        throw _InvalidRankInput;
+    }
+
     uint32_t i = 0;
     uint32_t q = _start_state;
     uint32_t char_cursor = 0;
     uint32_t state = 0;
     mpz_class char_index = 0;
-    for (i=1; i<=_fixed_slice; i++) {
+    for (i=1; i<=n; i++) {
         if (_delta_dense.at(q)) {
             // our optimized version, when _delta[q][i] is equal to n for all symbols i
             state = _delta.at(q).at(0);
             
             // We do the following two lines with a single call
             // to mpz_fdiv_qr, which is much faster.
-            // char_index = (c / _T.at(state).at(_fixed_slice-i));
-            // c = c % _T.at(state).at(_fixed_slice-i);
+            // char_index = (c / _T.at(state).at(n-i));
+            // c = c % _T.at(state).at(n-i);
             mpz_fdiv_qr( char_index.get_mpz_t(),
                          c.get_mpz_t(),
                          c.get_mpz_t(),
-                         _T.at(state).at(_fixed_slice-i).get_mpz_t() );
+                         _T.at(state).at(n-i).get_mpz_t() );
             
             char_cursor = char_index.get_ui();
         } else {
@@ -252,13 +247,13 @@ std::string ranker::unrank( const mpz_class c_in ) {
             // A call to mpz_cmp is faster than using >= directly.
             // while (c >= _T.at(state).at(n-i)) {
             while (mpz_cmp( c.get_mpz_t(),
-                            _T.at(state).at(_fixed_slice-i).get_mpz_t() )>=0) {
+                            _T.at(state).at(n-i).get_mpz_t() )>=0) {
                 
                 // Much faster to call mpz_sub, than -=.
                 // c -= _T.at(state).at(n-i);
                 mpz_sub( c.get_mpz_t(),
                          c.get_mpz_t(),
-                         _T.at(state).at(_fixed_slice-i).get_mpz_t() );
+                         _T.at(state).at(n-i).get_mpz_t() );
                 
                 char_cursor += 1;
                 state =_delta.at(q).at(char_cursor);
@@ -278,17 +273,12 @@ std::string ranker::unrank( const mpz_class c_in ) {
 }
 
 mpz_class ranker::rank( const std::string X ) {
+    uint32_t n = X.size();
     mpz_class retval = 0;
-
-    // verify len(X) is what we expect
-    if (X.length()!=_fixed_slice) {
-        throw _InvalidRankInput;
-    }
-
+    
     // walk the ranker, adding values from _T to c
     uint32_t i = 0;
     uint32_t j = 0;
-    uint32_t n = X.size();
     uint32_t symbol_as_int = 0;
     uint32_t q = _start_state;
     uint32_t state = 0;
@@ -296,7 +286,7 @@ mpz_class ranker::rank( const std::string X ) {
     for (i=1; i<=n; i++) {
         try {
             symbol_as_int = _sigma_reverse.at(X.at(i-1));
-        } catch (int e) {
+        } catch (std::exception& e) {
             throw _InvalidSymbol;
         }
 
@@ -336,6 +326,8 @@ mpz_class ranker::rank( const std::string X ) {
              _final_states.end(), q)==_final_states.end()) {
         throw _InvalidInputNoAcceptingPaths;
     }
+    
+    retval += getNumWordsInLanguage( 0, n-1 );
 
     return retval;
 }

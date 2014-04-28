@@ -47,6 +47,6 @@ TEST(CauseException, InvalidRankInputException) {
     ranker rankerObj(VALID_DFA_1, 16);
     rankerObj.rank("xxx");
     EXPECT_TRUE(false);
-  } catch (InvalidRankInput e) {
+  } catch (InvalidSymbol e) {
   }
 }

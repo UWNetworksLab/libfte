@@ -8,3 +8,11 @@ TEST(NormalUsage, Test1) {
   mpz_class   C = rankerObj.rank(X);
   EXPECT_EQ(0, C);
 }
+
+
+TEST(NormalUsage, Test2) {
+  ranker rankerObj(VALID_DFA_2, 16);
+  std::string X = rankerObj.unrank(0);
+  mpz_class   C = rankerObj.rank(X);
+  EXPECT_EQ(0, C);
+}
