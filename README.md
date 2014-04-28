@@ -1,5 +1,5 @@
-fte
-===
+libfte
+======
 
 This contains initial unit tests for (un)ranking.
 
