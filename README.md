@@ -7,7 +7,8 @@ Dependencies
 ------------
 
 * make, g++
-* GMP: http://gmplib.org/
+* GMP: https://gmplib.org/
+* Crypto++: https://cryptopp.com/
 
 ### OSX
 
@@ -15,6 +16,7 @@ On OSX: install Xcode, homebrew, then
 
 ```
 brew install --build-from-source gmp
+brew install --build-from-source cryptopp
 ```
 
 ### Debian/Ubuntu
@@ -24,7 +26,12 @@ On Debian/Ubuntu
 ```
 apt-get install build-essential
 apt-get install libgmp-dev
+apt-get install libcrypto++-dev
 ```
+
+### Windows
+
+TODO
 
 Tested on
 ---------
@@ -63,8 +70,9 @@ $ make test
 [  PASSED  ] 6 tests.
 ```
 
-Code
-----
+
+(un)ranking example
+-------------------
 
 ```c++
 #include <iostream>

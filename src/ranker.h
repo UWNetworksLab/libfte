@@ -11,8 +11,8 @@
  */
 
 
-#ifndef _RANK_UNRANK_H
-#define _RANK_UNRANK_H
+#ifndef _RANKER_H
+#define _RANKER_H
 
 #include <map>
 #include <vector>
@@ -168,4 +168,4 @@ public:
 // returns a (non-minimized) ATT FST formatted ranker
 std::string attFstFromRegex( const std::string );
 
-#endif /* _RANK_UNRANK_H */
+#endif /* _RANKER_H */
