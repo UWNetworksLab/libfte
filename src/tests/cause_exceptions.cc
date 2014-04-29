@@ -10,6 +10,14 @@ TEST(CauseException, InvalidFstFormatException1) {
   }
 }
 
+TEST(CauseException, InvalidFstFormatExceptionAsFteException1) {
+  try {
+    ranker rankerObj(INVALID_DFA_1, 16);
+    EXPECT_TRUE(false);
+  } catch (FteException e) {
+  }
+}
+
 TEST(CauseException, InvalidFstFormatException2) {
   try {
     ranker rankerObj(INVALID_DFA_2, 16);
@@ -50,3 +58,4 @@ TEST(CauseException, InvalidRankInputException) {
   } catch (InvalidSymbol e) {
   }
 }
+

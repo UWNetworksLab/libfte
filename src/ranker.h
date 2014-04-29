@@ -28,7 +28,16 @@ typedef std::vector< std::vector<mpz_class> > array_type_mpz_t2;
 typedef std::vector< std::string > array_type_string_t1;
 
 // Exceptions
-static class InvalidRankInput : public std::exception
+static class FteException : public std::exception
+{
+    virtual const char* what() const throw()
+    {
+        return "FteException";
+    }
+} _FteException;
+
+
+static class InvalidRankInput : public FteException
 {
     virtual const char* what() const throw()
     {
@@ -36,7 +45,7 @@ static class InvalidRankInput : public std::exception
     }
 } _InvalidRankInput;
 
-static class InvalidUnrankInput : public std::exception
+static class InvalidUnrankInput : public FteException
 {
     virtual const char* what() const throw()
     {
@@ -44,7 +53,7 @@ static class InvalidUnrankInput : public std::exception
     }
 } _InvalidUnrankInput;
 
-static class InvalidFstFormat : public std::exception
+static class InvalidFstFormat : public FteException
 {
     virtual const char* what() const throw()
     {
@@ -52,7 +61,7 @@ static class InvalidFstFormat : public std::exception
     }
 } _InvalidFstFormat;
 
-static class InvalidFstStateName : public std::exception
+static class InvalidFstStateName : public FteException
 {
     virtual const char* what() const throw()
     {
@@ -60,7 +69,7 @@ static class InvalidFstStateName : public std::exception
     }
 } _InvalidFstStateName;
 
-static class InvalidSymbolRange : public std::exception
+static class InvalidSymbolRange : public FteException
 {
     virtual const char* what() const throw()
     {
@@ -69,7 +78,7 @@ static class InvalidSymbolRange : public std::exception
 } _InvalidSymbolRange;
 
 
-static class InvalidInputNoAcceptingPaths : public std::exception
+static class InvalidInputNoAcceptingPaths : public FteException
 {
     virtual const char* what() const throw()
     {
@@ -77,7 +86,7 @@ static class InvalidInputNoAcceptingPaths : public std::exception
     }
 } _InvalidInputNoAcceptingPaths;
 
-static class InvalidSymbol : public std::exception
+static class InvalidSymbol : public FteException
 {
     virtual const char* what() const throw()
     {

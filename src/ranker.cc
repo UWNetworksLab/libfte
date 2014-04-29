@@ -123,7 +123,7 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
         }
     }
 
-    
+
 
     ranker::_validate();
 
@@ -201,7 +201,7 @@ void ranker::_buildTable() {
 
 std::string ranker::unrank( const mpz_class c_in ) {
     std::string retval;
-    
+
     // walk the ranker subtracting values from c until we have our n symbols
     mpz_class c = c_in;
     uint32_t n = 0;
@@ -214,7 +214,7 @@ std::string ranker::unrank( const mpz_class c_in ) {
             break;
         }
     }
-    
+
     if (n>_fixed_slice) {
         throw _InvalidRankInput;
     }
@@ -228,7 +228,7 @@ std::string ranker::unrank( const mpz_class c_in ) {
         if (_delta_dense.at(q)) {
             // our optimized version, when _delta[q][i] is equal to n for all symbols i
             state = _delta.at(q).at(0);
-            
+
             // We do the following two lines with a single call
             // to mpz_fdiv_qr, which is much faster.
             // char_index = (c / _T.at(state).at(n-i));
@@ -237,24 +237,24 @@ std::string ranker::unrank( const mpz_class c_in ) {
                          c.get_mpz_t(),
                          c.get_mpz_t(),
                          _T.at(state).at(n-i).get_mpz_t() );
-            
+
             char_cursor = char_index.get_ui();
         } else {
             // traditional goldberg-sipser ranking
             char_cursor = 0;
             state = _delta.at(q).at(char_cursor);
-            
+
             // A call to mpz_cmp is faster than using >= directly.
             // while (c >= _T.at(state).at(n-i)) {
             while (mpz_cmp( c.get_mpz_t(),
                             _T.at(state).at(n-i).get_mpz_t() )>=0) {
-                
+
                 // Much faster to call mpz_sub, than -=.
                 // c -= _T.at(state).at(n-i);
                 mpz_sub( c.get_mpz_t(),
                          c.get_mpz_t(),
                          _T.at(state).at(n-i).get_mpz_t() );
-                
+
                 char_cursor += 1;
                 state =_delta.at(q).at(char_cursor);
             }
@@ -275,7 +275,7 @@ std::string ranker::unrank( const mpz_class c_in ) {
 mpz_class ranker::rank( const std::string X ) {
     uint32_t n = X.size();
     mpz_class retval = 0;
-    
+
     // walk the ranker, adding values from _T to c
     uint32_t i = 0;
     uint32_t j = 0;
@@ -293,14 +293,14 @@ mpz_class ranker::rank( const std::string X ) {
         if (_delta_dense.at(q)) {
             // our optimized version, when _delta[q][i] is equal to n for all symbols i
             state = _delta.at(q).at(0);
-            
+
             // Orders of magnitude faster to use mpz_mul_ui,
             // compared to *.
             // tmp = _T.at(state).at(n-i) * symbol_as_int
             mpz_mul_ui( tmp.get_mpz_t(),
                         _T.at(state).at(n-i).get_mpz_t(),
                         symbol_as_int );
-            
+
             // mpz_add is faster than +=
             //retval += tmp.get_mpz_t();
             mpz_add( retval.get_mpz_t(),
@@ -310,7 +310,7 @@ mpz_class ranker::rank( const std::string X ) {
             // traditional goldberg-sipser ranking
             for (j=1; j<=symbol_as_int; j++) {
                 state = _delta.at(q).at(j-1);
-                
+
                 // mpz_add is faster than +=
                 //retval += _T.at(state).at(n-i);
                 mpz_add( retval.get_mpz_t(),
@@ -326,14 +326,14 @@ mpz_class ranker::rank( const std::string X ) {
              _final_states.end(), q)==_final_states.end()) {
         throw _InvalidInputNoAcceptingPaths;
     }
-    
+
     retval += getNumWordsInLanguage( 0, n-1 );
 
     return retval;
 }
 
 mpz_class ranker::getNumWordsInLanguage( const uint32_t min_word_length,
-                                      const uint32_t max_word_length )
+        const uint32_t max_word_length )
 {
     // verify min_word_length <= max_word_length <= _fixed_slice
     assert(0<=min_word_length);
