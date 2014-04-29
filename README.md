@@ -9,7 +9,19 @@ Dependencies
 * make, g++
 * GMP: http://gmplib.org/
 
-On OSX: install Xcode, homebrew, then ```brew install --build-from-source gmp```
+== OSX
+
+On OSX: install Xcode, homebrew, then
+
+```
+brew install --build-from-source gmp
+```
+
+== Debian/Ubuntu
+
+```
+apt-get install libgmp-dev
+```
 
 Tested on
 ---------

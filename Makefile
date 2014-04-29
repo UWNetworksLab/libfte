@@ -7,7 +7,7 @@ CXX = g++
 # compiler flags:
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
-CXXFLAGS  = -g -Wall -Isrc -I$(GTEST_DIR)/include
+CXXFLAGS  = -O3 -g -Wall -Isrc -I$(GTEST_DIR)/include
 LDFLAGS = -L$(GMP_DIR) -L$(GTEST_DIR) -lgmpxx -lgmp -lgtest
 
 # the build target executable:
