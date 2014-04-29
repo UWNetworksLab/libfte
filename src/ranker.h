@@ -148,6 +148,8 @@ private:
     array_type_mpz_t2 _T;
 
 public:
+    ranker() {};
+
     // The constructor of our rank/urank ranker class
     ranker( const std::string, const uint32_t );
 
