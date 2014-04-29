@@ -68,22 +68,28 @@ Code
 
 ```c++
 #include <iostream>
+
 #include "ranker.h"
 #include "tests/dfas.h"
 
 int main(int argc, char **argv) {
-  ranker rankerObj(VALID_DFA_1, 16);
-  std::string X = rankerObj.unrank(0);
-  mpz_class C   = rankerObj.rank(X);
-  std::cout << "X: " << X << std::endl;
-  std::cout << "C: " << C << std::endl;
-  return 0;
+    ranker rankerObj(VALID_DFA_1, 8);
+    std::string X = "bbbbbbbb";
+    mpz_class C   = rankerObj.rank(X);
+    std::string Y = rankerObj.unrank(C);
+    std::cout << "X: " << X << std::endl;
+    std::cout << "C: " << C << std::endl;
+    std::cout << "Y: " << Y << std::endl;
+    return 0;
 }
 ```
 
 which outputs
 
 ```
-X: aaaaaaaaaaaaaaaa
-C: 0
+X: bbbbbbbb
+C: 509
+Y: bbbbbbbb
 ```
+
+because ```C = 2^1 + 2^2 + ... + 2^7 + (2^8 - 1)```.
