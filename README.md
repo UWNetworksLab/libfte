@@ -73,7 +73,8 @@ Code
 #include "tests/dfas.h"
 
 int main(int argc, char **argv) {
-    ranker rankerObj(VALID_DFA_1, 8);
+    uint32_t N = 8;
+    ranker rankerObj(VALID_DFA_1, N);
     std::string X = "bbbbbbbb";
     mpz_class C   = rankerObj.rank(X);
     std::string Y = rankerObj.unrank(C);
@@ -92,4 +93,4 @@ C: 509
 Y: bbbbbbbb
 ```
 
-because ```C = 2^1 + 2^2 + ... + 2^7 + (2^8 - 1)```.
+because ```C = 2^1 + 2^2 + ... + 2^7 + (2^N - 1)```.

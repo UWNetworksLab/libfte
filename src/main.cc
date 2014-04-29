@@ -4,7 +4,8 @@
 #include "tests/dfas.h"
 
 int main(int argc, char **argv) {
-    ranker rankerObj(VALID_DFA_1, 8);
+    uint32_t N  = 8;
+    ranker rankerObj(VALID_DFA_1, N);
     std::string X = "bbbbbbbb";
     mpz_class C   = rankerObj.rank(X);
     std::string Y = rankerObj.unrank(C);
