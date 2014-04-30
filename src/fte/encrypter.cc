@@ -4,8 +4,8 @@
 
 namespace fte {
 encrypter::encrypter( std::string input_dfa, uint32_t input_max_len,
-          std::string output_dfa, uint32_t output_max_len,
-          std::string key )
+                      std::string output_dfa, uint32_t output_max_len,
+                      std::string key )
 {
     _input_ranker = ranker(input_dfa, input_max_len);
     _output_ranker = ranker(output_dfa, output_max_len);

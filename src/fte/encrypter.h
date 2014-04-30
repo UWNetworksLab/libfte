@@ -14,8 +14,8 @@ private:
     ranker _output_ranker;
 public:
     encrypter( const std::string, const uint32_t,
-         const std::string, const uint32_t,
-         const std::string );
+               const std::string, const uint32_t,
+               const std::string );
     std::string encrypt( const std::string );
     std::string decrypt( const std::string );
 

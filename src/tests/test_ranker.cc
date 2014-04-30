@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "ranker.h"
+#include "fte/ranker.h"
 #include "dfas.h"
 
 //0

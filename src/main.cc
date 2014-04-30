@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "ranker.h"
+#include "fte/ranker.h"
 #include "tests/dfas.h"
 
 int main(int argc, char **argv) {

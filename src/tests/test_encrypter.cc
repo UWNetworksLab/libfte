@@ -3,7 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "dfas.h"
-#include "encrypter.h"
+#include "fte/encrypter.h"
 
 TEST(SanityCheck, Test1) {
     std::string str = "aaaaaaaaaaaaaaaa";
@@ -21,8 +21,8 @@ TEST(SanityCheck, Test2) {
 
 TEST(FteNormalUsage, Test1) {
     fte::encrypter fteObj( VALID_DFA_1, 16,
-                VALID_DFA_1, 16,
-                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" );
+                           VALID_DFA_1, 16,
+                           "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" );
 
     std::string input_plaintext = "aaaabbbb";
     std::string ciphertext = fteObj.encrypt( input_plaintext );

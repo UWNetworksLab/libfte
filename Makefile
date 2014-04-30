@@ -13,9 +13,8 @@ LDFLAGS = -L$(GMP_DIR) -L$(GTEST_DIR) -lgmpxx -lgmp -lgtest
 # the build target executable:
 TARGET_TEST = bin/test
 OBJ_TEST = src/tests.o \
-           src/exceptions.o \
-           src/ranker.o \
-           src/encrypter.o \
+           src/fte/ranker.o \
+           src/fte/encrypter.o \
            src/tests/dfas.o \
            src/tests/test_errors.o \
            src/tests/test_encrypter.o \
@@ -23,9 +22,8 @@ OBJ_TEST = src/tests.o \
 
 TARGET_MAIN = bin/main
 OBJ_MAIN = src/main.o \
-           src/exceptions.o \
-           src/ranker.o \
-           src/encrypter.o \
+           src/fte/ranker.o \
+           src/fte/encrypter.o \
            src/tests/dfas.o
 
 all: $(GTEST_DIR)/libgtest.a $(TARGET_TEST) $(TARGET_MAIN)
