@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <sstream>
 
+namespace fte {
+
 /*
  * Please see ranker.h for a detailed explantion of the
  * methods in this file and their purpose.
@@ -67,7 +69,7 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
                 _final_states.push_back( final_state );
             }
         } else if (split_vec.size()>0) {
-            throw _InvalidFstFormat;
+            throw fte::InvalidFstFormat();
         } else {
             // blank line, ignore
         }
@@ -131,7 +133,7 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
     ranker::_buildTable();
 
     if (1 >= getNumWordsInLanguage(0, _fixed_slice)) {
-        throw _InvalidInputNoAcceptingPaths;
+        throw fte::InvalidInputNoAcceptingPaths();
     }
 }
 
@@ -139,28 +141,28 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
 void ranker::_validate() {
     // ensure ranker has at least one state
     if (0 == _states.size())
-        throw _InvalidFstFormat;
+        throw fte::InvalidFstFormat();
     if (0 == _final_states.size())
-        throw _InvalidFstFormat;
+        throw fte::InvalidFstFormat();
 
     // ensure ranker has at least one symbol
     if (0 == _sigma.size())
-        throw _InvalidFstFormat;
+        throw fte::InvalidFstFormat();
     if (0 == _sigma_reverse.size())
-        throw _InvalidFstFormat;
+        throw fte::InvalidFstFormat();
 
     // ensure we have N states, labeled 0,1,..N-1
     array_type_uint32_t1::iterator state;
     for (state=_states.begin(); state!=_states.end(); state++) {
         if (*state >= _states.size()) {
-            throw _InvalidFstStateName;
+            throw fte::InvalidFstStateName();
         }
     }
 
     // ensure all symbols are in the range 0,1,...,255
     for (uint32_t i = 0; i < _symbols.size(); i++) {
         if (_symbols.at(i) > 256) {
-            throw _InvalidSymbol;
+            throw fte::InvalidSymbol();
         }
     }
 }
@@ -216,7 +218,7 @@ std::string ranker::unrank( const mpz_class c_in ) {
     }
 
     if (n>_fixed_slice) {
-        throw _InvalidRankInput;
+        throw fte::InvalidRankInput();
     }
 
     uint32_t i = 0;
@@ -266,7 +268,7 @@ std::string ranker::unrank( const mpz_class c_in ) {
     // bail if our last state q is not in _final_states
     if (find(_final_states.begin(),
              _final_states.end(), q)==_final_states.end()) {
-        throw _InvalidInputNoAcceptingPaths;
+        throw fte::InvalidInputNoAcceptingPaths();
     }
 
     return retval;
@@ -287,7 +289,7 @@ mpz_class ranker::rank( const std::string X ) {
         try {
             symbol_as_int = _sigma_reverse.at(X.at(i-1));
         } catch (std::exception& e) {
-            throw _InvalidSymbol;
+            throw fte::InvalidSymbol();
         }
 
         if (_delta_dense.at(q)) {
@@ -324,12 +326,16 @@ mpz_class ranker::rank( const std::string X ) {
     // bail if our last state q is not in _final_states
     if (find(_final_states.begin(),
              _final_states.end(), q)==_final_states.end()) {
-        throw _InvalidInputNoAcceptingPaths;
+        throw fte::InvalidInputNoAcceptingPaths();
     }
 
     retval += getNumWordsInLanguage( 0, n-1 );
 
     return retval;
+}
+
+mpz_class ranker::getNumWordsInLanguage( const uint32_t max_word_length ) {
+    return getNumWordsInLanguage( 0, max_word_length );
 }
 
 mpz_class ranker::getNumWordsInLanguage( const uint32_t min_word_length,
@@ -350,3 +356,5 @@ mpz_class ranker::getNumWordsInLanguage( const uint32_t min_word_length,
     }
     return num_words;
 }
+
+} // namespace fte

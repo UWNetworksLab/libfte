@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv) {
     uint32_t N  = 8;
-    ranker rankerObj(VALID_DFA_1, N);
+    fte::ranker rankerObj(VALID_DFA_1, N);
     std::string X = "bbbbbbbb";
     mpz_class C   = rankerObj.rank(X);
     std::string Y = rankerObj.unrank(C);

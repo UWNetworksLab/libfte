@@ -70,6 +70,20 @@ $ make test
 [  PASSED  ] 6 tests.
 ```
 
+fte-encryption examples
+-----------------------
+
+```
+#include "fte.h"
+
+int main(int argc, char **argv) {
+    fte fteObj(..., ..., ...);
+    fte.encrypt("hello");
+    fteObj.decrypt(ciphertext);
+    return 0;
+}
+
+```
 
 (un)ranking example
 -------------------

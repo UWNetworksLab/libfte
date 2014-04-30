@@ -11,8 +11,8 @@
  */
 
 
-#ifndef _RANKER_H
-#define _RANKER_H
+#ifndef _LIBFTE_SRC_RANKER_H
+#define _LIBFTE_SRC_RANKER_H
 
 #include <map>
 #include <vector>
@@ -20,79 +20,16 @@
 #include <stdint.h>
 #include <gmpxx.h>
 
+#include "exceptions.h"
+
+namespace fte {
+
 typedef std::vector<char> array_type_char_t1;
 typedef std::vector<bool> array_type_bool_t1;
 typedef std::vector<uint32_t> array_type_uint32_t1;
 typedef std::vector< std::vector<uint32_t> > array_type_uint32_t2;
 typedef std::vector< std::vector<mpz_class> > array_type_mpz_t2;
 typedef std::vector< std::string > array_type_string_t1;
-
-// Exceptions
-static class FteException : public std::exception
-{
-    virtual const char* what() const throw()
-    {
-        return "FteException";
-    }
-} _FteException;
-
-
-static class InvalidRankInput : public FteException
-{
-    virtual const char* what() const throw()
-    {
-        return "Invalid rank input: ensure integer is within the correct range.";
-    }
-} _InvalidRankInput;
-
-static class InvalidUnrankInput : public FteException
-{
-    virtual const char* what() const throw()
-    {
-        return "Invalid unrank input: ensure string is exactly fixed length sizee.";
-    }
-} _InvalidUnrankInput;
-
-static class InvalidFstFormat : public FteException
-{
-    virtual const char* what() const throw()
-    {
-        return "Invalid FST format.";
-    }
-} _InvalidFstFormat;
-
-static class InvalidFstStateName : public FteException
-{
-    virtual const char* what() const throw()
-    {
-        return "Invalid ranker format: ranker has N states, and a state that is not in the range 0,1,...,N-1.";
-    }
-} _InvalidFstStateName;
-
-static class InvalidSymbolRange : public FteException
-{
-    virtual const char* what() const throw()
-    {
-        return "Invalid ranker format: ranker has symbol that is not in the range 0,1,...,255.";
-    }
-} _InvalidSymbolRange;
-
-
-static class InvalidInputNoAcceptingPaths : public FteException
-{
-    virtual const char* what() const throw()
-    {
-        return "Please verify your input, the string does not result in an accepting path in the ranker.";
-    }
-} _InvalidInputNoAcceptingPaths;
-
-static class InvalidSymbol : public FteException
-{
-    virtual const char* what() const throw()
-    {
-        return "Please verify your input, it contains a symbol not in the sigma of the ranker.";
-    }
-} _InvalidSymbol;
 
 class ranker {
 
@@ -163,11 +100,10 @@ public:
 
     // given integers [n,m] returns the number of words accepted by the
     // ranker that are at least length n and no greater than length m
+    mpz_class getNumWordsInLanguage( const uint32_t );
     mpz_class getNumWordsInLanguage( const uint32_t, const uint32_t );
 };
 
-// given a perl-compatiable regular-expression
-// returns a (non-minimized) ATT FST formatted ranker
-std::string attFstFromRegex( const std::string );
+} // namespace fte
 
-#endif /* _RANKER_H */
+#endif /* _LIBFTE_SRC_RANKER_H */
