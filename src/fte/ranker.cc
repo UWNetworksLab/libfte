@@ -33,14 +33,12 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
     : _fixed_slice(max_len),
       _start_state(0),
       _num_states(0),
-      _num_symbols(0)
-{
+      _num_symbols(0) {
     // construct the _start_state, _final_states and symbols/states of our ranker
     bool startStateIsntSet = true;
     std::string line;
     std::istringstream my_str_stream(dfa_str);
-    while ( getline (my_str_stream,line) )
-    {
+    while ( getline (my_str_stream,line) ) {
         if (line.empty()) break;
 
         array_type_string_t1 split_vec = tokenize( line, '\t' );
@@ -99,8 +97,7 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
 
     // fill our our transition function delta
     std::istringstream my_str_stream2(dfa_str);
-    while ( getline (my_str_stream2,line) )
-    {
+    while ( getline (my_str_stream2,line) ) {
         array_type_string_t1 split_vec = tokenize( line, '\t' );
         if (split_vec.size() == 4) {
             uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
@@ -339,8 +336,7 @@ mpz_class ranker::getNumWordsInLanguage( const uint32_t max_word_length ) {
 }
 
 mpz_class ranker::getNumWordsInLanguage( const uint32_t min_word_length,
-        const uint32_t max_word_length )
-{
+        const uint32_t max_word_length ) {
     // verify min_word_length <= max_word_length <= _fixed_slice
     assert(0<=min_word_length);
     assert(min_word_length<=max_word_length);

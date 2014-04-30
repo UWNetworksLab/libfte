@@ -11,8 +11,8 @@
  */
 
 
-#ifndef _LIBFTE_SRC_RANKER_H
-#define _LIBFTE_SRC_RANKER_H
+#ifndef _LIBFTE_SRC_FTE_RANKER_H
+#define _LIBFTE_SRC_FTE_RANKER_H
 
 #include <map>
 #include <vector>
@@ -33,7 +33,7 @@ typedef std::vector< std::string > array_type_string_t1;
 
 class ranker {
 
-private:
+  private:
     // the maximum value for which buildTable is computed
     uint32_t _fixed_slice;
 
@@ -84,7 +84,7 @@ private:
     // accepting paths of length exactly i from state q.
     array_type_mpz_t2 _T;
 
-public:
+  public:
     ranker() {};
 
     // The constructor of our rank/urank ranker class
@@ -106,4 +106,4 @@ public:
 
 } // namespace fte
 
-#endif /* _LIBFTE_SRC_RANKER_H */
+#endif /* _LIBFTE_SRC_FTE_RANKER_H */

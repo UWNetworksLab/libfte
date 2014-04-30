@@ -1,18 +1,22 @@
-#ifndef _LIBFTE_SRC_FTE_H
-#define _LIBFTE_SRC_FTE_H
+#ifndef _LIBFTE_SRC_FTE_ENCRYPTER_H
+#define _LIBFTE_SRC_FTE_ENCRYPTER_H
 
 #include <iostream>
 #include <string.h>
+
 #include "exceptions.h"
 #include "ranker.h"
+#include "ffx2.h"
 
 namespace fte {
 
 class encrypter {
-private:
+  private:
     ranker _input_ranker;
     ranker _output_ranker;
-public:
+    std::string _key;
+    fte::ffx2 _ffx;
+  public:
     encrypter( const std::string, const uint32_t,
                const std::string, const uint32_t,
                const std::string );
@@ -23,4 +27,4 @@ public:
 
 } // namespace fte
 
-#endif /* _LIBFTE_SRC_FTE_H */
+#endif /* _LIBFTE_SRC_FTE_ENCRYPTER_H */

@@ -14,6 +14,7 @@ LDFLAGS = -L$(GMP_DIR) -L$(GTEST_DIR) -lgmpxx -lgmp -lgtest
 TARGET_TEST = bin/test
 OBJ_TEST = src/tests.o \
            src/fte/ranker.o \
+           src/fte/ffx2.o \
            src/fte/encrypter.o \
            src/tests/dfas.o \
            src/tests/test_errors.o \
@@ -23,10 +24,18 @@ OBJ_TEST = src/tests.o \
 TARGET_MAIN = bin/main
 OBJ_MAIN = src/main.o \
            src/fte/ranker.o \
+           src/fte/ffx2.o \
            src/fte/encrypter.o \
            src/tests/dfas.o
 
-all: $(GTEST_DIR)/libgtest.a $(TARGET_TEST) $(TARGET_MAIN)
+OBJ_AES = src/aes/aes_modes.o \
+          src/aes/aescrypt.o \
+          src/aes/aeskey.o \
+          src/aes/aestab.o
+
+LIBAES = src/aes/libaes.a
+
+all: $(GTEST_DIR)/libgtest.a $(LIBAES) $(TARGET_TEST) $(TARGET_MAIN)
 
 $(GTEST_DIR)/libgtest.a:
 	cd $(GTEST_DIR) && cmake . && $(MAKE)
@@ -40,6 +49,9 @@ $(TARGET_TEST): $(OBJ_TEST)
 $(TARGET_MAIN): $(OBJ_MAIN)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
+$(LIBAES): $(OBJ_AES)
+	ar rsc $(LIBAES) $(OBJ_AES)
+
 test:
 	@./$(TARGET_TEST)
 
@@ -48,3 +60,5 @@ clean:
 	$(RM) $(OBJ_TEST)
 	$(RM) $(TARGET_MAIN)
 	$(RM) $(OBJ_MAIN)
+	$(RM) $(LIBAES)
+	$(RM) $(OBJ_AES)
