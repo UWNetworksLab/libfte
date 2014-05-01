@@ -1,5 +1,6 @@
 GTEST_DIR = thirdparty/gtest-1.7.0
 GMP_DIR = /usr/local/lib
+AES_DIR = src/aes
 
 # the compiler: gcc for C program, define as g++ for C++
 CXX = g++
@@ -8,7 +9,7 @@ CXX = g++
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
 CXXFLAGS  = -O3 -g -Wall -Isrc -I$(GTEST_DIR)/include
-LDFLAGS = -L$(GMP_DIR) -L$(GTEST_DIR) -lgmpxx -lgmp -lgtest
+LDFLAGS = -L$(GMP_DIR) -L$(AES_DIR) -L$(GTEST_DIR) -lgmp -lgmpxx -laes -lgtest
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -19,6 +20,7 @@ OBJ_TEST = src/tests.o \
            src/tests/dfas.o \
            src/tests/test_errors.o \
            src/tests/test_encrypter.o \
+           src/tests/test_ffx2.o \
            src/tests/test_ranker.o
 
 TARGET_MAIN = bin/main

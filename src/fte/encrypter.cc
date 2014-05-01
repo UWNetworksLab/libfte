@@ -21,8 +21,8 @@ encrypter::encrypter( std::string input_dfa, uint32_t input_max_len,
         throw fte::FteException();
     }
     
-    _input_language_capacity = round(log(_words_in_input_language));
-    _output_language_capacity = round(log(_words_in_output_language));
+    _input_language_capacity = mpz_sizeinbase(_words_in_input_language.get_mpz_t(),2);
+    _output_language_capacity = mpz_sizeinbase(_words_in_output_language.get_mpz_t(),2);
 }
 
 std::string encrypter::encrypt( std::string plaintext ) {

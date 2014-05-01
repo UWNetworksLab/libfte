@@ -4,6 +4,7 @@
 #include <gmpxx.h>
 
 namespace fte {
+mpz_class extract_bit_range( const mpz_class, const uint32_t, const uint32_t );    
 class ffx2 {
   public:
     ffx2() {};
