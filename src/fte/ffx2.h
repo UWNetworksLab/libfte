@@ -7,10 +7,10 @@ namespace fte {
 class ffx2 {
   public:
     ffx2() {};
-    mpz_class encrypt( const std::string, const mpz_class );
-    mpz_class decrypt( const std::string, const mpz_class );
-    mpz_class encrypt( const std::string, const mpz_class, const mpz_class );
-    mpz_class decrypt( const std::string, const mpz_class, const mpz_class );
+    mpz_class encrypt( const std::string, const mpz_class, const uint32_t );
+    mpz_class decrypt( const std::string, const mpz_class, const uint32_t );
+    mpz_class encrypt( const std::string, const mpz_class, const uint32_t, const mpz_class, const uint32_t );
+    mpz_class decrypt( const std::string, const mpz_class, const uint32_t, const mpz_class, const uint32_t );
 };
 }
 

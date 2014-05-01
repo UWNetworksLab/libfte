@@ -16,6 +16,10 @@ class encrypter {
     ranker _output_ranker;
     std::string _key;
     fte::ffx2 _ffx;
+    mpz_class _words_in_input_language;
+    mpz_class _words_in_output_language;
+    uint32_t _input_language_capacity;
+    uint32_t _output_language_capacity;
   public:
     encrypter( const std::string, const uint32_t,
                const std::string, const uint32_t,

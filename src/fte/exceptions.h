@@ -57,17 +57,6 @@ class InvalidSymbol : public FteException {
     }
 };
 
-//static FteException _FteException;
-
-/*static FteException _FteException;
-static InvalidRankInput _InvalidRankInput;
-static InvalidUnrankInput _InvalidUnrankInput;
-static InvalidFstFormat _InvalidFstFormat;
-static InvalidFstStateName _InvalidFstStateName;
-static InvalidSymbolRange _InvalidSymbolRange;
-static InvalidInputNoAcceptingPaths _InvalidInputNoAcceptingPaths;
-static InvalidSymbol _InvalidSymbol;*/
-
 } // namespace fte
 
 #endif /* _LIBFTE_SRC_EXCEPTIONS_H */
