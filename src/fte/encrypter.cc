@@ -20,7 +20,7 @@ encrypter::encrypter( std::string input_dfa, uint32_t input_max_len,
     if ( _words_in_input_language > _words_in_output_language ) {
         throw fte::FteException();
     }
-    
+
     _input_language_capacity = mpz_sizeinbase(_words_in_input_language.get_mpz_t(),2);
     _output_language_capacity = mpz_sizeinbase(_words_in_output_language.get_mpz_t(),2);
 }
