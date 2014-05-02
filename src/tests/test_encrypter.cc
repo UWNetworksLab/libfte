@@ -19,7 +19,7 @@ TEST(SanityCheck, Test2) {
     EXPECT_EQ( true, match );
 }
 
-TEST(FteNormalUsage, Test1) {
+/*TEST(FteNormalUsage, Test1) {
     fte::encrypter fteObj( VALID_DFA_1, 16,
                            VALID_DFA_1, 16,
                            "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" );
@@ -34,4 +34,4 @@ TEST(FteNormalUsage, Test1) {
     bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
 
     EXPECT_EQ( true, match );
-}
+}*/
