@@ -19,18 +19,19 @@ TEST(SanityCheck, Test2) {
     EXPECT_EQ( true, match );
 }
 
-/*TEST(FteNormalUsage, Test1) {
-    fte::encrypter fteObj( VALID_DFA_1, 16,
-                           VALID_DFA_1, 16,
-                           "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" );
+/*TEST(FteNormalUsage, FpeTest1) {
+    std::string K = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00";
+    fte::encrypter fteObj( VALID_DFA_1, 64,
+                           VALID_DFA_1, 64,
+                           K );
 
-    std::string input_plaintext = "aaaabbbb";
+    std::string input_plaintext = "aaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";
     std::string ciphertext = fteObj.encrypt( input_plaintext );
     std::string output_plaintext = fteObj.decrypt( ciphertext );
 
     EXPECT_EQ( input_plaintext, output_plaintext );
 
-    std::regex rx("^(a|b){1,16}$");
+    std::regex rx("^(a|b){1,64}$");
     bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
 
     EXPECT_EQ( true, match );
