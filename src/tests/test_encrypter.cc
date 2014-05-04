@@ -36,3 +36,21 @@ TEST(FteNormalUsage, FpeTest1) {
 
     EXPECT_EQ( true, match );
 }
+
+TEST(FteNormalUsage, FteTest1) {
+    fte::key K = "00000000000000000000000000000000";
+    fte::encrypter fteObj( VALID_DFA_1, 32,
+                           VALID_DFA_1, 64,
+                           K );
+
+    std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    std::string ciphertext = fteObj.encrypt( input_plaintext );
+    std::string output_plaintext = fteObj.decrypt( ciphertext );
+
+    EXPECT_EQ( input_plaintext, output_plaintext );
+
+    std::regex rx("^(a|b){1,64}$");
+    bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
+
+    EXPECT_EQ( true, match );
+}

@@ -7,7 +7,6 @@
 
 namespace fte {
 
-
 encrypter::encrypter( const std::string input_dfa, const uint32_t input_max_len,
                       const std::string output_dfa, const uint32_t output_max_len,
                       const fte::key key ) {
@@ -33,6 +32,8 @@ encrypter::encrypter( const std::string input_dfa, const uint32_t input_max_len,
 }
 
 std::string encrypter::encrypt( const std::string plaintext ) {
+    // TODO: validate that input plaintext is in input language
+    
     mpz_class plaintext_rank = _input_ranker.rank(plaintext);
     mpz_class C = _ffx.encrypt( _key, plaintext_rank, _output_language_capacity );
     std::string retval = _output_ranker.unrank(C);
@@ -40,9 +41,12 @@ std::string encrypter::encrypt( const std::string plaintext ) {
 }
 
 std::string encrypter::decrypt( const std::string ciphertext ) {
+    // TODO: validate that input plaintext is in output language
+    
     mpz_class C = _output_ranker.rank(ciphertext);
     mpz_class plaintext_rank = _ffx.decrypt( _key, C, _output_language_capacity );
     std::string retval = _input_ranker.unrank(plaintext_rank);
     return retval;
 }
+
 } // namespace fte

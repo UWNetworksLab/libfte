@@ -89,7 +89,7 @@ mpz_class CBC_MAC( const fte::key K, const mpz_class X, const uint32_t X_len ) {
 
     retval = extract_bit_range( retval, byte_string_len*8, byte_string_len*8 - 128, byte_string_len*8 - 1 );
 
-    // TODO: cleanup
+    // cleanup
     delete[] iv;
     delete[] key;
     delete[] inBuffer;
@@ -190,16 +190,19 @@ mpz_class ffx2::encrypt( const fte::key K ,
     uint32_t A_len = l;
     uint32_t B_len = n-l;
 
-    mpz_class modulus = 0;
-    mpz_ui_pow_ui(modulus.get_mpz_t(), 2, std::max(A_len,B_len) );
-
     mpz_class C = 0;
     uint32_t i = 0;
     for (i=0; i<=(r-1); i++) {
-        //std::cout << " F " << F(K,n,T,T_len,i,B,B_len) << std::endl;
-        //std::cout << " A_len B_len " << A_len << " " << B_len << std::endl;
-        //std::cout << " A B " << A << " " << B << std::endl;
-        C = A + F(K,n,T,T_len,i,B,std::max(A_len,B_len));
+        uint32_t m = 0;
+        if ((i%2) == 0) {
+            m = floor( n / 2.0 );
+        } else {
+            m = ceil( n / 2.0 );
+        }
+        mpz_class modulus = 0;
+        mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m );
+        
+        C = A + F(K,n,T,T_len,i,B,m);
         C = C % modulus;
         A = B;
         B = C;
@@ -227,15 +230,21 @@ mpz_class ffx2::decrypt( const fte::key K,
     uint32_t A_len = l;
     uint32_t B_len = n-l;
 
-    mpz_class modulus = 0;
-    mpz_ui_pow_ui( modulus.get_mpz_t(), 2, std::max(A_len,B_len) );
-
     mpz_class C = 0;
     int32_t i = 0;
     for (i=r-1; i>=0; i--) {
+        uint32_t m = 0;
+        if ((i%2) == 0) {
+            m = floor( n / 2.0 );
+        } else {
+            m = ceil( n / 2.0 );
+        }
+        mpz_class modulus = 0;
+        mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m );
+        
         C = B;
         B = A;
-        A = C - F(K,n,T,T_len,i,B,std::max(A_len,B_len));
+        A = C - F(K,n,T,T_len,i,B,m);
         while (A<0) A += modulus;
         A = A % modulus;
     }

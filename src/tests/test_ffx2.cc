@@ -186,6 +186,15 @@ TEST(FFX2, TestVector6) {
     EXPECT_EQ( Y, 3223057243 );
 }
 
+TEST(FFX2, TestVector7) {
+    fte::ffx2 ffxObj = fte::ffx2::ffx2();
+    fte::key K = "00000000000000000000000000000000";
+    mpz_class X = mpz_class("19531846666280701709");
+    uint32_t X_len = 65;
+    mpz_class Y = ffxObj.encrypt(K, X, X_len);
+    EXPECT_EQ( Y, mpz_class("24174057300333921796") );
+}
+
 TEST(FFX2Malicous, ShortKey1) {
     try {
     fte::ffx2 ffxObj = fte::ffx2::ffx2();
