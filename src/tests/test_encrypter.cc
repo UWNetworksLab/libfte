@@ -19,8 +19,8 @@ TEST(SanityCheck, Test2) {
     EXPECT_EQ( true, match );
 }
 
-/*TEST(FteNormalUsage, FpeTest1) {
-    std::string K = "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00";
+TEST(FteNormalUsage, FpeTest1) {
+    fte::key K = "00000000000000000000000000000000";
     fte::encrypter fteObj( VALID_DFA_1, 64,
                            VALID_DFA_1, 64,
                            K );
@@ -35,4 +35,4 @@ TEST(SanityCheck, Test2) {
     bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
 
     EXPECT_EQ( true, match );
-}*/
+}

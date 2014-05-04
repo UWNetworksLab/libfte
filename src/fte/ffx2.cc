@@ -6,6 +6,7 @@
 #include <gmpxx.h>
 
 #include "ffx2.h"
+#include "exceptions.h"
 #include "aes/aes.h"
 
 namespace fte {
@@ -53,17 +54,16 @@ void fte_key_to_char_array( std::string key_in, const uint32_t out_len, unsigned
 
 mpz_class CBC_MAC( const fte::key K, const mpz_class X, const uint32_t X_len ) {
     mpz_class retval = 0;
-    
+
     uint32_t byte_string_len = X_len / 8;
-    
+
     assert( ((X_len / 8)%16) == 0 );
 
     uint8_t i = 0;
     aes_encrypt_ctx ctx[1];
+    
     unsigned char * iv = new unsigned char[16];
     unsigned char * key = new unsigned char[16];
-    size_t line_as_bytes_len = 0;
-
     unsigned char * inBuffer = new unsigned char[byte_string_len];
     unsigned char * outBuffer = new unsigned char[byte_string_len];
 
@@ -73,12 +73,12 @@ mpz_class CBC_MAC( const fte::key K, const mpz_class X, const uint32_t X_len ) {
     }
 
     mpz_to_char_array( X, byte_string_len, inBuffer );
-    
+
     for(i = 0; i < 16; ++i) {
         iv[i] = 0x00;
         key[i] = 0x00;
     }
-    
+
     fte_key_to_char_array( K.getKey(), 16, key );
 
     aes_init();
@@ -86,11 +86,15 @@ mpz_class CBC_MAC( const fte::key K, const mpz_class X, const uint32_t X_len ) {
     aes_cbc_encrypt(inBuffer, outBuffer, byte_string_len, iv, ctx);
 
     char_array_to_mpz( outBuffer, byte_string_len, retval );
-    
+
     retval = extract_bit_range( retval, byte_string_len*8, byte_string_len*8 - 128, byte_string_len*8 - 1 );
 
     // TODO: cleanup
-    
+    delete[] iv;
+    delete[] key;
+    delete[] inBuffer;
+    delete[] outBuffer;
+
     return retval;
 }
 
@@ -134,44 +138,18 @@ mpz_class F(const fte::key K,
     uint32_t T_offset = ((((-1 * t) - b - 1) % 16) * 8);
     T_offset += 8;
     T_offset += B_bits;
-    
+
     uint32_t Q_len = T_len + T_offset;
     Q += mpz_class(T) << T_offset;
     Q += mpz_class(i) << B_bits;
     Q += B;
 
-    //std::cout << " B_bits "  << B_bits << std::endl;  
-    //std::cout << " b "  << b << std::endl;   
-    //std::cout << " Q " << T << " " << i << " " << B << std::endl;
-
     mpz_class Y = 0;
 
-    /*std::cout << "b " << b << std::endl;
-    std::cout << "i " << i << std::endl;
-    std::cout << "m " << m << std::endl;
-    std::cout << "n " << n << std::endl;
-    std::cout << "t " << t << std::endl;
-    std::cout << "B_len " << B_len << std::endl;
-    std::cout << "B_bits " << B_bits << std::endl;
-    std::cout << "P_len " << P_len << std::endl;
-    std::cout << "Q_len " << Q_len << std::endl;
-    std::cout << "T_len " << T_len << std::endl;
-    std::cout << "T_offset " << T_offset << std::endl;*/
-    
     assert( ((P_len / 8)%16) == 0 );
     assert( ((Q_len / 8)%16) == 0 );
-    
-    
-    //std::cout << "Y0 " << P << " " << Q << std::endl;
-    //std::cout << "Y1 " << (P<<Q_len) + Q << std::endl;
-    
+
     Y = CBC_MAC(K, (P<<Q_len) + Q, P_len + Q_len);
-
-    //std::cout << "Y1 " << Y << std::endl;
-    
-    //Y = extract_bit_range( Z, Z_len*8, 0, (d+4)*8-1 ) ;
-
-    //std::cout << "Y2 " << Y << std::endl;
 
     mpz_class Z = Y;
     uint32_t Z_len = 16;
@@ -181,17 +159,13 @@ mpz_class F(const fte::key K,
         //ctxt = AES(K, Y^[1]^16)
         //Z += ctxt;
     }
-    
-    Y = extract_bit_range( Z, Z_len*8, 0, (d+4)*8-1 ) ;
 
-    //std::cout << "Y3 " << Y << std::endl;
+    Y = extract_bit_range( Z, Z_len*8, 0, (d+4)*8-1 );
 
     mpz_class modulus = 0;
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m );
     Y = Y % modulus;
-    
-    //std::cout << "Y4 " << Y << std::endl;
-    
+
     retval = Y;
 
     return retval;
@@ -202,8 +176,10 @@ mpz_class ffx2::encrypt( const fte::key K ,
                          const mpz_class T, const uint32_t T_len,
                          const mpz_class X, const uint32_t X_len ) {
 
-    assert(X>0);
-    
+    if (K.length() != 32) {
+        throw fte::InvalidKeyLength();
+    }
+
     mpz_class retval = 0;
 
     uint32_t n = X_len; // input length of message
@@ -237,7 +213,9 @@ mpz_class ffx2::encrypt( const fte::key K ,
 mpz_class ffx2::decrypt( const fte::key K,
                          const mpz_class T, const uint32_t T_len,
                          const mpz_class Y, const uint32_t Y_len ) {
-    assert(Y>0);
+    if (K.length() != 32) {
+        throw fte::InvalidKeyLength();
+    }
     
     mpz_class retval = 0;
 

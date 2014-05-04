@@ -57,6 +57,12 @@ class InvalidSymbol : public FteException {
     }
 };
 
+class InvalidKeyLength : public FteException {
+    virtual const char* what() const throw() {
+        return "Invalid key length.";
+    }
+};
+
 } // namespace fte
 
 #endif /* _LIBFTE_SRC_EXCEPTIONS_H */

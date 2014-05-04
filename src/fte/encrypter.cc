@@ -7,10 +7,15 @@
 
 namespace fte {
 
-     
+
 encrypter::encrypter( const std::string input_dfa, const uint32_t input_max_len,
                       const std::string output_dfa, const uint32_t output_max_len,
                       const fte::key key ) {
+    
+    if (key.length() != 32) {
+        throw fte::InvalidKeyLength();
+    }
+    
     _input_ranker = ranker(input_dfa, input_max_len);
     _output_ranker = ranker(output_dfa, output_max_len);
     _key = key;

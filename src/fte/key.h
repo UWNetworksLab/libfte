@@ -6,11 +6,11 @@
 #include <string.h>
 
 namespace fte {
-    
+
 class key {
-private:
+  private:
     std::string _key;
-public:
+  public:
     key() {};
     key( const std::string );
     key( const char * );

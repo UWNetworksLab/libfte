@@ -4,18 +4,12 @@
 
 namespace fte {
 
-key::key( const std::string key ) 
-{
+key::key( const std::string key ) {
     _key = key;
-    
-    assert(_key.length()==32);
 }
 
-key::key( const char * key ) 
-{
+key::key( const char * key ) {
     _key = key;
-    
-    assert(_key.length()==32);
 }
 
 std::string key::getKey() const {
@@ -25,7 +19,7 @@ std::string key::getKey() const {
 // bool validateKey( )
 
 uint32_t key::length() const {
-    return 16;
+    return _key.length();
 }
 
 }
