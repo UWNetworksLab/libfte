@@ -17,6 +17,7 @@ OBJ_TEST = src/tests.o \
            src/fte/ranker.o \
            src/fte/ffx2.o \
            src/fte/encrypter.o \
+           src/fte/key.o \
            src/tests/dfas.o \
            src/tests/test_errors.o \
            src/tests/test_encrypter.o \
@@ -28,6 +29,7 @@ OBJ_MAIN = src/main.o \
            src/fte/ranker.o \
            src/fte/ffx2.o \
            src/fte/encrypter.o \
+           src/fte/key.o \
            src/tests/dfas.o
 
 OBJ_AES = src/aes/aes_modes.o \

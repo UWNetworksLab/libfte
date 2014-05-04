@@ -6,9 +6,11 @@
 #include "ffx2.h"
 
 namespace fte {
-encrypter::encrypter( std::string input_dfa, uint32_t input_max_len,
-                      std::string output_dfa, uint32_t output_max_len,
-                      std::string key ) {
+
+     
+encrypter::encrypter( const std::string input_dfa, const uint32_t input_max_len,
+                      const std::string output_dfa, const uint32_t output_max_len,
+                      const fte::key key ) {
     _input_ranker = ranker(input_dfa, input_max_len);
     _output_ranker = ranker(output_dfa, output_max_len);
     _key = key;
@@ -25,14 +27,14 @@ encrypter::encrypter( std::string input_dfa, uint32_t input_max_len,
     _output_language_capacity = mpz_sizeinbase(_words_in_output_language.get_mpz_t(),2);
 }
 
-std::string encrypter::encrypt( std::string plaintext ) {
+std::string encrypter::encrypt( const std::string plaintext ) {
     mpz_class plaintext_rank = _input_ranker.rank(plaintext);
     mpz_class C = _ffx.encrypt( _key, plaintext_rank, _output_language_capacity );
     std::string retval = _output_ranker.unrank(C);
     return retval;
 }
 
-std::string encrypter::decrypt( std::string ciphertext ) {
+std::string encrypter::decrypt( const std::string ciphertext ) {
     mpz_class C = _output_ranker.rank(ciphertext);
     mpz_class plaintext_rank = _ffx.decrypt( _key, C, _output_language_capacity );
     std::string retval = _input_ranker.unrank(plaintext_rank);

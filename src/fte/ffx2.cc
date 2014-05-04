@@ -42,16 +42,26 @@ void char_array_to_mpz( unsigned char * in, const uint32_t in_len, mpz_class & o
     }
 }
 
-mpz_class CBC_MAC( const std::string K, const mpz_class X, const uint32_t X_len ) {
+void fte_key_to_char_array( std::string key_in, const uint32_t out_len, unsigned char * & key_out ) {
+    int32_t i = 0;
+    for (i=0; i<out_len; i++) {
+        std::string nugget = key_in.substr(i*2,2);
+        mpz_class N = mpz_class(nugget, 16);
+        key_out[i] = (unsigned char)N.get_ui();
+    }
+}
+
+mpz_class CBC_MAC( const fte::key K, const mpz_class X, const uint32_t X_len ) {
     mpz_class retval = 0;
     
     uint32_t byte_string_len = X_len / 8;
+    
     assert( ((X_len / 8)%16) == 0 );
 
     uint8_t i = 0;
     aes_encrypt_ctx ctx[1];
-    unsigned char iv[16];
-    unsigned char key[16];
+    unsigned char * iv = new unsigned char[16];
+    unsigned char * key = new unsigned char[16];
     size_t line_as_bytes_len = 0;
 
     unsigned char * inBuffer = new unsigned char[byte_string_len];
@@ -65,15 +75,11 @@ mpz_class CBC_MAC( const std::string K, const mpz_class X, const uint32_t X_len 
     mpz_to_char_array( X, byte_string_len, inBuffer );
     
     for(i = 0; i < 16; ++i) {
+        iv[i] = 0x00;
         key[i] = 0x00;
     }
     
-    // probably not safe?
-    std::copy(K.begin(), K.end(), key);
-   
-    for(i = 0; i < 16; ++i) {
-        iv[i] = 0x00;
-    }
+    fte_key_to_char_array( K.getKey(), 16, key );
 
     aes_init();
     aes_encrypt_key128(key, ctx);
@@ -81,12 +87,14 @@ mpz_class CBC_MAC( const std::string K, const mpz_class X, const uint32_t X_len 
 
     char_array_to_mpz( outBuffer, byte_string_len, retval );
     
-    retval = extract_bit_range( retval, byte_string_len*8, byte_string_len*8 - 128, byte_string_len*8 - 1);
+    retval = extract_bit_range( retval, byte_string_len*8, byte_string_len*8 - 128, byte_string_len*8 - 1 );
 
+    // TODO: cleanup
+    
     return retval;
 }
 
-mpz_class F(const std::string K,
+mpz_class F(const fte::key K,
             const uint32_t n,
             const mpz_class T,
             const uint32_t T_len,
@@ -128,9 +136,13 @@ mpz_class F(const std::string K,
     T_offset += B_bits;
     
     uint32_t Q_len = T_len + T_offset;
-    Q += T << T_offset;
-    Q += i << B_bits;
+    Q += mpz_class(T) << T_offset;
+    Q += mpz_class(i) << B_bits;
     Q += B;
+
+    //std::cout << " B_bits "  << B_bits << std::endl;  
+    //std::cout << " b "  << b << std::endl;   
+    //std::cout << " Q " << T << " " << i << " " << B << std::endl;
 
     mpz_class Y = 0;
 
@@ -149,9 +161,17 @@ mpz_class F(const std::string K,
     assert( ((P_len / 8)%16) == 0 );
     assert( ((Q_len / 8)%16) == 0 );
     
+    
+    //std::cout << "Y0 " << P << " " << Q << std::endl;
+    //std::cout << "Y1 " << (P<<Q_len) + Q << std::endl;
+    
     Y = CBC_MAC(K, (P<<Q_len) + Q, P_len + Q_len);
 
     //std::cout << "Y1 " << Y << std::endl;
+    
+    //Y = extract_bit_range( Z, Z_len*8, 0, (d+4)*8-1 ) ;
+
+    //std::cout << "Y2 " << Y << std::endl;
 
     mpz_class Z = Y;
     uint32_t Z_len = 16;
@@ -164,13 +184,13 @@ mpz_class F(const std::string K,
     
     Y = extract_bit_range( Z, Z_len*8, 0, (d+4)*8-1 ) ;
 
-    //std::cout << "Y2 " << Y << std::endl;
+    //std::cout << "Y3 " << Y << std::endl;
 
     mpz_class modulus = 0;
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m );
     Y = Y % modulus;
-
-    //std::cout << "Y3 " << Y << std::endl;
+    
+    //std::cout << "Y4 " << Y << std::endl;
     
     retval = Y;
 
@@ -178,7 +198,7 @@ mpz_class F(const std::string K,
 }
 
 
-mpz_class ffx2::encrypt( const std::string K ,
+mpz_class ffx2::encrypt( const fte::key K ,
                          const mpz_class T, const uint32_t T_len,
                          const mpz_class X, const uint32_t X_len ) {
 
@@ -201,8 +221,9 @@ mpz_class ffx2::encrypt( const std::string K ,
     uint32_t i = 0;
     for (i=0; i<=(r-1); i++) {
         //std::cout << " F " << F(K,n,T,T_len,i,B,B_len) << std::endl;
+        //std::cout << " A_len B_len " << A_len << " " << B_len << std::endl;
         //std::cout << " A B " << A << " " << B << std::endl;
-        C = A + F(K,n,T,T_len,i,B,B_len);
+        C = A + F(K,n,T,T_len,i,B,std::max(A_len,B_len));
         C = C % modulus;
         A = B;
         B = C;
@@ -213,9 +234,11 @@ mpz_class ffx2::encrypt( const std::string K ,
     return retval;
 }
 
-mpz_class ffx2::decrypt( const std::string K,
+mpz_class ffx2::decrypt( const fte::key K,
                          const mpz_class T, const uint32_t T_len,
                          const mpz_class Y, const uint32_t Y_len ) {
+    assert(Y>0);
+    
     mpz_class retval = 0;
 
     uint32_t n = Y_len; // input length of message
@@ -227,14 +250,14 @@ mpz_class ffx2::decrypt( const std::string K,
     uint32_t B_len = n-l;
 
     mpz_class modulus = 0;
-    mpz_ui_pow_ui(modulus.get_mpz_t(), 2, std::max(A_len,B_len) );
+    mpz_ui_pow_ui( modulus.get_mpz_t(), 2, std::max(A_len,B_len) );
 
     mpz_class C = 0;
     int32_t i = 0;
     for (i=r-1; i>=0; i--) {
         C = B;
         B = A;
-        A = C - F(K,n,T,T_len,i,B,B_len);
+        A = C - F(K,n,T,T_len,i,B,std::max(A_len,B_len));
         while (A<0) A += modulus;
         A = A % modulus;
     }
@@ -244,13 +267,13 @@ mpz_class ffx2::decrypt( const std::string K,
     return retval;
 }
 
-mpz_class ffx2::encrypt( const std::string K,
+mpz_class ffx2::encrypt( const fte::key K,
                          const mpz_class X, const uint32_t X_len ) {
     return ffx2::encrypt( K, 0, 0, X, X_len );
 }
 
-mpz_class ffx2::decrypt( const std::string K,
-                                          const mpz_class X, const uint32_t X_len ) {
+mpz_class ffx2::decrypt( const fte::key K,
+                         const mpz_class X, const uint32_t X_len ) {
     return ffx2::decrypt( K, 0, 0, X, X_len );
 }
 

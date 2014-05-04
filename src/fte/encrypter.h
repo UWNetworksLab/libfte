@@ -7,6 +7,7 @@
 #include "exceptions.h"
 #include "ranker.h"
 #include "ffx2.h"
+#include "key.h"
 
 namespace fte {
 
@@ -14,7 +15,7 @@ class encrypter {
   private:
     ranker _input_ranker;
     ranker _output_ranker;
-    std::string _key;
+    fte::key _key;
     fte::ffx2 _ffx;
     mpz_class _words_in_input_language;
     mpz_class _words_in_output_language;
@@ -23,7 +24,7 @@ class encrypter {
   public:
     encrypter( const std::string, const uint32_t,
                const std::string, const uint32_t,
-               const std::string );
+               const fte::key );
     std::string encrypt( const std::string );
     std::string decrypt( const std::string );
 
