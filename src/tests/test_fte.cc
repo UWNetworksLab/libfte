@@ -3,7 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "dfas.h"
-#include "fte/encrypter.h"
+#include "fte/fte.h"
 
 TEST(SanityCheck, Test1) {
     std::string str = "aaaaaaaaaaaaaaaa";
@@ -21,7 +21,7 @@ TEST(SanityCheck, Test2) {
 
 TEST(FteNormalUsage, FpeTest1) {
     fte::key K = "00000000000000000000000000000000";
-    fte::encrypter fteObj( VALID_DFA_1, 64,
+    fte::fte fteObj( VALID_DFA_1, 64,
                            VALID_DFA_1, 64,
                            K );
 
@@ -39,7 +39,7 @@ TEST(FteNormalUsage, FpeTest1) {
 
 TEST(FteNormalUsage, FteTest1) {
     fte::key K = "00000000000000000000000000000000";
-    fte::encrypter fteObj( VALID_DFA_1, 32,
+    fte::fte fteObj( VALID_DFA_1, 32,
                            VALID_DFA_1, 64,
                            K );
 
@@ -55,9 +55,9 @@ TEST(FteNormalUsage, FteTest1) {
     EXPECT_EQ( true, match );
 }
 
-/*TEST(FteNormalUsage, FteTest2) {
+TEST(FteNormalUsage, FteTest2) {
     fte::key K = "00000000000000000000000000000000";
-    fte::encrypter fteObj( VALID_DFA_1, 32,
+    fte::fte fteObj( VALID_DFA_1, 32,
                            VALID_DFA_5, 32,
                            K );
 
@@ -71,4 +71,4 @@ TEST(FteNormalUsage, FteTest1) {
     bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
 
     EXPECT_EQ( true, match );
-}*/
+}

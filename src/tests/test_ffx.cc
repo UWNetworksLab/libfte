@@ -2,9 +2,9 @@
 
 #include "gtest/gtest.h"
 
-#include "ffx/ffx2.h"
+#include "ffx/ffx.h"
 
-#include "fte/encrypter.h"
+#include "fte/fte.h"
 #include "fte/exceptions.h"
 
 TEST(FFX2, ExtractBits1) {
@@ -113,7 +113,7 @@ TEST(FFX2, MpzCharConversion2) {
 }
 
 TEST(FFX2, EncryptDecrypt1) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "00000000000000000000000000000000";
     mpz_class X = 1191613746;
     uint32_t X_len = 32;
@@ -124,7 +124,7 @@ TEST(FFX2, EncryptDecrypt1) {
 }
 
 TEST(FFX2, EncryptDecrypt2) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "00000000000000000000000000000000";
     mpz_class X = mpz_class("19531846666280701709");
     uint32_t X_len = 65;
@@ -135,7 +135,7 @@ TEST(FFX2, EncryptDecrypt2) {
 }
 
 TEST(FFX2, TestVector1) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "00000000000000000000000000000000";
     mpz_class X = 1191613746;
     uint32_t X_len = 32;
@@ -145,7 +145,7 @@ TEST(FFX2, TestVector1) {
 }
 
 TEST(FFX2, TestVector2) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "00000000000000000000000000000000";
     mpz_class X = 1546594394;
     uint32_t X_len = 32;
@@ -155,7 +155,7 @@ TEST(FFX2, TestVector2) {
 }
 
 TEST(FFX2, TestVector3) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
     mpz_class X = 1191613746;
     uint32_t X_len = 32;
@@ -165,7 +165,7 @@ TEST(FFX2, TestVector3) {
 }
 
 TEST(FFX2, TestVector4) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
     mpz_class X = 1546594394;
     uint32_t X_len = 32;
@@ -175,7 +175,7 @@ TEST(FFX2, TestVector4) {
 }
 
 TEST(FFX2, TestVector5) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "0000000000000000FFFFFFFFFFFFFFFF";
     mpz_class X = 1191613746;
     uint32_t X_len = 32;
@@ -185,7 +185,7 @@ TEST(FFX2, TestVector5) {
 }
 
 TEST(FFX2, TestVector6) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "0000000000000000FFFFFFFFFFFFFFFF";
     mpz_class X = 1546594394;
     uint32_t X_len = 32;
@@ -195,7 +195,7 @@ TEST(FFX2, TestVector6) {
 }
 
 TEST(FFX2, TestVector7) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "00000000000000000000000000000000";
     mpz_class X = mpz_class("19531846666280701709");
     uint32_t X_len = 65;
@@ -205,7 +205,7 @@ TEST(FFX2, TestVector7) {
 }
 
 TEST(FFX2, TestVector8) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "00000000000000000000000000000000";
     mpz_class X = mpz_class("9999999999999999999999999999999999999999999999999999999999999");
     uint32_t X_len = 203;
@@ -215,7 +215,7 @@ TEST(FFX2, TestVector8) {
 }
 
 TEST(FFX2, TestVector9) {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "0000000000000000FFFFFFFFFFFFFFFF";
     mpz_class X = mpz_class("9999999999999999999999999999999999999999999999999999999999999");
     uint32_t X_len = 203;
@@ -226,7 +226,7 @@ TEST(FFX2, TestVector9) {
 
 TEST(FFX2Malicous, ShortKey1) {
     try {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "00";
     mpz_class X = 1191613746;
     uint32_t X_len = 32;
@@ -239,7 +239,7 @@ TEST(FFX2Malicous, ShortKey1) {
 
 TEST(FFX2Malicous, LongKey1) {
     try {
-    ffx::ffx2 ffxObj = ffx::ffx2::ffx2();
+    ffx::ffx ffxObj = ffx::ffx::ffx(2);
     ffx::key K = "0000000000000000000000000000000000000000";
     mpz_class X = 1191613746;
     uint32_t X_len = 32;

@@ -16,20 +16,20 @@ TARGET_TEST = bin/test
 OBJ_TEST = src/tests.o \
            src/fte/ranker.o \
            src/ffx/key.o \
-           src/ffx/ffx2.o \
-           src/fte/encrypter.o \
+           src/ffx/ffx.o \
+           src/fte/fte.o \
            src/tests/dfas.o \
            src/tests/test_errors.o \
-           src/tests/test_encrypter.o \
-           src/tests/test_ffx2.o \
+           src/tests/test_fte.o \
+           src/tests/test_ffx.o \
            src/tests/test_ranker.o
 
 TARGET_MAIN = bin/main
 OBJ_MAIN = src/main.o \
            src/fte/ranker.o \
            src/ffx/key.o \
-           src/ffx/ffx2.o \
-           src/fte/encrypter.o \
+           src/ffx/ffx.o \
+           src/fte/fte.o \
            src/tests/dfas.o
 
 OBJ_AES = src/aes/aes_modes.o \

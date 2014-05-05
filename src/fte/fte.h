@@ -4,10 +4,9 @@
 #include <iostream>
 #include <string.h>
 
-#include "ffx/ffx2.h"
-
-#include "fte/exceptions.h"
+#include "ffx/ffx.h"
 #include "fte/ranker.h"
+#include "fte/exceptions.h"
 
 namespace fte {
 
@@ -18,20 +17,20 @@ public:
     key( const char * key ) : ffx::key(key) {};
 };
 
-class encrypter {
+class fte {
   private:
     ranker _input_ranker;
     ranker _output_ranker;
-    fte::key _key;
-    ffx::ffx2 _ffx;
+    key _key;
+    ffx::ffx _ffx;
     mpz_class _words_in_input_language;
     mpz_class _words_in_output_language;
     uint32_t _input_language_capacity;
     uint32_t _output_language_capacity;
   public:
-    encrypter( const std::string, const uint32_t,
+    fte( const std::string, const uint32_t,
                const std::string, const uint32_t,
-               const fte::key );
+               const key );
     std::string encrypt( const std::string );
     std::string decrypt( const std::string );
 

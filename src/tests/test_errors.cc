@@ -10,11 +10,11 @@ TEST(CauseException, InvalidFstFormatException1) {
     }
 }
 
-TEST(CauseException, InvalidFstFormatExceptionAsFteException1) {
+TEST(CauseException, InvalidFstFormatExceptionAsFTEException1) {
     try {
         fte::ranker rankerObj(INVALID_DFA_1, 16);
         EXPECT_TRUE(false);
-    } catch (fte::FteException e) {
+    } catch (fte::FTEException e) {
     }
 }
 
