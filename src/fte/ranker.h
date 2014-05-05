@@ -20,7 +20,7 @@
 #include <stdint.h>
 #include <gmpxx.h>
 
-#include "exceptions.h"
+#include "fte/exceptions.h"
 
 namespace fte {
 

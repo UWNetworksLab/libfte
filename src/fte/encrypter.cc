@@ -1,9 +1,10 @@
 #include <math.h>
 
-#include "exceptions.h"
-#include "ranker.h"
-#include "encrypter.h"
-#include "ffx2.h"
+#include "ffx/ffx2.h"
+
+#include "fte/exceptions.h"
+#include "fte/ranker.h"
+#include "fte/encrypter.h"
 
 namespace fte {
 
@@ -18,7 +19,7 @@ encrypter::encrypter( const std::string input_dfa, const uint32_t input_max_len,
     _input_ranker = ranker(input_dfa, input_max_len);
     _output_ranker = ranker(output_dfa, output_max_len);
     _key = key;
-    _ffx = fte::ffx2::ffx2();
+    _ffx = ffx::ffx2::ffx2();
 
     // validate that _input/_output rankers are compatible
     _words_in_input_language = _input_ranker.getNumWordsInLanguage(input_max_len);

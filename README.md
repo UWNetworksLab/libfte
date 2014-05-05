@@ -8,6 +8,7 @@ Dependencies
 
 * make, g++
 * GMP: https://gmplib.org/
+* googletest: https://code.google.com/p/googletest/ (included)
 
 ### OSX
 
@@ -81,6 +82,11 @@ int main(int argc, char **argv) {
 }
 
 ```
+
+ffx-encryption example
+----------------------
+
+TODO
 
 (un)ranking example
 -------------------

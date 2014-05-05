@@ -1,7 +1,7 @@
-#include "ranker.h"
-
 #include <assert.h>
 #include <sstream>
+
+#include "fte/ranker.h"
 
 namespace fte {
 

@@ -2,7 +2,7 @@
 
 #include "key.h"
 
-namespace fte {
+namespace ffx {
 
 key::key( const std::string key ) {
     _key = key;

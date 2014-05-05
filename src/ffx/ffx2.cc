@@ -6,10 +6,9 @@
 #include <gmpxx.h>
 
 #include "ffx2.h"
-#include "exceptions.h"
 #include "aes/aes.h"
 
-namespace fte {
+namespace ffx {
 
 mpz_class extract_bit_range( const mpz_class X, const uint32_t X_len,
                              const uint32_t start, const uint32_t end ) {
@@ -52,7 +51,7 @@ void fte_key_to_char_array( std::string key_in, const uint32_t out_len, unsigned
     }
 }
 
-mpz_class CBC_MAC( const fte::key K, const mpz_class X, const uint32_t X_len ) {
+mpz_class CBC_MAC( const ffx::key K, const mpz_class X, const uint32_t X_len ) {
     mpz_class retval = 0;
 
     uint32_t byte_string_len = X_len / 8;
@@ -98,7 +97,7 @@ mpz_class CBC_MAC( const fte::key K, const mpz_class X, const uint32_t X_len ) {
     return retval;
 }
 
-mpz_class F(const fte::key K,
+mpz_class F(const ffx::key K,
             const uint32_t n,
             const mpz_class T,
             const uint32_t T_len,
@@ -172,12 +171,12 @@ mpz_class F(const fte::key K,
 }
 
 
-mpz_class ffx2::encrypt( const fte::key K ,
+mpz_class ffx2::encrypt( const ffx::key K ,
                          const mpz_class T, const uint32_t T_len,
                          const mpz_class X, const uint32_t X_len ) {
 
     if (K.length() != 32) {
-        throw fte::InvalidKeyLength();
+        throw ffx::InvalidKeyLength();
     }
 
     mpz_class retval = 0;
@@ -187,19 +186,18 @@ mpz_class ffx2::encrypt( const fte::key K ,
     uint32_t r = 10; // rounds
     mpz_class A = extract_bit_range( X, X_len, 0, l-1 );
     mpz_class B = extract_bit_range( X, X_len, l, n-1 );
-    uint32_t A_len = l;
     uint32_t B_len = n-l;
+        uint32_t m = 0;
+        mpz_class modulus = 0;
 
     mpz_class C = 0;
     uint32_t i = 0;
     for (i=0; i<=(r-1); i++) {
-        uint32_t m = 0;
         if ((i%2) == 0) {
             m = floor( n / 2.0 );
         } else {
             m = ceil( n / 2.0 );
         }
-        mpz_class modulus = 0;
         mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m );
         
         C = A + F(K,n,T,T_len,i,B,m);
@@ -213,11 +211,11 @@ mpz_class ffx2::encrypt( const fte::key K ,
     return retval;
 }
 
-mpz_class ffx2::decrypt( const fte::key K,
+mpz_class ffx2::decrypt( const ffx::key K,
                          const mpz_class T, const uint32_t T_len,
                          const mpz_class Y, const uint32_t Y_len ) {
     if (K.length() != 32) {
-        throw fte::InvalidKeyLength();
+        throw ffx::InvalidKeyLength();
     }
     
     mpz_class retval = 0;
@@ -227,19 +225,18 @@ mpz_class ffx2::decrypt( const fte::key K,
     uint32_t r = 10; // rounds
     mpz_class A = extract_bit_range( Y, Y_len, 0, l-1 );
     mpz_class B = extract_bit_range( Y, Y_len, l, n-1 );
-    uint32_t A_len = l;
     uint32_t B_len = n-l;
+    uint32_t m = 0;
+    mpz_class modulus = 0;
 
     mpz_class C = 0;
     int32_t i = 0;
     for (i=r-1; i>=0; i--) {
-        uint32_t m = 0;
         if ((i%2) == 0) {
             m = floor( n / 2.0 );
         } else {
             m = ceil( n / 2.0 );
         }
-        mpz_class modulus = 0;
         mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m );
         
         C = B;
@@ -254,12 +251,12 @@ mpz_class ffx2::decrypt( const fte::key K,
     return retval;
 }
 
-mpz_class ffx2::encrypt( const fte::key K,
+mpz_class ffx2::encrypt( const ffx::key K,
                          const mpz_class X, const uint32_t X_len ) {
     return ffx2::encrypt( K, 0, 0, X, X_len );
 }
 
-mpz_class ffx2::decrypt( const fte::key K,
+mpz_class ffx2::decrypt( const ffx::key K,
                          const mpz_class X, const uint32_t X_len ) {
     return ffx2::decrypt( K, 0, 0, X, X_len );
 }

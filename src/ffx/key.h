@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string.h>
 
-namespace fte {
+namespace ffx {
 
 class key {
   private:
@@ -18,6 +18,6 @@ class key {
     uint32_t length() const;
 };
 
-} // namespace fte
+} // namespace ffx
 
 #endif /* _LIBFTE_SRC_FTE_KEY_H */
