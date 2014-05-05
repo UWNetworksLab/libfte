@@ -6,7 +6,7 @@
 #include "ffx/key.h"
 
 namespace ffx {
-    
+
 class FFXException : public std::exception {
     virtual const char* what() const throw() {
         return "FteException";
@@ -35,7 +35,9 @@ class ffx {
   public:
     ffx();
     ffx(const uint32_t);
-    const uint32_t getRadix() const { return _radix; }
+    const uint32_t getRadix() const {
+        return _radix;
+    }
     mpz_class encrypt( const key, const mpz_class, const uint32_t );
     mpz_class decrypt( const key, const mpz_class, const uint32_t );
     mpz_class encrypt( const key, const mpz_class, const uint32_t, const mpz_class, const uint32_t );

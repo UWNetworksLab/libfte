@@ -12,7 +12,7 @@
 namespace fte {
 
 class key : public ffx::key {
-public:
+  public:
     key() : ffx::key() {};
     key( std::string key ) : ffx::key(key) {};
     key( const char * key ) : ffx::key(key) {};
@@ -30,8 +30,8 @@ class fte {
     uint32_t _output_language_capacity;
   public:
     fte( const std::string, const uint32_t,
-               const std::string, const uint32_t,
-               const key );
+         const std::string, const uint32_t,
+         const key );
     std::string encrypt( const std::string );
     std::string decrypt( const std::string );
 

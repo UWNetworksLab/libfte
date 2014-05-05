@@ -12,13 +12,11 @@ namespace ffx {
 
 
 ffx::ffx()
-: _radix(2)
-{
+    : _radix(2) {
 }
-    
+
 ffx::ffx( const uint32_t radix )
-: _radix(radix)
-{
+    : _radix(radix) {
     if (_radix != 2) {
         throw InvalidRadix();
     }
@@ -75,14 +73,14 @@ void fte_key_to_char_array( std::string key_in, const uint32_t out_len, unsigned
 
 mpz_class AES_ECB( const key K, const mpz_class X, const uint32_t X_len ) {
     mpz_class retval = 0;
-    
+
     assert( (X_len%128) == 0 );
 
     uint32_t byte_string_len = X_len / 8;
 
     uint8_t i = 0;
     aes_encrypt_ctx ctx[1];
-    
+
     unsigned char * key = new unsigned char[16];
     unsigned char * inBuffer = new unsigned char[byte_string_len];
     unsigned char * outBuffer = new unsigned char[byte_string_len];
@@ -116,14 +114,14 @@ mpz_class AES_ECB( const key K, const mpz_class X, const uint32_t X_len ) {
 
 mpz_class AES_CBC_MAC( const key K, const mpz_class X, const uint32_t X_len ) {
     mpz_class retval = 0;
-    
+
     assert( (X_len%128) == 0 );
 
     uint32_t byte_string_len = X_len / 8;
 
     uint8_t i = 0;
     aes_encrypt_ctx ctx[1];
-    
+
     unsigned char * iv = new unsigned char[16];
     unsigned char * key = new unsigned char[16];
     unsigned char * inBuffer = new unsigned char[byte_string_len];
@@ -223,7 +221,7 @@ mpz_class F(const key K,
         Z += ctxt;
         counter += 1;
     }
-    
+
     Y = extract_bit_range( Z, Z_len*8, 0, ((d+4)*8)-1 );
 
     mpz_class modulus = 0;
@@ -237,8 +235,8 @@ mpz_class F(const key K,
 
 
 mpz_class ffx::encrypt( const key K ,
-                         const mpz_class T, const uint32_t T_len,
-                         const mpz_class X, const uint32_t X_len ) {
+                        const mpz_class T, const uint32_t T_len,
+                        const mpz_class X, const uint32_t X_len ) {
 
     if (K.length() != 32) {
         throw InvalidKeyLength();
@@ -264,7 +262,7 @@ mpz_class ffx::encrypt( const key K ,
             m = ceil( n / 2.0 );
         }
         mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m );
-        
+
         C = A + F(K,n,T,T_len,i,B,m);
         C = C % modulus;
         A = B;
@@ -277,12 +275,12 @@ mpz_class ffx::encrypt( const key K ,
 }
 
 mpz_class ffx::decrypt( const key K,
-                         const mpz_class T, const uint32_t T_len,
-                         const mpz_class Y, const uint32_t Y_len ) {
+                        const mpz_class T, const uint32_t T_len,
+                        const mpz_class Y, const uint32_t Y_len ) {
     if (K.length() != 32) {
         throw InvalidKeyLength();
     }
-    
+
     mpz_class retval = 0;
 
     uint32_t n = Y_len; // input length of message
@@ -303,7 +301,7 @@ mpz_class ffx::decrypt( const key K,
             m = ceil( n / 2.0 );
         }
         mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m );
-        
+
         C = B;
         B = A;
         A = C - F(K,n,T,T_len,i,B,m);
@@ -317,12 +315,12 @@ mpz_class ffx::decrypt( const key K,
 }
 
 mpz_class ffx::encrypt( const key K,
-                         const mpz_class X, const uint32_t X_len ) {
+                        const mpz_class X, const uint32_t X_len ) {
     return ffx::encrypt( K, 0, 0, X, X_len );
 }
 
 mpz_class ffx::decrypt( const key K,
-                         const mpz_class X, const uint32_t X_len ) {
+                        const mpz_class X, const uint32_t X_len ) {
     return ffx::decrypt( K, 0, 0, X, X_len );
 }
 

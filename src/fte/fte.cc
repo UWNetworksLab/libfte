@@ -10,13 +10,13 @@
 namespace fte {
 
 fte::fte( const std::string input_dfa, const uint32_t input_max_len,
-                      const std::string output_dfa, const uint32_t output_max_len,
-                      const key key ) {
-    
+          const std::string output_dfa, const uint32_t output_max_len,
+          const key key ) {
+
     if (key.length() != 32) {
         throw InvalidKeyLength();
     }
-    
+
     _input_ranker = ranking::dfa(input_dfa, input_max_len);
     _output_ranker = ranking::dfa(output_dfa, output_max_len);
     _key = key;
@@ -35,7 +35,7 @@ fte::fte( const std::string input_dfa, const uint32_t input_max_len,
 
 std::string fte::encrypt( const std::string plaintext ) {
     // TODO: validate that input plaintext is in input language
-    
+
     mpz_class plaintext_rank = _input_ranker.rank(plaintext);
     mpz_class C = _ffx.encrypt( _key, plaintext_rank, _output_language_capacity );
     std::string retval = _output_ranker.unrank(C);
@@ -44,7 +44,7 @@ std::string fte::encrypt( const std::string plaintext ) {
 
 std::string fte::decrypt( const std::string ciphertext ) {
     // TODO: validate that input plaintext is in output language
-    
+
     mpz_class C = _output_ranker.rank(ciphertext);
     mpz_class plaintext_rank = _ffx.decrypt( _key, C, _output_language_capacity );
     std::string retval = _input_ranker.unrank(plaintext_rank);
