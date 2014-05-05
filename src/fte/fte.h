@@ -5,8 +5,9 @@
 #include <string.h>
 
 #include "ffx/ffx.h"
-#include "fte/ranker.h"
+
 #include "fte/exceptions.h"
+#include "fte/ranking/dfa.h"
 
 namespace fte {
 
@@ -19,8 +20,8 @@ public:
 
 class fte {
   private:
-    ranker _input_ranker;
-    ranker _output_ranker;
+    ranking::dfa _input_ranker;
+    ranking::dfa _output_ranker;
     key _key;
     ffx::ffx _ffx;
     mpz_class _words_in_input_language;

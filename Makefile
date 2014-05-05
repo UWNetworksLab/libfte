@@ -14,10 +14,10 @@ LDFLAGS = -L$(GMP_DIR) -L$(AES_DIR) -L$(GTEST_DIR) -lgmp -lgmpxx -laes -lgtest
 # the build target executable:
 TARGET_TEST = bin/test
 OBJ_TEST = src/tests.o \
-           src/fte/ranker.o \
            src/ffx/key.o \
            src/ffx/ffx.o \
            src/fte/fte.o \
+           src/fte/ranking/dfa.o \
            src/tests/dfas.o \
            src/tests/test_errors.o \
            src/tests/test_fte.o \
@@ -26,10 +26,10 @@ OBJ_TEST = src/tests.o \
 
 TARGET_MAIN = bin/main
 OBJ_MAIN = src/main.o \
-           src/fte/ranker.o \
            src/ffx/key.o \
            src/ffx/ffx.o \
            src/fte/fte.o \
+           src/fte/ranking/dfa.o \
            src/tests/dfas.o
 
 OBJ_AES = src/aes/aes_modes.o \

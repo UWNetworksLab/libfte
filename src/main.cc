@@ -9,7 +9,7 @@
 #include "ffx/ffx.h"
 
 // ranking includes
-#include "fte/ranker.h"
+#include "fte/ranking/dfa.h"
 
 void fte_example() {
     
@@ -52,7 +52,7 @@ void ranking_example() {
     
     // ranking example
     uint32_t N  = 8;
-    fte::ranker rankerObj(VALID_DFA_1, N);
+    fte::ranking::dfa rankerObj(VALID_DFA_1, N);
     std::string X = "bbbbbbbb";
     mpz_class Y   = rankerObj.rank(X);
     std::string Z = rankerObj.unrank(Y);
