@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
-#include "fte/ranking/dfa.h"
-#include "dfas.h"
 
-//0
+#include "fte/ranking/dfa.h"
+
+#include "dfas.h"
 
 TEST(RankerNormalUsage, Test1) {
     fte::ranking::dfa rankerObj(VALID_DFA_1, 16);
@@ -38,8 +38,6 @@ TEST(RankerNormalUsage, Test5) {
     mpz_class   C = rankerObj.rank(X);
     EXPECT_EQ(0, C);
 }
-
-//capacity
 
 TEST(RankerNormalUsage, Test6) {
     fte::ranking::dfa rankerObj(VALID_DFA_1, 16);

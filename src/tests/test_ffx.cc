@@ -5,7 +5,6 @@
 #include "ffx/ffx.h"
 
 #include "fte/fte.h"
-#include "fte/exceptions.h"
 
 const uint32_t FFX_RADIX = 2;
 

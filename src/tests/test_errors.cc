@@ -1,7 +1,8 @@
 #include "gtest/gtest.h"
 
+#include "fte/fte.h"
+
 #include "dfas.h"
-#include "fte/ranking/dfa.h"
 
 TEST(CauseException, InvalidFstFormatException1) {
     try {

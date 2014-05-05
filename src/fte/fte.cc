@@ -8,9 +8,6 @@
 #include "fte/fte.h"
 
 namespace fte {
-    
-const uint32_t FFX_RADIX = 2;
-const uint32_t FTE_KEY_LENGTH_IN_NIBBLES = 32;
 
 fte::fte( const std::string input_dfa, const uint32_t input_max_len,
           const std::string output_dfa, const uint32_t output_max_len,

@@ -88,8 +88,8 @@ ffx-encryption example
 
 TODO
 
-(un)ranking example
--------------------
+ranking example
+---------------
 
 ```c++
 #include <iostream>

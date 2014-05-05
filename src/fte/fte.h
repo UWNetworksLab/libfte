@@ -10,6 +10,9 @@
 #include "fte/ranking/dfa.h"
 
 namespace fte {
+    
+const uint32_t FFX_RADIX = 2;
+const uint32_t FTE_KEY_LENGTH_IN_NIBBLES = 32;
 
 class key : public ffx::key {
   public:

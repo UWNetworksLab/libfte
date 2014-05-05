@@ -16,8 +16,6 @@ std::string key::getKey() const {
     return _key;
 }
 
-// bool validateKey( )
-
 uint32_t key::length() const {
     return _key.length();
 }

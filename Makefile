@@ -14,6 +14,8 @@ LDFLAGS = -L$(GMP_DIR) -L$(AES_DIR) -L$(GTEST_DIR) -lgmp -lgmpxx -laes -lgtest
 # the build target executable:
 TARGET_TEST = bin/test
 OBJ_TEST = src/tests.o \
+           src/ffx/conversions.o \
+           src/ffx/encryption.o \
            src/ffx/key.o \
            src/ffx/ffx.o \
            src/fte/fte.o \
@@ -26,6 +28,8 @@ OBJ_TEST = src/tests.o \
 
 TARGET_MAIN = bin/main
 OBJ_MAIN = src/main.o \
+           src/ffx/conversions.o \
+           src/ffx/encryption.o \
            src/ffx/key.o \
            src/ffx/ffx.o \
            src/fte/fte.o \

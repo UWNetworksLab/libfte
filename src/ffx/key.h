@@ -1,5 +1,5 @@
-#ifndef _LIBFTE_SRC_FTE_KEY_H
-#define _LIBFTE_SRC_FTE_KEY_H
+#ifndef _LIBFTE_SRC_FFX_KEY_H
+#define _LIBFTE_SRC_FFX_KEY_H
 
 #include <stdio.h>
 #include <iostream>
@@ -20,4 +20,4 @@ class key {
 
 } // namespace ffx
 
-#endif /* _LIBFTE_SRC_FTE_KEY_H */
+#endif /* _LIBFTE_SRC_FFX_KEY_H */
