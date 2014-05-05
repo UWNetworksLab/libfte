@@ -1,12 +1,12 @@
 #include <math.h>
 #include <string.h>
 #include <assert.h>
-#include <iostream>
 
 #include <gmpxx.h>
 
-#include "ffx.h"
 #include "aes/aes.h"
+
+#include "ffx.h"
 
 namespace ffx {
 

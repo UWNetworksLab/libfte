@@ -17,7 +17,6 @@
 #include <map>
 #include <vector>
 
-#include <stdint.h>
 #include <gmpxx.h>
 
 #include "fte/exceptions.h"

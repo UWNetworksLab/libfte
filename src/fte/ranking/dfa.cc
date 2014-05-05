@@ -339,6 +339,7 @@ mpz_class dfa::getNumWordsInLanguage( const uint32_t max_word_length ) {
 
 mpz_class dfa::getNumWordsInLanguage( const uint32_t min_word_length,
                                       const uint32_t max_word_length ) {
+    // TODO: remove asserts
     // verify min_word_length <= max_word_length <= _fixed_slice
     assert(0<=min_word_length);
     assert(min_word_length<=max_word_length);
