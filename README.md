@@ -75,26 +75,26 @@ FTE encryption example
 #include "fte/fte.h"
 
 int main() {
+  // setup
   fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
-  fte::FTE fteObj = fte::FTE(VALID_DFA_5, 16, // regex="^\C+$"
-                             VALID_DFA_1, 128, // regex="^(a|b)+$"
+  fte::FTE fteObj = fte::FTE(VALID_DFA_5, 16, // regex="^\C{1,16}$"
+                             VALID_DFA_1, 128, // regex="^(a|b){1,128}$"
                              K);
-  std::string X = "Hello, Word!";
-  std::string Y = fteObj.encrypt(X);
-  std::string Z = fteObj.decrypt(Y);
+  // encrypt-then-decrypt
+  std::string input_plaintext = "Hello, Word!";
+  std::string ciphertext = fteObj.encrypt(X);
+  std::string output_plaintext = fteObj.decrypt(Y);
 
-  std::cout << "fte:" << std::endl;
-  std::cout << "- X: " << X << std::endl;
-  std::cout << "- Y: " << Y << std::endl;
-  std::cout << "- Z: " << Z << std::endl;
+  std::cout << "input_plaintext: " << X << std::endl;
+  std::cout << "ciphertext: " << Y << std::endl;
+  std::cout << "output_plaintext: " << Z << std::endl;
 }
 ```
 
 will output
 
 ```
-fte:
-- X: Hello, Word!
-- Y: babbbaababababbbbabbbbaabbaabaaaaabbabaabaaabbaaaabbabaabaababaaabbbabbbaabababaaabbaabababbbbbbaabbbaaaaaaabbbbbabaabbbaaaabab
-- Z: Hello, Word!
+input_plaintext: Hello, Word!
+ciphertext: babbbaababababbbbabbbbaabbaabaaaaabbabaabaaabbaaaabbabaabaababaaabbbabbbaabababaaabbaabababbbbbbaabbbaaaaaaabbbbbabaabbbaaaabab
+output_plaintext: Hello, Word!
 ```
