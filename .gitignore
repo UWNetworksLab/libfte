@@ -3,4 +3,4 @@ bin/*
 */*.o
 nbproject
 *.orig
-src/aes/libaes.a
+thirdparty/aes/libaes.a
