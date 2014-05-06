@@ -6,24 +6,23 @@
 
 #include "aes/aes.h"
 
-#include "conversions.h"
-#include "encryption.h"
-#include "ffx.h"
+#include "ffx/ffx.h"
 
 namespace ffx {
 
-ffx::ffx()
-    : _radix(DEFAULT_FFX_RADIX) {
+FFX::FFX() 
+: radix_(DEFAULT_FFX_RADIX)
+{
 }
 
-ffx::ffx( const uint32_t radix )
-    : _radix(radix) {
-    if (_radix != DEFAULT_FFX_RADIX) {
+FFX::FFX( const uint32_t radix )
+    : radix_(radix) {
+    if (radix_ != DEFAULT_FFX_RADIX) {
         throw InvalidRadix();
     }
 }
 
-mpz_class F(const key K,
+mpz_class F(const Key K,
             const uint32_t n,
             const mpz_class T,
             const uint32_t T_len,
@@ -98,26 +97,24 @@ mpz_class F(const key K,
     return retval;
 }
 
-
-mpz_class ffx::encrypt( const key K ,
+mpz_class FFX::encrypt( const Key K ,
                         const mpz_class T, const uint32_t T_len,
                         const mpz_class X, const uint32_t X_len ) {
 
-    if (K.length() != FTE_KEY_LENGTH_IN_NIBBLES) {
+    if (K.length() != kFFXKeyLengthInNibbles) {
         throw InvalidKeyLength();
     }
 
     mpz_class retval = 0;
 
-    uint32_t n = X_len; // input length of message
-    uint32_t l = floor( X_len / 2.0 ); // maximally-balanced feistel
-    uint32_t r = DEFAULT_FFX_ROUNDS; // rounds
+    uint32_t n = X_len;
+    uint32_t l = floor( X_len / 2.0 );
+    uint32_t r = DEFAULT_FFX_ROUNDS;
     mpz_class A = extract_bit_range( X, X_len, 0, l-1 );
     mpz_class B = extract_bit_range( X, X_len, l, n-1 );
     uint32_t B_len = n - l;
     uint32_t m = 0;
     mpz_class modulus = 0;
-
     mpz_class C = 0;
     uint32_t i = 0;
     for (i=0; i<=(r-1); i++) {
@@ -139,25 +136,24 @@ mpz_class ffx::encrypt( const key K ,
     return retval;
 }
 
-mpz_class ffx::decrypt( const key K,
+mpz_class FFX::decrypt( const Key K,
                         const mpz_class T, const uint32_t T_len,
                         const mpz_class Y, const uint32_t Y_len ) {
     
-    if (K.length() != FTE_KEY_LENGTH_IN_NIBBLES) {
+    if (K.length() != kFFXKeyLengthInNibbles) {
         throw InvalidKeyLength();
     }
 
     mpz_class retval = 0;
 
-    uint32_t n = Y_len; // input length of message
-    uint32_t l = floor( Y_len / 2.0 ); // maximally-balanced feistel
-    uint32_t r = DEFAULT_FFX_ROUNDS; // rounds
+    uint32_t n = Y_len;
+    uint32_t l = floor( Y_len / 2.0 );
+    uint32_t r = DEFAULT_FFX_ROUNDS;
     mpz_class A = extract_bit_range( Y, Y_len, 0, l-1 );
     mpz_class B = extract_bit_range( Y, Y_len, l, n-1 );
     uint32_t B_len = n - l;
     uint32_t m = 0;
     mpz_class modulus = 0;
-
     mpz_class C = 0;
     int32_t i = 0;
     for (i=r-1; i>=0; i--) {
@@ -180,14 +176,14 @@ mpz_class ffx::decrypt( const key K,
     return retval;
 }
 
-mpz_class ffx::encrypt( const key K,
+mpz_class FFX::encrypt( const Key K,
                         const mpz_class X, const uint32_t X_len ) {
-    return ffx::encrypt( K, 0, 0, X, X_len );
+    return FFX::encrypt( K, 0, 0, X, X_len );
 }
 
-mpz_class ffx::decrypt( const key K,
+mpz_class FFX::decrypt( const Key K,
                         const mpz_class X, const uint32_t X_len ) {
-    return ffx::decrypt( K, 0, 0, X, X_len );
+    return FFX::decrypt( K, 0, 0, X, X_len );
 }
 
 

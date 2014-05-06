@@ -2,37 +2,36 @@
 
 #include "aes/aes.h"
 
-#include "conversions.h"
-#include "encryption.h"
+#include "ffx/conversions.h"
+#include "ffx/encryption.h"
 
 namespace ffx {
 
-mpz_class aes_ecb( const key K, const mpz_class X, const uint32_t X_len ) {
+mpz_class aes_ecb( const Key K, const mpz_class X, const uint32_t X_len ) {
     mpz_class retval = 0;
 
-    assert( (X_len%128) == 0 );
+    assert( (X_len % kFFXKeyLengthInBits) == 0 );
 
     uint32_t byte_string_len = X_len / 8;
-
-    uint8_t i = 0;
     
     aes_encrypt_ctx * ctx = new aes_encrypt_ctx[1];
-    unsigned char * key = new unsigned char[16];
+    unsigned char * key = new unsigned char[kFFXKeyLengthInBytes];
     unsigned char * inBuffer = new unsigned char[byte_string_len];
     unsigned char * outBuffer = new unsigned char[byte_string_len];
 
+
+    uint8_t i = 0;
     for (i=0; i<byte_string_len; i++) {
         inBuffer[i] = 0;
         outBuffer[i] = 0;
     }
 
-    mpz_to_char_array( X, byte_string_len, inBuffer );
-
-    for(i = 0; i < 16; ++i) {
+    for(i = 0; i < kFFXKeyLengthInBytes; ++i) {
         key[i] = 0x00;
     }
 
-    fte_key_to_char_array( K.getKey(), 16, key );
+    mpz_to_char_array( X, byte_string_len, inBuffer );
+    fte_key_to_char_array( K.getKey(), kFFXKeyLengthInBytes, key );
 
     aes_init();
     aes_encrypt_key128(key, ctx);
@@ -54,34 +53,32 @@ mpz_class aes_ecb( const key K, const mpz_class X, const uint32_t X_len ) {
     return retval;
 }
 
-mpz_class aes_cbc_mac( const key K, const mpz_class X, const uint32_t X_len ) {
+mpz_class aes_cbc_mac( const Key K, const mpz_class X, const uint32_t X_len ) {
     mpz_class retval = 0;
 
-    assert( (X_len%128) == 0 );
+    assert( (X_len%kFFXKeyLengthInBits) == 0 );
 
     uint32_t byte_string_len = X_len / 8;
-
-    uint8_t i = 0;
     
     aes_encrypt_ctx * ctx = new aes_encrypt_ctx[1];
-    unsigned char * iv = new unsigned char[16];
-    unsigned char * key = new unsigned char[16];
+    unsigned char * iv = new unsigned char[kFFXKeyLengthInBytes];
+    unsigned char * key = new unsigned char[kFFXKeyLengthInBytes];
     unsigned char * inBuffer = new unsigned char[byte_string_len];
     unsigned char * outBuffer = new unsigned char[byte_string_len];
 
+    uint8_t i = 0;
     for (i=0; i<byte_string_len; i++) {
         inBuffer[i] = 0;
         outBuffer[i] = 0;
     }
 
-    mpz_to_char_array( X, byte_string_len, inBuffer );
-
-    for(i = 0; i < 16; ++i) {
+    for(i = 0; i < kFFXKeyLengthInBytes; ++i) {
         iv[i] = 0x00;
         key[i] = 0x00;
     }
 
-    fte_key_to_char_array( K.getKey(), 16, key );
+    mpz_to_char_array( X, byte_string_len, inBuffer );
+    fte_key_to_char_array( K.getKey(), kFFXKeyLengthInBytes, key );
 
     aes_init();
     aes_encrypt_key128(key, ctx);

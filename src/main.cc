@@ -14,8 +14,8 @@
 void fte_example() {
 
     // fte example
-    fte::key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
-    fte::fte fteObj = fte::fte::fte( VALID_DFA_5, 16,
+    fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
+    fte::FTE fteObj = fte::FTE( VALID_DFA_5, 16,
                                      VALID_DFA_1, 128,
                                      K );
     std::string X = "Hello, Word!";
@@ -33,8 +33,9 @@ void fte_example() {
 void ffx_example() {
 
     // ffx example
-    ffx::ffx ffxObj = ffx::ffx::ffx(2);
-    ffx::key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
+    uint32_t radix = 2;
+    ffx::FFX ffxObj = ffx::FFX(radix);
+    ffx::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
     mpz_class X = 65535;
     uint32_t X_len = 16; // in bits
     mpz_class Y = ffxObj.encrypt( K, X, X_len );

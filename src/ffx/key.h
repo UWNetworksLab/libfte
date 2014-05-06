@@ -6,14 +6,20 @@
 #include <string.h>
 
 namespace ffx {
+    
+const uint32_t kFFXKeyLengthInBytes = 16;
+const uint32_t kFFXKeyLengthInNibbles = kFFXKeyLengthInBytes*2;
+const uint32_t kFFXKeyLengthInBits = kFFXKeyLengthInBytes*8;
 
-class key {
+class Key {
   private:
-    std::string _key;
+    std::string key_;
+  
   public:
-    key() {};
-    key( const std::string );
-    key( const char * );
+    Key() {};
+    Key( const std::string );
+    Key( const char * );
+    
     std::string getKey() const;
     uint32_t length() const;
 };

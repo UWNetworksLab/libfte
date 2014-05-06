@@ -1,53 +1,49 @@
 #include <math.h>
 
 #include "ffx/ffx.h"
-
-#include "ranking/dfa.h"
-
-#include "fte/exceptions.h"
 #include "fte/fte.h"
 
 namespace fte {
 
-fte::fte( const std::string input_dfa, const uint32_t input_max_len,
+FTE::FTE( const std::string input_dfa, const uint32_t input_max_len,
           const std::string output_dfa, const uint32_t output_max_len,
-          const key key ) {
+          const Key key ) {
 
-    if (key.length() != FTE_KEY_LENGTH_IN_NIBBLES) {
+    if (key.length() != kFTEKeyLengthInNibbles) {
         throw InvalidKeyLength();
     }
 
-    _input_ranker = ranking::dfa(input_dfa, input_max_len);
-    _output_ranker = ranking::dfa(output_dfa, output_max_len);
-    _key = key;
-    _ffx = ffx::ffx::ffx(FFX_RADIX);
+    input_ranker_ = ranking::dfa(input_dfa, input_max_len);
+    output_ranker_ = ranking::dfa(output_dfa, output_max_len);
+    key_ = key;
+    ffx_ = ffx::FFX(kFFXRadix);
 
     // validate that _input/_output rankers are compatible
-    _words_in_input_language = _input_ranker.getNumWordsInLanguage(input_max_len);
-    _words_in_output_language = _output_ranker.getNumWordsInLanguage(output_max_len);
-    if ( _words_in_input_language > _words_in_output_language ) {
+    mpz_class words_in_input_language = input_ranker_.getNumWordsInLanguage(input_max_len);
+    mpz_class words_in_output_language = output_ranker_.getNumWordsInLanguage(output_max_len);
+    if ( words_in_input_language > words_in_output_language ) {
         throw FTEException();
     }
 
-    _input_language_capacity = mpz_sizeinbase(_words_in_input_language.get_mpz_t(),2);
-    _output_language_capacity = mpz_sizeinbase(_words_in_output_language.get_mpz_t(),2);
+    input_language_capacity_ = mpz_sizeinbase(words_in_input_language.get_mpz_t(),kFFXRadix);
+    output_language_capacity_ = mpz_sizeinbase(words_in_output_language.get_mpz_t(),kFFXRadix);
 }
 
-std::string fte::encrypt( const std::string plaintext ) {
+std::string FTE::encrypt( const std::string plaintext ) {
     // TODO: validate that input plaintext is in input language
 
-    mpz_class plaintext_rank = _input_ranker.rank(plaintext);
-    mpz_class C = _ffx.encrypt( _key, plaintext_rank, _output_language_capacity );
-    std::string retval = _output_ranker.unrank(C);
+    mpz_class plaintext_rank = input_ranker_.rank(plaintext);
+    mpz_class C = ffx_.encrypt( key_, plaintext_rank, output_language_capacity_ );
+    std::string retval = output_ranker_.unrank(C);
     return retval;
 }
 
-std::string fte::decrypt( const std::string ciphertext ) {
+std::string FTE::decrypt( const std::string ciphertext ) {
     // TODO: validate that input plaintext is in output language
 
-    mpz_class C = _output_ranker.rank(ciphertext);
-    mpz_class plaintext_rank = _ffx.decrypt( _key, C, _output_language_capacity );
-    std::string retval = _input_ranker.unrank(plaintext_rank);
+    mpz_class C = output_ranker_.rank(ciphertext);
+    mpz_class plaintext_rank = ffx_.decrypt( key_, C, output_language_capacity_ );
+    std::string retval = input_ranker_.unrank(plaintext_rank);
     return retval;
 }
 

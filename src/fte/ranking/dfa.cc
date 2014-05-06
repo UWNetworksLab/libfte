@@ -124,8 +124,6 @@ dfa::dfa(const std::string dfa_str, const uint32_t max_len)
         }
     }
 
-
-
     dfa::_validate();
 
     // perform our precalculation to speed up (un)ranking

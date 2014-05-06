@@ -11,7 +11,33 @@ namespace ffx {
 
 const uint32_t DEFAULT_FFX_RADIX = 2;
 const uint32_t DEFAULT_FFX_ROUNDS = 10;
-const uint32_t FTE_KEY_LENGTH_IN_NIBBLES = 32;
+
+class FFX {
+  private:
+    uint32_t radix_;
+ 
+  public:
+    FFX();
+    explicit FFX(const uint32_t);
+    
+    const uint32_t getRadix() const {
+        return radix_;
+    }
+    
+    mpz_class encrypt( const Key,
+                       const mpz_class, const uint32_t );
+    
+    mpz_class decrypt( const Key,
+                       const mpz_class, const uint32_t );
+    
+    mpz_class encrypt( const Key,
+                       const mpz_class, const uint32_t,
+                       const mpz_class, const uint32_t );
+    
+    mpz_class decrypt( const Key,
+                       const mpz_class, const uint32_t,
+                       const mpz_class, const uint32_t );
+};
 
 class FFXException : public std::exception {
     virtual const char* what() const throw() {
@@ -31,31 +57,6 @@ class InvalidRadix : public FFXException {
     }
 };
 
-class ffx {
-  private:
-    uint32_t _radix;
- 
-  public:
-    ffx();
-    ffx(const uint32_t);
-    const uint32_t getRadix() const {
-        return _radix;
-    }
-    
-    mpz_class encrypt( const key,
-                       const mpz_class, const uint32_t );
-    
-    mpz_class decrypt( const key,
-                       const mpz_class, const uint32_t );
-    
-    mpz_class encrypt( const key,
-                       const mpz_class, const uint32_t,
-                       const mpz_class, const uint32_t );
-    
-    mpz_class decrypt( const key,
-                       const mpz_class, const uint32_t,
-                       const mpz_class, const uint32_t );
-};
 }
 
 #endif /* _LIBFTE_SRC_FTE_ENCRYPTER_H */

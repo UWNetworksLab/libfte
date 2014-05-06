@@ -11,32 +11,36 @@
 
 namespace fte {
     
-const uint32_t FFX_RADIX = 2;
-const uint32_t FTE_KEY_LENGTH_IN_NIBBLES = 32;
+const uint32_t kFFXRadix = 2;
+const uint32_t kFTEKeyLengthInNibbles = 32;
 
-class key : public ffx::key {
+class Key : public ffx::Key {
   public:
-    key() : ffx::key() {};
-    key( std::string key ) : ffx::key(key) {};
-    key( const char * key ) : ffx::key(key) {};
+    Key() : ffx::Key() {};
+    Key( std::string key ) : ffx::Key(key) {};
+    Key( const char * key ) : ffx::Key(key) {};
 };
 
-class fte {
+class FTE {
   private:
-    ranking::dfa _input_ranker;
-    ranking::dfa _output_ranker;
-    key _key;
-    ffx::ffx _ffx;
-    mpz_class _words_in_input_language;
-    mpz_class _words_in_output_language;
-    uint32_t _input_language_capacity;
-    uint32_t _output_language_capacity;
+    ranking::dfa input_ranker_;
+    ranking::dfa output_ranker_;
+    Key key_;
+    ffx::FFX ffx_;
+    uint32_t input_language_capacity_;
+    uint32_t output_language_capacity_;
   public:
-    fte( const std::string, const uint32_t,
+    FTE( const std::string, const uint32_t,
          const std::string, const uint32_t,
-         const key );
-    std::string encrypt( const std::string );
-    std::string decrypt( const std::string );
+         const Key );
+
+    /**
+     * encrypt function desc.
+     * @param plaintext desc.
+     * @param ciphertext desc.
+     */
+    std::string encrypt( const std::string plaintext );
+    std::string decrypt( const std::string ciphertext );
 
 };
 

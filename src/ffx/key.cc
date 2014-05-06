@@ -1,23 +1,23 @@
 #include <assert.h>
 
-#include "key.h"
+#include "ffx/key.h"
 
 namespace ffx {
 
-key::key( const std::string key ) {
-    _key = key;
+Key::Key( const std::string key ) {
+    key_ = key;
 }
 
-key::key( const char * key ) {
-    _key = key;
+Key::Key( const char * key ) {
+    key_ = key;
 }
 
-std::string key::getKey() const {
-    return _key;
+std::string Key::getKey() const {
+    return key_;
 }
 
-uint32_t key::length() const {
-    return _key.length();
+uint32_t Key::length() const {
+    return key_.length();
 }
 
 }

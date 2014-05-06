@@ -21,8 +21,8 @@ TEST(SanityCheck, Test2) {
 }
 
 TEST(FteNormalUsage, FpeTest1) {
-    fte::key K = "00000000000000000000000000000000";
-    fte::fte fteObj( VALID_DFA_1, 64,
+    fte::Key K = "00000000000000000000000000000000";
+    fte::FTE fteObj( VALID_DFA_1, 64,
                            VALID_DFA_1, 64,
                            K );
 
@@ -39,8 +39,8 @@ TEST(FteNormalUsage, FpeTest1) {
 }
 
 TEST(FteNormalUsage, FteTest1) {
-    fte::key K = "00000000000000000000000000000000";
-    fte::fte fteObj( VALID_DFA_1, 32,
+    fte::Key K = "00000000000000000000000000000000";
+    fte::FTE fteObj( VALID_DFA_1, 32,
                            VALID_DFA_1, 64,
                            K );
 
@@ -57,8 +57,8 @@ TEST(FteNormalUsage, FteTest1) {
 }
 
 TEST(FteNormalUsage, FteTest2) {
-    fte::key K = "00000000000000000000000000000000";
-    fte::fte fteObj( VALID_DFA_1, 32,
+    fte::Key K = "00000000000000000000000000000000";
+    fte::FTE fteObj( VALID_DFA_1, 32,
                            VALID_DFA_5, 32,
                            K );
 
