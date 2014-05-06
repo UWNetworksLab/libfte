@@ -5,7 +5,7 @@
 
 namespace ffx {
 
-
+    
 mpz_class extract_bit_range(const mpz_class, const uint32_t, const uint32_t,
                             const uint32_t);
 

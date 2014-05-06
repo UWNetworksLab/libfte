@@ -29,17 +29,15 @@ class FTE {
   ffx::FFX ffx_;
   uint32_t input_language_capacity_;
   uint32_t output_language_capacity_;
- 
+
  public:
   FTE(const std::string, const uint32_t,
       const std::string, const uint32_t,
       const Key);
 
-  
-  std::string encrypt(const std::string plaintext);
-  
-  
-  std::string decrypt(const std::string ciphertext);
+
+  std::string encrypt(const std::string);
+  std::string decrypt(const std::string);
 
 };
 

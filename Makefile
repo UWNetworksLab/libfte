@@ -1,6 +1,6 @@
 GTEST_DIR = thirdparty/gtest-1.7.0
 GMP_DIR = /usr/local/lib
-AES_DIR = src/aes
+AES_DIR = thirdparty/aes
 
 # the compiler: gcc for C program, define as g++ for C++
 CXX = g++
@@ -8,7 +8,7 @@ CXX = g++
 # compiler flags:
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
-CXXFLAGS  = -O3 -g -Wall -Isrc -I$(GTEST_DIR)/include
+CXXFLAGS  = -O3 -g -Wall -Isrc -Ithirdparty -I$(GTEST_DIR)/include
 LDFLAGS = -L$(GMP_DIR) -L$(AES_DIR) -L$(GTEST_DIR) -lgmp -lgmpxx -laes -lgtest
 
 # the build target executable:
@@ -36,12 +36,12 @@ OBJ_MAIN = src/main.o \
            src/fte/ranking/dfa.o \
            src/tests/dfas.o
 
-OBJ_AES = src/aes/aes_modes.o \
-          src/aes/aescrypt.o \
-          src/aes/aeskey.o \
-          src/aes/aestab.o
+OBJ_AES = thirdparty/aes/aes_modes.o \
+          thirdparty/aes/aescrypt.o \
+          thirdparty/aes/aeskey.o \
+          thirdparty/aes/aestab.o
 
-LIBAES = src/aes/libaes.a
+LIBAES = thirdparty/aes/libaes.a
 
 all: $(GTEST_DIR)/libgtest.a $(LIBAES) $(TARGET_TEST) $(TARGET_MAIN)
 
