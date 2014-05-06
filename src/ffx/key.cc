@@ -4,20 +4,20 @@
 
 namespace ffx {
 
-Key::Key( const std::string key ) {
-    key_ = key;
+Key::Key ( const std::string key ) {
+  key_ = key;
 }
 
-Key::Key( const char * key ) {
-    key_ = key;
+Key::Key ( const char * key ) {
+  key_ = key;
 }
 
 std::string Key::getKey() const {
-    return key_;
+  return key_;
 }
 
 uint32_t Key::length() const {
-    return key_.length();
+  return key_.length();
 }
 
 }

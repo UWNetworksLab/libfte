@@ -119,3 +119,8 @@ Y: bbbbbbbb
 ```
 
 because ```C = 2^1 + 2^2 + ... + 2^7 + (2^N - 1)```.
+
+code style
+----------
+
+```astyle --indent=spaces=2 -p -P -U -c --max-code-length=80 --style=google```
