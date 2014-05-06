@@ -17,8 +17,8 @@ class Key {
 
  public:
   Key() {};
-  Key ( const std::string );
-  Key ( const char * );
+  Key(const std::string);
+  Key(const char *);
 
   std::string getKey() const;
   uint32_t length() const;

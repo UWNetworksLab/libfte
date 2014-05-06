@@ -7,10 +7,10 @@
 
 namespace ffx {
 
-mpz_class aes_ecb ( const Key K, const mpz_class X, const uint32_t X_len ) {
+mpz_class aes_ecb(const Key K, const mpz_class X, const uint32_t X_len) {
   mpz_class retval = 0;
 
-  assert ( ( X_len % kFFXKeyLengthInBits ) == 0 );
+  assert((X_len % kFFXKeyLengthInBits) == 0);
 
   uint32_t byte_string_len = X_len / 8;
 
@@ -21,23 +21,23 @@ mpz_class aes_ecb ( const Key K, const mpz_class X, const uint32_t X_len ) {
 
 
   uint8_t i = 0;
-  for ( i = 0; i < byte_string_len; i++ ) {
+  for(i = 0; i < byte_string_len; i++) {
     inBuffer[i] = 0;
     outBuffer[i] = 0;
   }
 
-  for ( i = 0; i < kFFXKeyLengthInBytes; ++i ) {
+  for(i = 0; i < kFFXKeyLengthInBytes; ++i) {
     key[i] = 0x00;
   }
 
-  mpz_to_char_array ( X, byte_string_len, inBuffer );
-  fte_key_to_char_array ( K.getKey(), kFFXKeyLengthInBytes, key );
+  mpz_to_char_array(X, byte_string_len, inBuffer);
+  fte_key_to_char_array(K.getKey(), kFFXKeyLengthInBytes, key);
 
   aes_init();
-  aes_encrypt_key128 ( key, ctx );
-  aes_ecb_encrypt ( inBuffer, outBuffer, byte_string_len, ctx );
+  aes_encrypt_key128(key, ctx);
+  aes_ecb_encrypt(inBuffer, outBuffer, byte_string_len, ctx);
 
-  char_array_to_mpz ( outBuffer, byte_string_len, retval );
+  char_array_to_mpz(outBuffer, byte_string_len, retval);
 
   // cleanup
   delete[] ctx;
@@ -53,10 +53,10 @@ mpz_class aes_ecb ( const Key K, const mpz_class X, const uint32_t X_len ) {
   return retval;
 }
 
-mpz_class aes_cbc_mac ( const Key K, const mpz_class X, const uint32_t X_len ) {
+mpz_class aes_cbc_mac(const Key K, const mpz_class X, const uint32_t X_len) {
   mpz_class retval = 0;
 
-  assert ( ( X_len % kFFXKeyLengthInBits ) == 0 );
+  assert((X_len % kFFXKeyLengthInBits) == 0);
 
   uint32_t byte_string_len = X_len / 8;
 
@@ -67,29 +67,29 @@ mpz_class aes_cbc_mac ( const Key K, const mpz_class X, const uint32_t X_len ) {
   unsigned char * outBuffer = new unsigned char[byte_string_len];
 
   uint8_t i = 0;
-  for ( i = 0; i < byte_string_len; i++ ) {
+  for(i = 0; i < byte_string_len; i++) {
     inBuffer[i] = 0;
     outBuffer[i] = 0;
   }
 
-  for ( i = 0; i < kFFXKeyLengthInBytes; ++i ) {
+  for(i = 0; i < kFFXKeyLengthInBytes; ++i) {
     iv[i] = 0x00;
     key[i] = 0x00;
   }
 
-  mpz_to_char_array ( X, byte_string_len, inBuffer );
-  fte_key_to_char_array ( K.getKey(), kFFXKeyLengthInBytes, key );
+  mpz_to_char_array(X, byte_string_len, inBuffer);
+  fte_key_to_char_array(K.getKey(), kFFXKeyLengthInBytes, key);
 
   aes_init();
-  aes_encrypt_key128 ( key, ctx );
-  aes_cbc_encrypt ( inBuffer, outBuffer, byte_string_len, iv, ctx );
+  aes_encrypt_key128(key, ctx);
+  aes_cbc_encrypt(inBuffer, outBuffer, byte_string_len, iv, ctx);
 
-  char_array_to_mpz ( outBuffer, byte_string_len, retval );
+  char_array_to_mpz(outBuffer, byte_string_len, retval);
 
-  retval = extract_bit_range ( retval,
-                               byte_string_len * 8,
-                               byte_string_len * 8 - 128,
-                               byte_string_len * 8 - 1 );
+  retval = extract_bit_range(retval,
+                             byte_string_len * 8,
+                             byte_string_len * 8 - 128,
+                             byte_string_len * 8 - 1);
 
   // cleanup
   delete[] ctx;

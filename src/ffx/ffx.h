@@ -18,25 +18,25 @@ class FFX {
 
  public:
   FFX();
-  explicit FFX ( const uint32_t );
+  explicit FFX(const uint32_t);
 
   const uint32_t get_radix() const {
     return radix_;
   }
 
-  mpz_class encrypt ( const Key,
-                      const mpz_class, const uint32_t );
+  mpz_class encrypt(const Key,
+                    const mpz_class, const uint32_t);
 
-  mpz_class decrypt ( const Key,
-                      const mpz_class, const uint32_t );
+  mpz_class decrypt(const Key,
+                    const mpz_class, const uint32_t);
 
-  mpz_class encrypt ( const Key,
-                      const mpz_class, const uint32_t,
-                      const mpz_class, const uint32_t );
+  mpz_class encrypt(const Key,
+                    const mpz_class, const uint32_t,
+                    const mpz_class, const uint32_t);
 
-  mpz_class decrypt ( const Key,
-                      const mpz_class, const uint32_t,
-                      const mpz_class, const uint32_t );
+  mpz_class decrypt(const Key,
+                    const mpz_class, const uint32_t,
+                    const mpz_class, const uint32_t);
 };
 
 class FFXException : public std::exception {

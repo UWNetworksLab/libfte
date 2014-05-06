@@ -7,8 +7,8 @@
 
 namespace ffx {
 
-mpz_class aes_ecb ( const Key, const mpz_class, const uint32_t );
-mpz_class aes_cbc_mac ( const Key, const mpz_class, const uint32_t );
+mpz_class aes_ecb(const Key, const mpz_class, const uint32_t);
+mpz_class aes_cbc_mac(const Key, const mpz_class, const uint32_t);
 
 } // namespace ffx
 

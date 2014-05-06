@@ -5,12 +5,21 @@
 
 namespace ffx {
 
-mpz_class extract_bit_range ( const mpz_class, const uint32_t, const uint32_t,
-                              const uint32_t );
-void mpz_to_char_array ( const mpz_class, const uint32_t, unsigned char * & );
-void char_array_to_mpz ( unsigned char *, const uint32_t, mpz_class & );
-void string_to_mpz ( std::string, const uint32_t, mpz_class & );
-void fte_key_to_char_array ( std::string, const uint32_t, unsigned char * & );
+
+mpz_class extract_bit_range(const mpz_class, const uint32_t, const uint32_t,
+                            const uint32_t);
+
+
+void mpz_to_char_array(const mpz_class, const uint32_t, unsigned char * &);
+
+
+void char_array_to_mpz(unsigned char *, const uint32_t, mpz_class &);
+
+
+void string_to_mpz(std::string, const uint32_t, mpz_class &);
+
+
+void fte_key_to_char_array(std::string, const uint32_t, unsigned char * &);
 
 } // namespace ffx
 

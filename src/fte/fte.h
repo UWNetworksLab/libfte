@@ -17,8 +17,8 @@ const uint32_t kFTEKeyLengthInNibbles = 32;
 class Key : public ffx::Key {
  public:
   Key() : ffx::Key() {};
-  Key ( std::string key ) : ffx::Key ( key ) {};
-  Key ( const char * key ) : ffx::Key ( key ) {};
+  Key(std::string key) : ffx::Key(key) {};
+  Key(const char * key) : ffx::Key(key) {};
 };
 
 class FTE {
@@ -30,17 +30,17 @@ class FTE {
   uint32_t input_language_capacity_;
   uint32_t output_language_capacity_;
  public:
-  FTE ( const std::string, const uint32_t,
-        const std::string, const uint32_t,
-        const Key );
+  FTE(const std::string, const uint32_t,
+      const std::string, const uint32_t,
+      const Key);
 
   /**
    * encrypt function desc.
    * @param plaintext desc.
    * @param ciphertext desc.
    */
-  std::string encrypt ( const std::string plaintext );
-  std::string decrypt ( const std::string ciphertext );
+  std::string encrypt(const std::string plaintext);
+  std::string decrypt(const std::string ciphertext);
 
 };
 

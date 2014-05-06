@@ -4,11 +4,11 @@
 
 namespace ffx {
 
-Key::Key ( const std::string key ) {
+Key::Key(const std::string key) {
   key_ = key;
 }
 
-Key::Key ( const char * key ) {
+Key::Key(const char * key) {
   key_ = key;
 }
 
