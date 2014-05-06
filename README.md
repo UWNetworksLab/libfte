@@ -59,68 +59,42 @@ $ make test
 [ RUN      ] CauseException.InvalidFstFormatException1
 [       OK ] CauseException.InvalidInputNoAcceptingPathsException1 (0 ms)
 ...
-[ RUN      ] CauseException.InvalidRankInputException
-[       OK ] CauseException.InvalidRankInputException (0 ms)
-[----------] 6 tests from CauseException (1 ms total)
+[ RUN      ] RankerNormalUsage.Test10
+[       OK ] RankerNormalUsage.Test10 (1 ms)
+[----------] 10 tests from RankerNormalUsage (6 ms total)
 
 [----------] Global test environment tear-down
-[==========] 6 tests from 1 test case ran. (1 ms total)
-[  PASSED  ] 6 tests.
+[==========] 43 tests from 6 test cases ran. (20 ms total)
+[  PASSED  ] 43 tests.
 ```
 
-fte-encryption examples
------------------------
-
-```
-#include "fte.h"
-
-int main(int argc, char **argv) {
-    fte fteObj(..., ..., ...);
-    fte.encrypt("hello");
-    fteObj.decrypt(ciphertext);
-    return 0;
-}
-
-```
-
-ffx-encryption example
+FTE encryption example
 ----------------------
 
-TODO
-
-ranking example
----------------
-
 ```c++
-#include <iostream>
+#include "fte/fte.h"
 
-#include "ranker.h"
-#include "tests/dfas.h"
+int main() {
+  fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
+  fte::FTE fteObj = fte::FTE(VALID_DFA_5, 16, // regex="^\C+$"
+                             VALID_DFA_1, 128, // regex="^(a|b)+$"
+                             K);
+  std::string X = "Hello, Word!";
+  std::string Y = fteObj.encrypt(X);
+  std::string Z = fteObj.decrypt(Y);
 
-int main(int argc, char **argv) {
-    uint32_t N = 8;
-    ranker rankerObj(VALID_DFA_1, N);
-    std::string X = "bbbbbbbb";
-    mpz_class C   = rankerObj.rank(X);
-    std::string Y = rankerObj.unrank(C);
-    std::cout << "X: " << X << std::endl;
-    std::cout << "C: " << C << std::endl;
-    std::cout << "Y: " << Y << std::endl;
-    return 0;
+  std::cout << "fte:" << std::endl;
+  std::cout << "- X: " << X << std::endl;
+  std::cout << "- Y: " << Y << std::endl;
+  std::cout << "- Z: " << Z << std::endl;
 }
 ```
 
-which outputs
+will output
 
 ```
-X: bbbbbbbb
-C: 509
-Y: bbbbbbbb
+fte:
+- X: Hello, Word!
+- Y: babbbaababababbbbabbbbaabbaabaaaaabbabaabaaabbaaaabbabaabaababaaabbbabbbaabababaaabbaabababbbbbbaabbbaaaaaaabbbbbabaabbbaaaabab
+- Z: Hello, Word!
 ```
-
-because ```C = 2^1 + 2^2 + ... + 2^7 + (2^N - 1)```.
-
-code style
-----------
-
-```astyle --indent=spaces=2 -D -U -c --max-code-length=80 --style=google```
