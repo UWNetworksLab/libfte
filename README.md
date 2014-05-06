@@ -6,10 +6,15 @@ This contains initial unit tests for (un)ranking.
 Dependencies
 ------------
 
+### For testing
+
+* googletest: https://code.google.com/p/googletest/ (included: thirdparty/gtest-1.7.0)
+
+### For building/distributing
+
 * make, g++
 * GMP: https://gmplib.org/
 * aes: http://brgladman.org/oldsite/AES/index.php (included: thirdparty/aes)
-* googletest: https://code.google.com/p/googletest/ (included: thirdparty/gtest-1.7.0)
 
 ### OSX
 
