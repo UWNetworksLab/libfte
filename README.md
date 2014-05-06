@@ -53,11 +53,11 @@ Test
 
 ```
 $ make test
-[==========] Running 6 tests from 1 test case.
+[==========] Running 43 tests from 6 test cases.
 [----------] Global test environment set-up.
-[----------] 6 tests from CauseException
+[----------] 7 tests from CauseException
 [ RUN      ] CauseException.InvalidFstFormatException1
-[       OK ] CauseException.InvalidInputNoAcceptingPathsException1 (0 ms)
+[       OK ] CauseException.InvalidFstFormatException1 (1 ms)
 ...
 [ RUN      ] RankerNormalUsage.Test10
 [       OK ] RankerNormalUsage.Test10 (1 ms)
