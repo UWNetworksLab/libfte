@@ -29,9 +29,9 @@ array_type_string_t1 tokenize( std::string line, char delim ) {
 /*
  * Parameters:
  *   dfa_str: a minimized ATT FST formatted dfa, see: http://www2.research.att.com/~fsmtools/fsm/man4/fsm.5.html
- *   max_len: the maxium length to compute dfa::buildTable
+ *   max_len: the maxium length to compute DFA::buildTable
  */
-dfa::dfa(const std::string dfa_str, const uint32_t max_len)
+DFA::DFA(const std::string dfa_str, const uint32_t max_len)
     : _fixed_slice(max_len),
       _start_state(0),
       _num_states(0),
@@ -124,10 +124,10 @@ dfa::dfa(const std::string dfa_str, const uint32_t max_len)
         }
     }
 
-    dfa::_validate();
+    DFA::_validate();
 
     // perform our precalculation to speed up (un)ranking
-    dfa::_buildTable();
+    DFA::_buildTable();
 
     if (1 >= getNumWordsInLanguage(0, _fixed_slice)) {
         throw fte::InvalidInputNoAcceptingPaths();
@@ -135,7 +135,7 @@ dfa::dfa(const std::string dfa_str, const uint32_t max_len)
 }
 
 
-void dfa::_validate() {
+void DFA::_validate() {
     // ensure dfa has at least one state
     if (0 == _states.size())
         throw fte::InvalidFstFormat();
@@ -164,7 +164,7 @@ void dfa::_validate() {
     }
 }
 
-void dfa::_buildTable() {
+void DFA::_buildTable() {
     uint32_t i;
     uint32_t q;
     uint32_t a;
@@ -198,7 +198,7 @@ void dfa::_buildTable() {
 }
 
 
-std::string dfa::unrank( const mpz_class c_in ) {
+std::string DFA::unrank( const mpz_class c_in ) {
     std::string retval;
 
     // walk the dfa subtracting values from c until we have our n symbols
@@ -271,7 +271,7 @@ std::string dfa::unrank( const mpz_class c_in ) {
     return retval;
 }
 
-mpz_class dfa::rank( const std::string X ) {
+mpz_class DFA::rank( const std::string X ) {
     uint32_t n = X.size();
     mpz_class retval = 0;
 
@@ -331,11 +331,11 @@ mpz_class dfa::rank( const std::string X ) {
     return retval;
 }
 
-mpz_class dfa::getNumWordsInLanguage( const uint32_t max_word_length ) {
+mpz_class DFA::getNumWordsInLanguage( const uint32_t max_word_length ) {
     return getNumWordsInLanguage( 0, max_word_length );
 }
 
-mpz_class dfa::getNumWordsInLanguage( const uint32_t min_word_length,
+mpz_class DFA::getNumWordsInLanguage( const uint32_t min_word_length,
                                       const uint32_t max_word_length ) {
     // TODO: remove asserts
     // verify min_word_length <= max_word_length <= _fixed_slice

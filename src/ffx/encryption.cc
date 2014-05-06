@@ -31,7 +31,7 @@ mpz_class aes_ecb(const Key K, const mpz_class X, const uint32_t X_len) {
   }
 
   mpz_to_char_array(X, byte_string_len, inBuffer);
-  fte_key_to_char_array(K.getKey(), kFFXKeyLengthInBytes, key);
+  fte_key_to_char_array(K.get_key(), kFFXKeyLengthInBytes, key);
 
   aes_init();
   aes_encrypt_key128(key, ctx);
@@ -78,7 +78,7 @@ mpz_class aes_cbc_mac(const Key K, const mpz_class X, const uint32_t X_len) {
   }
 
   mpz_to_char_array(X, byte_string_len, inBuffer);
-  fte_key_to_char_array(K.getKey(), kFFXKeyLengthInBytes, key);
+  fte_key_to_char_array(K.get_key(), kFFXKeyLengthInBytes, key);
 
   aes_init();
   aes_encrypt_key128(key, ctx);

@@ -32,7 +32,7 @@ typedef std::vector< std::vector<uint32_t> > array_type_uint32_t2;
 typedef std::vector< std::vector<mpz_class> > array_type_mpz_t2;
 typedef std::vector< std::string > array_type_string_t1;
 
-class dfa {
+class DFA {
 
   private:
     // the maximum value for which buildTable is computed
@@ -86,10 +86,10 @@ class dfa {
     array_type_mpz_t2 _T;
 
   public:
-    dfa() {};
+    DFA() {};
 
     // The constructor of our rank/urank ranker class
-    dfa( const std::string, const uint32_t );
+    DFA( const std::string, const uint32_t );
 
     // our unrank function an int -> str mapping
     // given an integer i, return the ith lexicographically ordered string in

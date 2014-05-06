@@ -13,8 +13,8 @@ FTE::FTE(const std::string input_dfa, const uint32_t input_max_len,
     throw InvalidKeyLength();
   }
 
-  input_ranker_ = ranking::dfa(input_dfa, input_max_len);
-  output_ranker_ = ranking::dfa(output_dfa, output_max_len);
+  input_ranker_ = ranking::DFA(input_dfa, input_max_len);
+  output_ranker_ = ranking::DFA(output_dfa, output_max_len);
   key_ = key;
   ffx_ = ffx::FFX(kFFXRadix);
 

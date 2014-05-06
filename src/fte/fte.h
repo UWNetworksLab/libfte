@@ -23,23 +23,22 @@ class Key : public ffx::Key {
 
 class FTE {
  private:
-  ranking::dfa input_ranker_;
-  ranking::dfa output_ranker_;
+  ranking::DFA input_ranker_;
+  ranking::DFA output_ranker_;
   Key key_;
   ffx::FFX ffx_;
   uint32_t input_language_capacity_;
   uint32_t output_language_capacity_;
+ 
  public:
   FTE(const std::string, const uint32_t,
       const std::string, const uint32_t,
       const Key);
 
-  /**
-   * encrypt function desc.
-   * @param plaintext desc.
-   * @param ciphertext desc.
-   */
+  
   std::string encrypt(const std::string plaintext);
+  
+  
   std::string decrypt(const std::string ciphertext);
 
 };
