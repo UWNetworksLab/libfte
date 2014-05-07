@@ -3,12 +3,14 @@ GMP_DIR = /usr/local/lib
 AES_DIR = thirdparty/aes
 
 # the compiler: gcc for C program, define as g++ for C++
-CXX = g++
+CC = /Users/kpdyer/Downloads/emsdk_portable/emscripten/1.12.0/emcc
+CXX = /Users/kpdyer/Downloads/emsdk_portable/emscripten/1.12.0/em++
+AR = /Users/kpdyer/Downloads/emsdk_portable/emscripten/1.12.0/emar
 
 # compiler flags:
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
-CXXFLAGS  = -O3 -g -Wall -Isrc -Ithirdparty -I$(GTEST_DIR)/include
+CXXFLAGS  = -O3 -g -Wall -Isrc -Ithirdparty -I/usr/local/include -I$(GTEST_DIR)/include
 LDFLAGS = -L$(GMP_DIR) -L$(AES_DIR) -L$(GTEST_DIR) -lgmp -lgmpxx -laes -lgtest
 
 # the build target executable:
@@ -36,6 +38,14 @@ OBJ_MAIN = src/main.o \
            src/fte/ranking/dfa.o \
            src/tests/dfas.o
 
+TARGET_LIBFTE = .libs/libfte.a
+OBJ_LIBFTE = src/ffx/conversions.o \
+             src/ffx/encryption.o \
+             src/ffx/key.o \
+             src/ffx/ffx.o \
+             src/fte/fte.o \
+             src/fte/ranking/dfa.o \
+
 OBJ_AES = thirdparty/aes/aes_modes.o \
           thirdparty/aes/aescrypt.o \
           thirdparty/aes/aeskey.o \
@@ -43,7 +53,7 @@ OBJ_AES = thirdparty/aes/aes_modes.o \
 
 LIBAES = thirdparty/aes/libaes.a
 
-all: $(GTEST_DIR)/libgtest.a $(LIBAES) $(TARGET_TEST) $(TARGET_MAIN)
+all: $(GTEST_DIR)/libgtest.a $(LIBAES) $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_LIBFTE)
 
 $(GTEST_DIR)/libgtest.a:
 	cd $(GTEST_DIR) && cmake . && $(MAKE)
@@ -58,7 +68,10 @@ $(TARGET_MAIN): $(OBJ_MAIN)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
 $(LIBAES): $(OBJ_AES)
-	ar rsc $(LIBAES) $(OBJ_AES)
+	$(AR) rsc $(LIBAES) $(OBJ_AES)
+
+$(TARGET_LIBFTE): $(OBJ_LIBAES) $(OBJ_LIBFTE)
+	$(AR) rsc $(TARGET_LIBFTE) $(OBJ_LIBFTE) $(OBJ_AES)
 
 test:
 	@./$(TARGET_TEST)
