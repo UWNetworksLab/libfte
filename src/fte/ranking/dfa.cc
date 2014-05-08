@@ -1,12 +1,14 @@
-#include "ranker.h"
-
 #include <assert.h>
 #include <sstream>
 
+#include "fte/ranking/dfa.h"
+
 namespace fte {
 
+namespace ranking {
+
 /*
- * Please see ranker.h for a detailed explantion of the
+ * Please see dfa.h for a detailed explantion of the
  * methods in this file and their purpose.
  */
 
@@ -26,15 +28,15 @@ array_type_string_t1 tokenize( std::string line, char delim ) {
 
 /*
  * Parameters:
- *   dfa_str: a minimized ATT FST formatted ranker, see: http://www2.research.att.com/~fsmtools/fsm/man4/fsm.5.html
- *   max_len: the maxium length to compute ranker::buildTable
+ *   dfa_str: a minimized ATT FST formatted dfa, see: http://www2.research.att.com/~fsmtools/fsm/man4/fsm.5.html
+ *   max_len: the maxium length to compute DFA::buildTable
  */
-ranker::ranker(const std::string dfa_str, const uint32_t max_len)
+DFA::DFA(const std::string dfa_str, const uint32_t max_len)
     : _fixed_slice(max_len),
       _start_state(0),
       _num_states(0),
       _num_symbols(0) {
-    // construct the _start_state, _final_states and symbols/states of our ranker
+    // construct the _start_state, _final_states and symbols/states of our dfa
     bool startStateIsntSet = true;
     std::string line;
     std::istringstream my_str_stream(dfa_str);
@@ -86,7 +88,7 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
         _sigma_reverse.insert( std::pair<char,uint32_t>((char)(_symbols.at(j)), j) );
     }
 
-    // initialize all transitions in our ranker to our dead state
+    // initialize all transitions in our dfa to our dead state
     _delta.resize(_num_states);
     for (j=0; j<_num_states; j++) {
         _delta.at(j).resize(_num_symbols);
@@ -122,12 +124,10 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
         }
     }
 
-
-
-    ranker::_validate();
+    DFA::_validate();
 
     // perform our precalculation to speed up (un)ranking
-    ranker::_buildTable();
+    DFA::_buildTable();
 
     if (1 >= getNumWordsInLanguage(0, _fixed_slice)) {
         throw fte::InvalidInputNoAcceptingPaths();
@@ -135,14 +135,14 @@ ranker::ranker(const std::string dfa_str, const uint32_t max_len)
 }
 
 
-void ranker::_validate() {
-    // ensure ranker has at least one state
+void DFA::_validate() {
+    // ensure dfa has at least one state
     if (0 == _states.size())
         throw fte::InvalidFstFormat();
     if (0 == _final_states.size())
         throw fte::InvalidFstFormat();
 
-    // ensure ranker has at least one symbol
+    // ensure dfa has at least one symbol
     if (0 == _sigma.size())
         throw fte::InvalidFstFormat();
     if (0 == _sigma_reverse.size())
@@ -164,7 +164,7 @@ void ranker::_validate() {
     }
 }
 
-void ranker::_buildTable() {
+void DFA::_buildTable() {
     uint32_t i;
     uint32_t q;
     uint32_t a;
@@ -198,10 +198,10 @@ void ranker::_buildTable() {
 }
 
 
-std::string ranker::unrank( const mpz_class c_in ) {
+std::string DFA::unrank( const mpz_class c_in ) {
     std::string retval;
 
-    // walk the ranker subtracting values from c until we have our n symbols
+    // walk the dfa subtracting values from c until we have our n symbols
     mpz_class c = c_in;
     uint32_t n = 0;
     while (true) {
@@ -271,11 +271,11 @@ std::string ranker::unrank( const mpz_class c_in ) {
     return retval;
 }
 
-mpz_class ranker::rank( const std::string X ) {
+mpz_class DFA::rank( const std::string X ) {
     uint32_t n = X.size();
     mpz_class retval = 0;
 
-    // walk the ranker, adding values from _T to c
+    // walk the dfa, adding values from _T to c
     uint32_t i = 0;
     uint32_t j = 0;
     uint32_t symbol_as_int = 0;
@@ -331,12 +331,13 @@ mpz_class ranker::rank( const std::string X ) {
     return retval;
 }
 
-mpz_class ranker::getNumWordsInLanguage( const uint32_t max_word_length ) {
+mpz_class DFA::getNumWordsInLanguage( const uint32_t max_word_length ) {
     return getNumWordsInLanguage( 0, max_word_length );
 }
 
-mpz_class ranker::getNumWordsInLanguage( const uint32_t min_word_length,
-        const uint32_t max_word_length ) {
+mpz_class DFA::getNumWordsInLanguage( const uint32_t min_word_length,
+                                      const uint32_t max_word_length ) {
+    // TODO: remove asserts
     // verify min_word_length <= max_word_length <= _fixed_slice
     assert(0<=min_word_length);
     assert(min_word_length<=max_word_length);
@@ -352,5 +353,7 @@ mpz_class ranker::getNumWordsInLanguage( const uint32_t min_word_length,
     }
     return num_words;
 }
+
+} // namespace ranking
 
 } // namespace fte

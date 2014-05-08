@@ -6,8 +6,15 @@ This contains initial unit tests for (un)ranking.
 Dependencies
 ------------
 
+### For testing
+
+* googletest: https://code.google.com/p/googletest/ (included: thirdparty/gtest-1.7.0)
+
+### For building/distributing
+
 * make, g++
 * GMP: https://gmplib.org/
+* aes: http://brgladman.org/oldsite/AES/index.php (included: thirdparty/aes)
 
 ### OSX
 
@@ -52,64 +59,48 @@ Test
 
 ```
 $ make test
-[==========] Running 6 tests from 1 test case.
+[==========] Running 43 tests from 6 test cases.
 [----------] Global test environment set-up.
-[----------] 6 tests from CauseException
+[----------] 7 tests from CauseException
 [ RUN      ] CauseException.InvalidFstFormatException1
-[       OK ] CauseException.InvalidInputNoAcceptingPathsException1 (0 ms)
+[       OK ] CauseException.InvalidFstFormatException1 (1 ms)
 ...
-[ RUN      ] CauseException.InvalidRankInputException
-[       OK ] CauseException.InvalidRankInputException (0 ms)
-[----------] 6 tests from CauseException (1 ms total)
+[ RUN      ] RankerNormalUsage.Test10
+[       OK ] RankerNormalUsage.Test10 (1 ms)
+[----------] 10 tests from RankerNormalUsage (6 ms total)
 
 [----------] Global test environment tear-down
-[==========] 6 tests from 1 test case ran. (1 ms total)
-[  PASSED  ] 6 tests.
+[==========] 43 tests from 6 test cases ran. (20 ms total)
+[  PASSED  ] 43 tests.
 ```
 
-fte-encryption examples
------------------------
-
-```
-#include "fte.h"
-
-int main(int argc, char **argv) {
-    fte fteObj(..., ..., ...);
-    fte.encrypt("hello");
-    fteObj.decrypt(ciphertext);
-    return 0;
-}
-
-```
-
-(un)ranking example
--------------------
+FTE encryption example
+----------------------
 
 ```c++
-#include <iostream>
+#include "fte/fte.h"
 
-#include "ranker.h"
-#include "tests/dfas.h"
+int main() {
+  // setup
+  fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
+  fte::FTE fteObj = fte::FTE(VALID_DFA_5, 16, // regex="^\C{1,16}$"
+                             VALID_DFA_1, 128, // regex="^(a|b){1,128}$"
+                             K);
+  // encrypt-then-decrypt
+  std::string input_plaintext = "Hello, Word!";
+  std::string ciphertext = fteObj.encrypt(X);
+  std::string output_plaintext = fteObj.decrypt(Y);
 
-int main(int argc, char **argv) {
-    uint32_t N = 8;
-    ranker rankerObj(VALID_DFA_1, N);
-    std::string X = "bbbbbbbb";
-    mpz_class C   = rankerObj.rank(X);
-    std::string Y = rankerObj.unrank(C);
-    std::cout << "X: " << X << std::endl;
-    std::cout << "C: " << C << std::endl;
-    std::cout << "Y: " << Y << std::endl;
-    return 0;
+  std::cout << "input_plaintext: " << X << std::endl;
+  std::cout << "ciphertext: " << Y << std::endl;
+  std::cout << "output_plaintext: " << Z << std::endl;
 }
 ```
 
-which outputs
+will output
 
 ```
-X: bbbbbbbb
-C: 509
-Y: bbbbbbbb
+input_plaintext: Hello, Word!
+ciphertext: babbbaababababbbbabbbbaabbaabaaaaabbabaabaaabbaaaabbabaabaababaaabbbabbbaabababaaabbaabababbbbbbaabbbaaaaaaabbbbbabaabbbaaaabab
+output_plaintext: Hello, Word!
 ```
-
-because ```C = 2^1 + 2^2 + ... + 2^7 + (2^N - 1)```.

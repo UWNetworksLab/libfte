@@ -17,12 +17,13 @@
 #include <map>
 #include <vector>
 
-#include <stdint.h>
 #include <gmpxx.h>
 
-#include "exceptions.h"
+#include "fte/exceptions.h"
 
 namespace fte {
+
+namespace ranking {
 
 typedef std::vector<char> array_type_char_t1;
 typedef std::vector<bool> array_type_bool_t1;
@@ -31,7 +32,7 @@ typedef std::vector< std::vector<uint32_t> > array_type_uint32_t2;
 typedef std::vector< std::vector<mpz_class> > array_type_mpz_t2;
 typedef std::vector< std::string > array_type_string_t1;
 
-class ranker {
+class DFA {
 
   private:
     // the maximum value for which buildTable is computed
@@ -85,10 +86,10 @@ class ranker {
     array_type_mpz_t2 _T;
 
   public:
-    ranker() {};
+    DFA() {};
 
     // The constructor of our rank/urank ranker class
-    ranker( const std::string, const uint32_t );
+    DFA( const std::string, const uint32_t );
 
     // our unrank function an int -> str mapping
     // given an integer i, return the ith lexicographically ordered string in
@@ -103,6 +104,8 @@ class ranker {
     mpz_class getNumWordsInLanguage( const uint32_t );
     mpz_class getNumWordsInLanguage( const uint32_t, const uint32_t );
 };
+
+} // namespace ranking
 
 } // namespace fte
 
