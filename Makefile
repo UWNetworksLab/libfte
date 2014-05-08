@@ -3,9 +3,9 @@ GMP_DIR = /usr/local/lib
 AES_DIR = thirdparty/aes
 
 # the compiler: gcc for C program, define as g++ for C++
-CC = /Users/kpdyer/Downloads/emsdk_portable/emscripten/1.12.0/emcc
-CXX = /Users/kpdyer/Downloads/emsdk_portable/emscripten/1.12.0/em++
-AR = /Users/kpdyer/Downloads/emsdk_portable/emscripten/1.12.0/emar
+CC = emcc
+CXX = em++
+AR = emar
 
 # compiler flags:
 #  -g    adds debugging information to the executable file
