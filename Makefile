@@ -1,5 +1,4 @@
 GTEST_DIR = thirdparty/gtest-1.7.0
-GMP_DIR = /usr/local/lib
 AES_DIR = thirdparty/aes
 
 # the compiler: gcc for C program, define as g++ for C++
@@ -7,10 +6,7 @@ CC = emcc
 CXX = em++
 AR = emar
 
-# compiler flags:
-#  -g    adds debugging information to the executable file
-#  -Wall turns on most, but not all, compiler warnings
-CXXFLAGS  = -O3 -g -Wall -Isrc -Ithirdparty -I/usr/local/include -I$(GTEST_DIR)/include
+CXXFLAGS  = -O3 -g -Wall -I$(GMP_DIR) -Isrc -Ithirdparty -I$(GTEST_DIR)/include
 LDFLAGS = -L$(GMP_DIR) -L$(AES_DIR) -L$(GTEST_DIR) -lgmp -lgmpxx -laes -lgtest
 
 # the build target executable:
