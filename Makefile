@@ -6,8 +6,8 @@ CC = emcc
 CXX = em++
 AR = emar
 
-CXXFLAGS  = -O3 -g -Wall -I$(GMP_DIR) -Isrc -Ithirdparty -I$(GTEST_DIR)/include
-LDFLAGS = -L$(GMP_DIR) -L$(AES_DIR) -L$(GTEST_DIR) -lgmp -lgmpxx -laes -lgtest
+CXXFLAGS  = -O0 -Wall -I$(GMP_DIR) -Isrc -Ithirdparty -I$(GTEST_DIR)/include
+LDFLAGS = -L$(GMP_DIR)/.libs -L$(AES_DIR) -L$(GTEST_DIR) -lgmp
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -25,6 +25,7 @@ OBJ_TEST = src/tests.o \
            src/tests/test_ranker.o
 
 TARGET_MAIN = bin/main
+TARGET_MAINJS = bin/main.js
 OBJ_MAIN = src/main.o \
            src/ffx/conversions.o \
            src/ffx/encryption.o \
@@ -35,6 +36,7 @@ OBJ_MAIN = src/main.o \
            src/tests/dfas.o
 
 TARGET_LIBFTE = .libs/libfte.a
+TARGET_LIBFTEJS = .libs/libfte.js
 OBJ_LIBFTE = src/ffx/conversions.o \
              src/ffx/encryption.o \
              src/ffx/key.o \
@@ -47,8 +49,6 @@ OBJ_AES = thirdparty/aes/aes_modes.o \
           thirdparty/aes/aeskey.o \
           thirdparty/aes/aestab.o
 
-LIBAES = thirdparty/aes/libaes.a
-
 all: $(GTEST_DIR)/libgtest.a $(LIBAES) $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_LIBFTE)
 
 $(GTEST_DIR)/libgtest.a:
@@ -60,14 +60,20 @@ $(GTEST_DIR)/libgtest.a:
 $(TARGET_TEST): $(OBJ_TEST)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
-$(TARGET_MAIN): $(OBJ_MAIN)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
+$(TARGET_MAIN): $(OBJ_MAIN) $(OBJ_AES)
+	$(CXX) $(CXXFLAGS) $(OBJ_MAIN) $(OBJ_AES) $(LDFLAGS) -o $@ $^
+
+$(TARGET_MAINJS): $(OBJ_MAIN) $(OBJ_AES)
+	$(CXX) $(CXXFLAGS) $(OBJ_MAIN) $(OBJ_AES) $(LDFLAGS) -o $@ $^
 
 $(LIBAES): $(OBJ_AES)
 	$(AR) rsc $(LIBAES) $(OBJ_AES)
 
 $(TARGET_LIBFTE): $(LIBAES) $(OBJ_LIBFTE)
 	$(AR) rsc $(TARGET_LIBFTE) $(OBJ_LIBFTE) $(OBJ_AES)
+
+$(TARGET_LIBFTEJS): $(LIBAESJS) $(OBJ_LIBFTE)
+	$(AR) rsc $(TARGET_LIBFTEJS) $(OBJ_LIBFTE) $(LIBAES)
 
 test:
 	@./$(TARGET_TEST)
@@ -79,3 +85,5 @@ clean:
 	$(RM) $(OBJ_MAIN)
 	$(RM) $(LIBAES)
 	$(RM) $(OBJ_AES)
+	$(RM) $(TARGET_LIBFTE)
+	$(RM) $(TARGET_LIBFTEJS)

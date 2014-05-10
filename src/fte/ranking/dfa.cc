@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <exception>
 #include <sstream>
 
 #include "fte/ranking/dfa.h"

@@ -1,6 +1,8 @@
 #ifndef _LIBFTE_SRC_FFX_FFX_H
 #define _LIBFTE_SRC_FFX_FFX_H
 
+#include <exception>
+
 #include <gmpxx.h>
 
 #include "ffx/conversions.h"
