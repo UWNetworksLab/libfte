@@ -1,15 +1,15 @@
-GTEST_DIR = thirdparty/gtest-1.7.0
 AES_DIR = thirdparty/aes
+GTEST_LIB_DIR = thirdparty/gtest-1.7.0/lib/.libs
+GTEST_INC_DIR = thirdparty/gtest-1.7.0/include
 
 # the compiler: gcc for C program, define as g++ for C++
 CC = emcc
 CXX = em++
-#AR = emar
 
 ARFLAGS = rsc
-CFLAGS = -O3 -Wall
-CXXFLAGS  = -O3 -Wall -I/vagrant/sandbox/emscripten/system/lib/libcxxabi/include -I$(GMP_DIR) -Isrc -Ithirdparty -I$(GTEST_DIR)/include
-LDFLAGS = -L$(GMP_DIR)/.libs -L$(AES_DIR) -L.libs -L$(GTEST_DIR) -lgtest -lgmp -lfte 
+_CFLAGS = $(CFLAGS) -O3 -Wall
+_CXXFLAGS  = $(CXXFLAGS) -O3 -Wall -I$(GMP_DIR) -Isrc -Ithirdparty -I$(GTEST_INC_DIR) --closure 1 -s DISABLE_EXCEPTION_CATCHING=0
+_LDFLAGS = $(LDFLAGS) -L$(GMP_DIR)/.libs -L.libs -L$(GTEST_LIB_DIR) -lgtest_main -lgtest -lgmp -lfte 
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -40,30 +40,30 @@ OBJ_LIBAES = thirdparty/aes/aes_modes.o \
           thirdparty/aes/aeskey.o \
           thirdparty/aes/aestab.o
 
-TARGET_GTEST = $(GTEST_DIR)/libgtest.a
+TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
 
-all: $(GTEST_DIR)/libgtest.a $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_LIBFTE)
+all: $(TARGET_GTEST) $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_LIBFTE)
 
 $(TARGET_GTEST):
-	cd $(GTEST_DIR) && cmake . && $(MAKE)
+	cd $(GTEST_LIB_DIR) && cmake . && $(MAKE)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(_CFLAGS) -c -o $@ $<
 
 %.o: %.cc
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(_CXXFLAGS) -c -o $@ $<
 
 $(TARGET_TEST): $(TARGET_GTEST) $(OBJ_TEST)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
+	$(CXX) $(_CXXFLAGS) $(_LDFLAGS) -o $@ $(OBJ_TEST)
 
 $(TARGET_TESTJS): $(TARGET_GTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $(OBJ_TEST)
+	$(CXX) $(_CXXFLAGS) $(_LDFLAGS) -o $@ $(OBJ_TEST)
 
 $(TARGET_MAIN): $(OBJ_MAIN) $(TARGET_LIBFTE)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@
+	$(CXX) $(_CXXFLAGS) $(_LDFLAGS) -o $@ $(OBJ_MAIN)
 
 $(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $(OBJ_MAIN)
+	$(CXX) $(_CXXFLAGS) $(_LDFLAGS) -o $@ $(OBJ_MAIN)
 
 $(TARGET_LIBAES): $(OBJ_LIBAES)
 	$(AR) $(ARFLAGS) $(TARGET_LIBAES) $^

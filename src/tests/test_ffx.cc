@@ -1,4 +1,7 @@
-#include <gmpxx.h>
+#define __STDC_LIMIT_MACROS
+#define __STDC_CONSTANT_MACROS
+
+//#include <gmpxx.h>
 
 #include "gtest/gtest.h"
 
@@ -187,9 +190,10 @@ TEST(FFX2, TestVector6) {
   ffx::FFX ffxObj = ffx::FFX(FFX_RADIX);
   ffx::Key K = "0000000000000000FFFFFFFFFFFFFFFF";
   mpz_class X = 1546594394;
+  mpz_class ciphertext = mpz_class("3223057243");
   uint32_t X_len = 32;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y, 3223057243);
+  EXPECT_EQ(Y, ciphertext);
   EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
 }
 
