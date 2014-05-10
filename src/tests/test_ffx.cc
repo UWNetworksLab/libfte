@@ -4,8 +4,6 @@
 
 #include "ffx/ffx.h"
 
-#include "fte/fte.h"
-
 const uint32_t FFX_RADIX = 2;
 
 TEST(FFX2, ExtractBits1) {
