@@ -5,12 +5,6 @@
 #include "fte/fte.h"
 #include "tests/dfas.h"
 
-// ffx includes
-#include "ffx/ffx.h"
-
-// ranking includes
-#include "fte/ranking/dfa.h"
-
 int main(int argc, char **argv) {
   // fte example
   fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
