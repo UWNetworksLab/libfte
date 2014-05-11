@@ -1,4 +1,5 @@
 AES_DIR = thirdparty/aes
+GTEST_DIR = thirdparty/gtest-1.7.0
 GTEST_LIB_DIR = thirdparty/gtest-1.7.0/lib/.libs
 GTEST_INC_DIR = thirdparty/gtest-1.7.0/include
 
@@ -7,9 +8,9 @@ CC = emcc
 CXX = em++
 
 ARFLAGS = rsc
-_CFLAGS = $(CFLAGS) -O3 -Wall
-_CXXFLAGS  = $(CXXFLAGS) -O3 -Wall -I$(GMP_DIR) -Isrc -Ithirdparty -I$(GTEST_INC_DIR) --closure 1 -s DISABLE_EXCEPTION_CATCHING=0
-_LDFLAGS = $(LDFLAGS) -L$(GMP_DIR)/.libs -L.libs -L$(GTEST_LIB_DIR) -lgtest_main -lgtest -lgmp -lfte 
+_CFLAGS = $(CFLAGS) -g0 -O3 -Wall
+_CXXFLAGS  = $(CXXFLAGS) -g0 -O3 -Wall -I$(GMP_DIR) -Isrc -Ithirdparty -I$(GTEST_INC_DIR) --closure 1 -s DISABLE_EXCEPTION_CATCHING=0
+_LDFLAGS = $(LDFLAGS) -L$(GMP_DIR)/.libs -L.libs -L$(GTEST_LIB_DIR) -lgtest -lgmp -lfte 
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -45,7 +46,7 @@ TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
 all: $(TARGET_GTEST) $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_LIBFTE)
 
 $(TARGET_GTEST):
-	cd $(GTEST_LIB_DIR) && cmake . && $(MAKE)
+	cd $(GTEST_DIR) && cmake . && $(MAKE)
 
 %.o: %.c
 	$(CC) $(_CFLAGS) -c -o $@ $<
