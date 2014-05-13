@@ -71,7 +71,7 @@ mpz_class F(const Key K,
   uint32_t Z_len = 16;
   mpz_class counter = 1;
   while(Z_len < (d + 4)) {
-    mpz_class ctxt = aes_ecb(K, (Y + counter), 128);
+    mpz_class ctxt = aes_ecb_encrypt(K, (Y + counter), 128);
     Z_len += 16;
     Z = Z << 128;
     Z += ctxt;

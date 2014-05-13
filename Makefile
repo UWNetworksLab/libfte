@@ -3,7 +3,7 @@ THIRDPARTY_DIR = third_party
 AES_DIR = $(THIRDPARTY_DIR)/aes
 
 # TODO: create configure.ac script such that we don't have hard-code paths
-ifeq ($(GMP_DIR),1)
+ifeq ($(GMP_DIR),)
 GMP_DIR = /usr/local
 endif
 GMP_LIB_DIR = $(GMP_DIR)/lib
@@ -14,9 +14,9 @@ GTEST_LIB_DIR = $(GTEST_DIR)/lib/.libs
 GTEST_INC_DIR = $(GTEST_DIR)/include
 
 # TODO: remove hard-coded compilers. however, for now we only test/support emcc/em++
-CC = emcc
-CXX = em++
-CXXFLAGS = -s DISABLE_EXCEPTION_CATCHING=0 --closure 1
+#CC = emcc
+#CXX = em++
+#CXXFLAGS = -s DISABLE_EXCEPTION_CATCHING=0 --closure 1
 AR = ar
 NODEJS = nodejs
 ARFLAGS = rsc
@@ -39,7 +39,8 @@ OBJ_MAIN = src/main.o \
 TARGET_LIBFTE = libfte.a
 OBJ_LIBFTE = src/ffx/conversions.o \
              src/ffx/key.o \
-             src/ffx/encryption.o \
+             src/ffx/aes_cbc_mac.o \
+             src/ffx/aes_ecb.o \
              src/ffx/ffx.o \
              src/fte/fte.o \
              src/fte/ranking/dfa.o

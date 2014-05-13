@@ -85,13 +85,13 @@ TEST(FFX2, MpzCharConversion1) {
   unsigned char * Y = new unsigned char[n];
   mpz_class Z = 0;
 
-  ffx::mpz_to_char_array(X, n, Y);
+  ffx::mpz_to_base256(X, n, Y);
 
   EXPECT_EQ(n, 2);
   EXPECT_EQ(Y[1], '\00');
   EXPECT_EQ(Y[0], '\04');
 
-  ffx::char_array_to_mpz(Y, n, Z);
+  ffx::base256_to_mpz(Y, n, Z);
 
   EXPECT_EQ(X, Z);
 
@@ -104,8 +104,8 @@ TEST(FFX2, MpzCharConversion2) {
   unsigned char * Y = new unsigned char[n];
   mpz_class Z = 0;
 
-  ffx::mpz_to_char_array(X, n, Y);
-  ffx::char_array_to_mpz(Y, n, Z);
+  ffx::mpz_to_base256(X, n, Y);
+  ffx::base256_to_mpz(Y, n, Z);
 
   EXPECT_EQ(X, Z);
 

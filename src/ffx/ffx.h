@@ -29,7 +29,8 @@
 #include <gmpxx.h>
 
 #include "ffx/conversions.h"
-#include "ffx/encryption.h"
+#include "ffx/aes_ecb.h"
+#include "ffx/aes_cbc_mac.h"
 #include "ffx/key.h"
 
 namespace ffx {
@@ -37,16 +38,34 @@ namespace ffx {
 const uint32_t DEFAULT_FFX_RADIX = 2;
 const uint32_t DEFAULT_FFX_ROUNDS = 10;
 
+class FFXException : public std::exception {
+  virtual const char* what() const throw() {
+    return "FteException";
+  }
+};
+
+class InvalidKeyLength : public FFXException {
+  virtual const char* what() const throw() {
+    return "Invalid key length.";
+  }
+};
+
+class InvalidRadix : public FFXException {
+  virtual const char* what() const throw() {
+    return "We currently only support radix=2.";
+  }
+};
+
 class FFX {
  private:
   uint32_t radix_;
 
  public:
-  FFX::FFX()
+  FFX()
     : radix_(DEFAULT_FFX_RADIX) {
   }
 
-  FFX::FFX(const uint32_t radix)
+  FFX(const uint32_t radix)
     : radix_(radix) {
     if(radix_ != DEFAULT_FFX_RADIX) {
       throw InvalidRadix();
@@ -70,6 +89,13 @@ class FFX {
   mpz_class encrypt(const Key key,
                     const mpz_class plaintext,
                     const uint32_t plaintext_len);
+  
+  // tweak can be specified, but will be ignored
+  mpz_class encrypt(const Key key,
+                    const mpz_class tweak,
+                    const uint32_t tweak_len,
+                    const mpz_class plaintext,
+                    const uint32_t plaintext_len);
 
 
   /*
@@ -79,35 +105,13 @@ class FFX {
   mpz_class decrypt(const Key key,
                     const mpz_class ciphertext,
                     const uint32_t ciphertext_len);
-
-/* TODO: support tweaks
-
-  mpz_class encrypt(const Key,
-                    const mpz_class, const uint32_t,
-                    const mpz_class, const uint32_t);
-
-  mpz_class decrypt(const Key,
-                    const mpz_class, const uint32_t,
-                    const mpz_class, const uint32_t); 
-*/
-};
-
-class FFXException : public std::exception {
-  virtual const char* what() const throw() {
-    return "FteException";
-  }
-};
-
-class InvalidKeyLength : public FFXException {
-  virtual const char* what() const throw() {
-    return "Invalid key length.";
-  }
-};
-
-class InvalidRadix : public FFXException {
-  virtual const char* what() const throw() {
-    return "We currently only support radix=2.";
-  }
+  
+  // tweak can be specified, but will be ignored
+  mpz_class decrypt(const Key key,
+                    const mpz_class tweak,
+                    const uint32_t tweak_len,
+                    const mpz_class ciphertext,
+                    const uint32_t ciphertext_len);
 };
 
 }
