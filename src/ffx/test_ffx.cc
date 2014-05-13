@@ -1,8 +1,6 @@
 #define __STDC_LIMIT_MACROS
 #define __STDC_CONSTANT_MACROS
 
-//#include <gmpxx.h>
-
 #include "gtest/gtest.h"
 
 #include "ffx/ffx.h"
@@ -10,11 +8,11 @@
 const uint32_t FFX_RADIX = 2;
 
 TEST(FFX2, ExtractBits1) {
-  // 0b1000
+  // We have the 4-bit X as 0b1000
   mpz_class X = 0x08;
   uint8_t X_len = 4;
 
-  // should return exactly 1000b
+  // should return exactly 1000b (bits in index 0 to 3)
   mpz_class retval = ffx::extract_bit_range(X, X_len, 0, 3);
 
   EXPECT_EQ(retval, 0x8);

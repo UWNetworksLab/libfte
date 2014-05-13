@@ -5,9 +5,28 @@
 
 namespace ffx {
 
-    
-mpz_class extract_bit_range(const mpz_class, const uint32_t, const uint32_t,
-                            const uint32_t);
+/* 
+ * Given a bitstring X of length X_len, extract_bit_range returns
+ * the bits in index start to end, inclusive.
+ * 
+ * For example:
+ * inputs:
+ *  - X = 0b10001000
+ *  - X_len = 8
+ *  - start = 0, end = 3
+ * output
+ *  - retval = 0b1000
+ *    because  0b10001000
+ *               [  ]
+ *   position    01234567
+ * 
+ * For those that love Python, this is equivalent to:
+ *   
+ *   bin(X).rjust(X_len,'0')[2:][start:end+1]
+ * 
+ */
+mpz_class extract_bit_range(const mpz_class X, const uint32_t X_len,
+                            const uint32_t start, const uint32_t end);
 
 
 void mpz_to_char_array(const mpz_class, const uint32_t, unsigned char * &);

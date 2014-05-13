@@ -1,3 +1,22 @@
+/*
+ * FFX is a Format-Preserving block cipher. It can be used to implement a
+ * variable-input length blockcipher over an arbitrary radix.
+ * 
+ * This is an implementation for FFX[radix=2] based on the proposed FFX NIST
+ * standard, and the updated FFX specification by Rogaway et al:
+ * 
+ * - http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf
+ * - http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf
+ * 
+ * Unfortunately, test vectors for FFX[2] do not exist. In this directory I've
+ * included aes-ffx-vectors.txt, which has test vectors for radix=10,36. I've
+ * used these test vectors to implement an FFX implementation in Python. In turn
+ * I used the Python implementation to generate FFX[2] vectors.
+ * 
+ * TODO: This implementation only supports radix=2.
+ * TODO: This implementation does not support tweaks.
+ */
+
 #ifndef _LIBFTE_SRC_FFX_FFX_H
 #define _LIBFTE_SRC_FFX_FFX_H
 

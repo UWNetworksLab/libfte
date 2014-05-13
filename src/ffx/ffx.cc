@@ -1,3 +1,7 @@
+/*
+ * See ffx.h for details about FFX. 
+ */
+
 #include <math.h>
 #include <string.h>
 #include <assert.h>
