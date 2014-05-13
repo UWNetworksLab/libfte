@@ -16,19 +16,24 @@ mpz_class aes_ecb_encrypt(const Key key,
   unsigned char * pInBuffer = new unsigned char[byte_string_len];
   unsigned char * pOutBuffer = new unsigned char[byte_string_len];
 
-  uint8_t i = 0;
+  uint32_t i = 0;
   for(i = 0; i < byte_string_len; i++) {
     pInBuffer[i] = 0;
     pOutBuffer[i] = 0;
   }
 
-  for(i = 0; i < kFFXKeyLengthInBytes; ++i) {
+  for(i = 0; i < kFFXKeyLengthInBytes; i++) {
     pKey[i] = 0x00;
   }
 
   mpz_to_base256(plaintext, byte_string_len, pInBuffer);
   base16_to_base256(key.get_key(), kFFXKeyLengthInBytes, pKey);
 
+  i = 0;
+  for(i = 0; i < byte_string_len; i++) {
+    std::cout << (uint32_t)(pInBuffer[i]) << std::endl;
+  }
+  
   aes_init();
   aes_encrypt_key128(pKey, pCtx);
   aes_ecb_encrypt(pInBuffer, pOutBuffer, byte_string_len, pCtx);

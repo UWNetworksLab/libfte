@@ -3,22 +3,21 @@
  * variable-input length blockcipher over an arbitrary radix.
  * 
  * This is an implementation for FFX[radix=2] based on the proposed FFX NIST
- * standard, and the updated FFX specification by Rogaway et al:
- * 
- * - http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf
- * - http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf
+ * standard, and the updated FFX specification by Rogaway et al. [2,3].
  * 
  * Unfortunately, test vectors for FFX[2] do not exist. In this directory I've
  * included aes-ffx-vectors.txt, which has test vectors for radix=10,36. I've
- * used these test vectors to implement an FFX implementation in Python. (Not
- * yet public.) In turn I used the Python implementation to generate FFX[2]
- * vectors.
+ * used these test vectors to implement an FFX implementation in Python [1].
+ * In turn I used the Python implementation to generate FFX[2] vectors.
  * 
- * TODO: Make Python implementation for FFX[N] public.
  * TODO: This implementation only supports radix=2.
  * TODO: This implementation does not support tweaks.
  * 
  * - Kevin P. Dyer
+ * 
+ * [1] https://github.com/kpdyer/libffx
+ * [2] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf
+ * [3] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf
  */
 
 #ifndef _LIBFTE_SRC_FFX_FFX_H

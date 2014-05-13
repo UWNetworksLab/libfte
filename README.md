@@ -1,20 +1,22 @@
-libfte
+LibFTE
 ======
 
-This contains initial unit tests for (un)ranking.
+LibFTE
 
 Dependencies
 ------------
 
-### For testing
+### For building/testing
 
-* googletest: https://code.google.com/p/googletest/ (included: thirdparty/gtest-1.7.0)
-
-### For building/distributing
-
-* make, g++
+* make, m4, gcc, g++, etc.
+* 32-bit emscripten (asm.js only): https://github.com/kripken/emscripten
 * GMP: https://gmplib.org/
 * aes: http://brgladman.org/oldsite/AES/index.php (included: thirdparty/aes)
+* googletest: https://code.google.com/p/googletest/ (included: thirdparty/gtest-1.7.0)
+
+### asm.js
+
+vagrant instructions here which are currently in the obfuscation repo.
 
 ### OSX
 
@@ -33,32 +35,36 @@ apt-get install build-essential
 apt-get install libgmp-dev
 ```
 
-### Windows
-
-TODO
-
 Tested on
 ---------
 
-* OSX 10.9.2 with Xcode 5.1.1 and GMP 5.1.3
+* OSX 10.9.2 with Xcode 5.1.1, GMP 5.1.3, GCC 4.2
+* Ubuntu 14.04, emscripten 1.17.0 compiled from source, build-essential
 
 Build
 -----
 
 ```
-$ make
-g++ -g -Wall -Isrc -Ithirdparty/gtest-1.7.0/include -c -o src/test.o src/test.cc
-g++ -g -Wall -Isrc -Ithirdparty/gtest-1.7.0/include -c -o src/ranker.o src/ranker.cc
+$ make bin/test.js
 ...
 $ ls bin
-main	test
+test.js
+```
+
+or  to build under emscripten
+
+```
+$ EMSCRIPTEN=1 make bin/test.js
+...
+$ ls bin
+test.js
 ```
 
 Test
 ----
 
 ```
-$ make test
+$ ./bin/test.js
 [==========] Running 43 tests from 6 test cases.
 [----------] Global test environment set-up.
 [----------] 7 tests from CauseException

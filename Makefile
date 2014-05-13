@@ -14,10 +14,15 @@ GTEST_LIB_DIR = $(GTEST_DIR)/lib/.libs
 GTEST_INC_DIR = $(GTEST_DIR)/include
 
 # TODO: remove hard-coded compilers. however, for now we only test/support emcc/em++
-#CC = emcc
-#CXX = em++
-#CXXFLAGS = -s DISABLE_EXCEPTION_CATCHING=0 --closure 1
-AR = ar
+ifeq ($(EMSCRIPTEN),1)
+CC = emcc
+endif
+ifeq ($(EMSCRIPTEN),1)
+CXX = em++
+endif
+ifeq ($(EMSCRIPTEN),1)
+CXXFLAGS = -s DISABLE_EXCEPTION_CATCHING=0 --closure 1
+endif
 NODEJS = nodejs
 ARFLAGS = rsc
 CFLAGS_ = $(CFLAGS) -g0 -O3 -Wall
@@ -30,6 +35,9 @@ OBJ_TEST = src/tests.o \
            src/fte/ranking/sample_dfas.o \
            src/fte/test_fte.o \
            src/ffx/test_ffx.o \
+           src/ffx/test_conversions.o \
+           src/ffx/test_aes_ecb.o \
+           src/ffx/test_aes_cbc_mac.o \
            src/fte/ranking/test_dfa.o
 
 TARGET_MAINJS = bin/main.js

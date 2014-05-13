@@ -20,7 +20,7 @@ namespace ffx {
  *               [  ]
  *   position    01234567
  * 
- * For those that love Python, this is equivalent to:
+ * In Python, this is equivalent to:
  *   
  *   bin(X).rjust(X_len,'0')[2:][start:end+1]
  * 
