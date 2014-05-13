@@ -18,7 +18,6 @@
 #ifndef _LIBFTE_SRC_FTE_FTE_H
 #define _LIBFTE_SRC_FTE_FTE_H
 
-#include <iostream>
 #include <string.h>
 
 #include "ffx/ffx.h"

@@ -1,6 +1,3 @@
-#define __STDC_LIMIT_MACROS
-#define __STDC_CONSTANT_MACROS
-
 #include "gtest/gtest.h"
 
 #include "ffx/aes_cbc_mac.h"

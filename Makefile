@@ -6,8 +6,12 @@ AES_DIR = $(THIRDPARTY_DIR)/aes
 ifeq ($(GMP_DIR),)
 GMP_DIR = /usr/local
 endif
+ifeq ($(GMP_LIB_DIR),)
 GMP_LIB_DIR = $(GMP_DIR)/lib
+endif
+ifeq ($(GMP_INC_DIR),)
 GMP_INC_DIR = $(GMP_DIR)/include
+endif
 
 GTEST_DIR = $(THIRDPARTY_DIR)/gtest-1.7.0
 GTEST_LIB_DIR = $(GTEST_DIR)/lib/.libs
@@ -20,14 +24,16 @@ endif
 ifeq ($(EMSCRIPTEN),1)
 CXX = em++
 endif
-ifeq ($(EMSCRIPTEN),1)
-CXXFLAGS = -s DISABLE_EXCEPTION_CATCHING=0 --closure 1
-endif
 NODEJS = nodejs
 ARFLAGS = rsc
 CFLAGS_ = $(CFLAGS) -g0 -O3 -Wall
+ifeq ($(EMSCRIPTEN),0)
 CXXFLAGS_  = $(CXXFLAGS) -g0 -O3 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
-LDFLAGS_ = $(LDFLAGS) -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lgmpxx -lfte 
+endif
+ifeq ($(EMSCRIPTEN),1)
+CXXFLAGS_  = $(CXXFLAGS) -s DISABLE_EXCEPTION_CATCHING=0 --closure 1 -g0 -O3 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
+endif
+LDFLAGS_ = $(LDFLAGS) -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte 
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -65,9 +71,6 @@ TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
 
 
 default: $(TARGET_TEST) $(TARGET_MAIN)
-
-$(TARGET_GTEST):
-	cd $(GTEST_DIR) && ./configure --enable-static --disable-shared && $(MAKE)
 
 %.o: %.c
 	$(CC) $(CFLAGS_) -c -o $@ $<
