@@ -1,33 +1,42 @@
-AES_DIR = thirdparty/aes
-GTEST_DIR = thirdparty/gtest-1.7.0
-GTEST_LIB_DIR = thirdparty/gtest-1.7.0/lib/.libs
-GTEST_INC_DIR = thirdparty/gtest-1.7.0/include
+THIRDPARTY_DIR = third_party
 
-# the compiler: gcc for C program, define as g++ for C++
+AES_DIR = $(THIRDPARTY_DIR)/aes
+
+# TODO: create configure.ac script such that we don't have hard-code paths
+ifeq ($(GMP_DIR),1)
+GMP_DIR = /usr/local
+endif
+GMP_LIB_DIR = $(GMP_DIR)/lib
+GMP_INC_DIR = $(GMP_DIR)/include
+
+GTEST_DIR = $(THIRDPARTY_DIR)/gtest-1.7.0
+GTEST_LIB_DIR = $(GTEST_DIR)/lib/.libs
+GTEST_INC_DIR = $(GTEST_DIR)/include
+
+# TODO: remove hard-coded compilers. however, for now we only test/support emcc/em++
 CC = emcc
 CXX = em++
-
+CXXFLAGS = -s DISABLE_EXCEPTION_CATCHING=0 --closure 1
+AR = ar
+NODEJS = nodejs
 ARFLAGS = rsc
-_CFLAGS = $(CFLAGS) -g0 -O3 -Wall
-_CXXFLAGS  = $(CXXFLAGS) -g0 -O3 -Wall -I$(GMP_DIR) -Isrc -Ithirdparty -I$(GTEST_INC_DIR) --closure 1 -s DISABLE_EXCEPTION_CATCHING=0
-_LDFLAGS = $(LDFLAGS) -L$(GMP_DIR)/.libs -L.libs -L$(GTEST_LIB_DIR) -lgtest -lgmp -lfte 
+CFLAGS_ = $(CFLAGS) -g0 -O3 -Wall
+CXXFLAGS_  = $(CXXFLAGS) -g0 -O3 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
+LDFLAGS_ = $(LDFLAGS) -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lgmpxx -lfte 
 
 # the build target executable:
-TARGET_TEST = bin/test
 TARGET_TESTJS = bin/test.js
 OBJ_TEST = src/tests.o \
-           src/tests/dfas.o \
-           src/tests/test_errors.o \
-           src/tests/test_fte.o \
-           src/tests/test_ffx.o \
-           src/tests/test_ranker.o
+           src/fte/ranking/sample_dfas.o \
+           src/fte/test_fte.o \
+           src/ffx/test_ffx.o \
+           src/fte/ranking/test_dfa.o
 
-TARGET_MAIN = bin/main
 TARGET_MAINJS = bin/main.js
 OBJ_MAIN = src/main.o \
-           src/tests/dfas.o
+           src/fte/ranking/sample_dfas.o
 
-TARGET_LIBFTE = .libs/libfte.a
+TARGET_LIBFTE = libfte.a
 OBJ_LIBFTE = src/ffx/conversions.o \
              src/ffx/key.o \
              src/ffx/encryption.o \
@@ -35,36 +44,31 @@ OBJ_LIBFTE = src/ffx/conversions.o \
              src/fte/fte.o \
              src/fte/ranking/dfa.o
 
-TARGET_LIBAES = .libs/libaes.a
-OBJ_LIBAES = thirdparty/aes/aes_modes.o \
-          thirdparty/aes/aescrypt.o \
-          thirdparty/aes/aeskey.o \
-          thirdparty/aes/aestab.o
+TARGET_LIBAES = $(THIRDPARTY_DIR)/aes/libaes.a
+OBJ_LIBAES = $(THIRDPARTY_DIR)/aes/aes_modes.o \
+          $(THIRDPARTY_DIR)/aes/aescrypt.o \
+          $(THIRDPARTY_DIR)/aes/aeskey.o \
+          $(THIRDPARTY_DIR)/aes/aestab.o
 
 TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
 
-all: $(TARGET_GTEST) $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_LIBFTE)
+
+default: $(TARGET_TEST) $(TARGET_MAIN)
 
 $(TARGET_GTEST):
-	cd $(GTEST_DIR) && cmake . && $(MAKE)
+	cd $(GTEST_DIR) && ./configure --enable-static --disable-shared && $(MAKE)
 
 %.o: %.c
-	$(CC) $(_CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS_) -c -o $@ $<
 
 %.o: %.cc
-	$(CXX) $(_CXXFLAGS) -c -o $@ $<
-
-$(TARGET_TEST): $(TARGET_GTEST) $(OBJ_TEST)
-	$(CXX) $(_CXXFLAGS) $(_LDFLAGS) -o $@ $(OBJ_TEST)
+	$(CXX) $(CXXFLAGS_) -c -o $@ $<
 
 $(TARGET_TESTJS): $(TARGET_GTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
-	$(CXX) $(_CXXFLAGS) $(_LDFLAGS) -o $@ $(OBJ_TEST)
-
-$(TARGET_MAIN): $(OBJ_MAIN) $(TARGET_LIBFTE)
-	$(CXX) $(_CXXFLAGS) $(_LDFLAGS) -o $@ $(OBJ_MAIN)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) -o $@ $(OBJ_TEST)
 
 $(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
-	$(CXX) $(_CXXFLAGS) $(_LDFLAGS) -o $@ $(OBJ_MAIN)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) -o $@ $(OBJ_MAIN)
 
 $(TARGET_LIBAES): $(OBJ_LIBAES)
 	$(AR) $(ARFLAGS) $(TARGET_LIBAES) $^
@@ -72,12 +76,10 @@ $(TARGET_LIBAES): $(OBJ_LIBAES)
 $(TARGET_LIBFTE): $(OBJ_LIBFTE) $(OBJ_LIBAES)
 	$(AR) $(ARFLAGS) $(TARGET_LIBFTE) $^
 
-test:
-	@./$(TARGET_TEST)
+test: $(TARGET_TESTJS)
+	$(NODEJS) $(TARGET_TESTJS)
 
 clean:
-	$(RM) $(TARGET_TEST)
-	$(RM) $(TARGET_MAIN)
 	$(RM) $(TARGET_MAINJS)
 	$(RM) $(TARGET_LIBFTE)
 	$(RM) $(OBJ_LIBAES)

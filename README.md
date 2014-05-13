@@ -88,12 +88,12 @@ int main() {
                              K);
   // encrypt-then-decrypt
   std::string input_plaintext = "Hello, Word!";
-  std::string ciphertext = fteObj.encrypt(X);
-  std::string output_plaintext = fteObj.decrypt(Y);
+  std::string ciphertext = fteObj.encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.decrypt(ciphertext);
 
-  std::cout << "input_plaintext: " << X << std::endl;
-  std::cout << "ciphertext: " << Y << std::endl;
-  std::cout << "output_plaintext: " << Z << std::endl;
+  std::cout << "input_plaintext: " << input_plaintext << std::endl;
+  std::cout << "ciphertext: " << ciphertext << std::endl;
+  std::cout << "output_plaintext: " << output_plaintext << std::endl;
 }
 ```
 

@@ -7,7 +7,7 @@
 
 #include "fte/fte.h"
 
-#include "dfas.h"
+#include "fte/ranking/sample_dfas.h"
 
 TEST(SanityCheck, Test1) {
   std::string str = "aaaaaaaaaaaaaaaa";
