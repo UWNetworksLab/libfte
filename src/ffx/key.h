@@ -2,7 +2,6 @@
 #define _LIBFTE_SRC_FFX_KEY_H
 
 #include <stdio.h>
-#include <iostream>
 #include <string.h>
 
 namespace ffx {
