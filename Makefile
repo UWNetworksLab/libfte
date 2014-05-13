@@ -36,6 +36,7 @@ endif
 LDFLAGS_ = $(LDFLAGS) -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte 
 
 # the build target executable:
+TARGET_TEST = bin/test
 TARGET_TESTJS = bin/test.js
 OBJ_TEST = src/tests.o \
            src/fte/ranking/sample_dfas.o \
@@ -46,6 +47,7 @@ OBJ_TEST = src/tests.o \
            src/ffx/test_aes_cbc_mac.o \
            src/fte/ranking/test_dfa.o
 
+TARGET_MAIN = bin/main
 TARGET_MAINJS = bin/main.js
 OBJ_MAIN = src/main.o \
            src/fte/ranking/sample_dfas.o
@@ -76,8 +78,14 @@ default: $(TARGET_TEST) $(TARGET_MAIN)
 %.o: %.cc
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
 
+$(TARGET_TEST): $(TARGET_GTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) -o $@ $(OBJ_TEST)
+
 $(TARGET_TESTJS): $(TARGET_GTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
 	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) -o $@ $(OBJ_TEST)
+
+$(TARGET_MAIN): $(TARGET_LIBFTE) $(OBJ_MAIN)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) -o $@ $(OBJ_MAIN)
 
 $(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
 	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) -o $@ $(OBJ_MAIN)
@@ -87,9 +95,6 @@ $(TARGET_LIBAES): $(OBJ_LIBAES)
 
 $(TARGET_LIBFTE): $(OBJ_LIBFTE) $(OBJ_LIBAES)
 	$(AR) $(ARFLAGS) $(TARGET_LIBFTE) $^
-
-test: $(TARGET_TESTJS)
-	$(NODEJS) $(TARGET_TESTJS)
 
 clean:
 	$(RM) $(TARGET_MAINJS)

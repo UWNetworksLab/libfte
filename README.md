@@ -1,7 +1,7 @@
 LibFTE
 ======
 
-LibFTE
+LibFTE is an encryption library that allows input plaintext and output ciphertext formats to be controlled by DFAs.
 
 Dependencies
 ------------
@@ -16,7 +16,7 @@ Dependencies
 
 ### asm.js
 
-vagrant instructions here which are currently in the obfuscation repo.
+[ vagrant instructions to appear here ]
 
 ### OSX
 
@@ -44,16 +44,24 @@ Tested on
 Build
 -----
 
+To build normally under gcc
+
 ```
-$ make bin/test.js
+$ cd third_party/gtest-*
+$ ./configure --enable-static --disable-shared && make
+$ cd ../..
+$ make bin/test
 ...
 $ ls bin
-test.js
+test
 ```
 
-or  to build under emscripten
+or to build under emscripten.
 
 ```
+$ cd third_party/gtest-*
+$ emconfigure ./configure ABI=32 --disable-assembly --disable-static --enable-shared
+$ cd ../..
 $ EMSCRIPTEN=1 make bin/test.js
 ...
 $ ls bin
@@ -64,7 +72,7 @@ Test
 ----
 
 ```
-$ ./bin/test.js
+$ ./bin/test (or ./bin/test.js)
 [==========] Running 43 tests from 6 test cases.
 [----------] Global test environment set-up.
 [----------] 7 tests from CauseException
