@@ -1,5 +1,3 @@
-#include <assert.h>
-
 #include "ffx/key.h"
 
 namespace ffx {

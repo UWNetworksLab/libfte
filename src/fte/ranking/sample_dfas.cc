@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string.h>
-#include "dfas.h"
+#include "sample_dfas.h"
 
 // completely invalid format
 std::string INVALID_DFA_1 = "";

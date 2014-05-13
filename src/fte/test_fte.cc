@@ -6,21 +6,49 @@
 #include "gtest/gtest.h"
 
 #include "fte/fte.h"
+#include "fte/ranking/sample_dfas.h"
 
-#include "dfas.h"
 
-TEST(SanityCheck, Test1) {
+TEST(SanityCheckMatch, Test1) {
   std::string str = "aaaaaaaaaaaaaaaa";
   std::regex rx("^(a|b){16}$");
   bool match = regex_match(str.begin(), str.end(), rx);
   EXPECT_EQ(true, match);
 }
 
-TEST(SanityCheck, Test2) {
+TEST(SanityCheckMatch, Test2) {
   std::string str = "bbbbbbbbbbbbbbbb";
   std::regex rx("^(a|b){16}$");
   bool match = regex_match(str.begin(), str.end(), rx);
   EXPECT_EQ(true, match);
+}
+
+TEST(SanityCheckNoMatch, Test1) {
+  std::string str = "aaaaaaaaaaaaaaaaa";
+  std::regex rx("^(a|b){16}$");
+  bool match = regex_match(str.begin(), str.end(), rx);
+  EXPECT_EQ(false, match);
+}
+
+TEST(SanityCheckNoMatch, Test2) {
+  std::string str = "aaaaaaaaaaaaaaa";
+  std::regex rx("^(a|b){16}$");
+  bool match = regex_match(str.begin(), str.end(), rx);
+  EXPECT_EQ(false, match);
+}
+
+TEST(SanityCheckNoMatch, Test3) {
+  std::string str = "c";
+  std::regex rx("^(a|b){16}$");
+  bool match = regex_match(str.begin(), str.end(), rx);
+  EXPECT_EQ(false, match);
+}
+
+TEST(SanityCheckNoMatch, Test4) {
+  std::string str = "cccccccccccccccc";
+  std::regex rx("^(a|b){16}$");
+  bool match = regex_match(str.begin(), str.end(), rx);
+  EXPECT_EQ(false, match);
 }
 
 TEST(FteNormalUsage, FpeTest1) {
