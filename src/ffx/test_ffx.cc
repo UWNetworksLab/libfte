@@ -19,7 +19,7 @@ TEST(FFX2, ExtractBits1) {
 }
 
 TEST(FFX2, ExtractBits2) {
-  // 0b10001000
+  // X is the 8-bit string: 0b10001000
   mpz_class X = 0x88;
   uint8_t X_len = 8;
 
