@@ -27,13 +27,12 @@ endif
 NODEJS = nodejs
 ARFLAGS = rsc
 CFLAGS_ = $(CFLAGS) -g0 -O3 -Wall
-ifeq ($(EMSCRIPTEN),0)
-CXXFLAGS_  = $(CXXFLAGS) -g0 -O3 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
-endif
 ifeq ($(EMSCRIPTEN),1)
 CXXFLAGS_  = $(CXXFLAGS) -s DISABLE_EXCEPTION_CATCHING=0 --closure 1 -g0 -O3 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
+else
+CXXFLAGS_  = $(CXXFLAGS) -g0 -O3 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
 endif
-LDFLAGS_ = $(LDFLAGS) -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte 
+LDFLAGS_ = $(LDFLAGS) -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lgmpxx -lfte 
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -42,9 +41,9 @@ OBJ_TEST = src/tests.o \
            src/fte/ranking/sample_dfas.o \
            src/fte/test_fte.o \
            src/ffx/test_ffx.o \
-           src/ffx/test_conversions.o \
            src/ffx/test_aes_ecb.o \
            src/ffx/test_aes_cbc_mac.o \
+           src/ffx/test_conversions.o \
            src/fte/ranking/test_dfa.o
 
 TARGET_MAIN = bin/main
