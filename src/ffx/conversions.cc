@@ -31,8 +31,8 @@ void base256_to_mpz(unsigned char * in, const uint32_t in_len,
   out = 0;
   int32_t i = 0;
   for(i = 0; i < in_len; i++) {
-    mpz_class nugget = ((uint32_t) in[i]);
-    out += nugget << 8 * (in_len - 1 - i);
+    mpz_class chunk = ((uint32_t) in[i]);
+    out += chunk << 8 * (in_len - 1 - i);
   }
 }
 

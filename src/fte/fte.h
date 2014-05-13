@@ -35,7 +35,6 @@ class FTE {
       const std::string, const uint32_t,
       const Key);
 
-
   std::string encrypt(const std::string);
   std::string decrypt(const std::string);
 

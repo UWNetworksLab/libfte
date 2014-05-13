@@ -11,6 +11,9 @@ const uint32_t kFFXKeyLengthInBytes = 16;
 const uint32_t kFFXKeyLengthInNibbles = kFFXKeyLengthInBytes * 2;
 const uint32_t kFFXKeyLengthInBits = kFFXKeyLengthInBytes * 8;
 
+/*
+ * The placeholder class for a hex-specified key for FTE/FFX.
+ */
 class Key {
  private:
   std::string key_;
