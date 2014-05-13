@@ -30,7 +30,7 @@ CXXFLAGS_  = $(CXXFLAGS) -g0 -O3 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_D
 LDFLAGS_ = $(LDFLAGS) -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lgmpxx -lfte 
 
 # the build target executable:
-TARGET_TESTJS = bin/test
+TARGET_TEST = bin/test
 TARGET_TESTJS = bin/test.js
 OBJ_TEST = src/tests.o \
            src/fte/ranking/sample_dfas.o \
