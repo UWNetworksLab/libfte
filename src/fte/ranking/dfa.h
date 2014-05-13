@@ -11,8 +11,8 @@
  */
 
 
-#ifndef _LIBFTE_SRC_FTE_RANKER_H
-#define _LIBFTE_SRC_FTE_RANKER_H
+#ifndef _LIBFTE_SRC_FTE_RANKING_DFA_H
+#define _LIBFTE_SRC_FTE_RANKING_DFA_H
 
 #include <map>
 #include <vector>
@@ -109,4 +109,4 @@ class DFA {
 
 } // namespace fte
 
-#endif /* _LIBFTE_SRC_FTE_RANKER_H */
+#endif /* _LIBFTE_SRC_FTE_RANKING_DFA_H */
