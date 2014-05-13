@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include "ffx/ffx.h"
-
 #include "fte/exceptions.h"
 #include "fte/ranking/dfa.h"
 

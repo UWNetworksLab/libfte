@@ -1,6 +1,8 @@
 #ifndef _DFAS_H
 #define _DFAS_H
 
+// TODO: more descriptive naming for DFAs
+
 extern std::string INVALID_DFA_1;
 extern std::string INVALID_DFA_2;
 extern std::string INVALID_DFA_3;

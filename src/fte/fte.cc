@@ -9,6 +9,7 @@ FTE::FTE(const std::string input_dfa, const uint32_t input_max_len,
          const std::string output_dfa, const uint32_t output_max_len,
          const Key key) {
 
+  // TODO: don't throw an exception in the constructor
   if(key.length() != kFTEKeyLengthInNibbles) {
     throw InvalidKeyLength();
   }
@@ -34,20 +35,22 @@ FTE::FTE(const std::string input_dfa, const uint32_t input_max_len,
 }
 
 std::string FTE::encrypt(const std::string plaintext) {
-  // TODO: validate that input plaintext is in input language
+  // TODO: catch exceptions from ranker
 
   mpz_class plaintext_rank = input_ranker_.rank(plaintext);
   mpz_class C = ffx_.encrypt(key_, plaintext_rank, output_language_capacity_);
   std::string retval = output_ranker_.unrank(C);
+  
   return retval;
 }
 
 std::string FTE::decrypt(const std::string ciphertext) {
-  // TODO: validate that input plaintext is in output language
+  // TODO: catch exceptions from ranker
 
   mpz_class C = output_ranker_.rank(ciphertext);
   mpz_class plaintext_rank = ffx_.decrypt(key_, C, output_language_capacity_);
   std::string retval = input_ranker_.unrank(plaintext_rank);
+  
   return retval;
 }
 

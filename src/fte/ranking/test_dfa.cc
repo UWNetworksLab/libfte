@@ -82,7 +82,6 @@ TEST(RankerNormalUsage, Test10) {
   EXPECT_EQ(words_in_language - 1, C);
 }
 
-// ERROR CASES
 
 TEST(CauseException, InvalidFstFormatException1) {
   try {
