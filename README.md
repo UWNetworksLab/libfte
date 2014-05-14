@@ -60,7 +60,7 @@ or to build under emscripten.
 
 ```
 $ cd third_party/gtest-*
-$ emconfigure ./configure ABI=32 --disable-assembly --disable-static --enable-shared
+$ emconfigure ./configure ABI=32 --disable-assembly --enable-static --disable-shared
 $ cd ../..
 $ EMSCRIPTEN=1 make bin/test.js
 ...
