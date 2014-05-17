@@ -83,6 +83,69 @@ TEST(RankerNormalUsage, Test10) {
 }
 
 
+TEST(RankerNormalUsage, Test11) {
+  fte::ranking::DFA rankerObj(VALID_DFA_5, 32);
+  mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 32);
+  std::string X = rankerObj.unrank(words_in_language - 1);
+  mpz_class   C = rankerObj.rank(X);
+  EXPECT_EQ(words_in_language - 1, C);
+}
+
+
+TEST(RankerNormalUsage, Test12) {
+  fte::ranking::DFA rankerObj(VALID_DFA_5, 64);
+  mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 64);
+  std::string X = rankerObj.unrank(words_in_language - 1);
+  mpz_class   C = rankerObj.rank(X);
+  EXPECT_EQ(words_in_language - 1, C);
+}
+
+
+TEST(RankerNormalUsage, Test13) {
+  fte::ranking::DFA rankerObj(VALID_DFA_5, 128);
+  mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 128);
+  std::string X = rankerObj.unrank(words_in_language - 1);
+  mpz_class   C = rankerObj.rank(X);
+  EXPECT_EQ(words_in_language - 1, C);
+}
+
+
+TEST(RankerNormalUsage, Test14) {
+  fte::ranking::DFA rankerObj(VALID_DFA_5, 256);
+  mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 256);
+  std::string X = rankerObj.unrank(words_in_language - 1);
+  mpz_class   C = rankerObj.rank(X);
+  EXPECT_EQ(words_in_language - 1, C);
+}
+
+
+TEST(RankerNormalUsage, Test15) {
+  fte::ranking::DFA rankerObj(VALID_DFA_5, 512);
+  mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 512);
+  std::string X = rankerObj.unrank(words_in_language - 1);
+  mpz_class   C = rankerObj.rank(X);
+  EXPECT_EQ(words_in_language - 1, C);
+}
+
+
+TEST(RankerNormalUsage, Test16) {
+  fte::ranking::DFA rankerObj(VALID_DFA_5, 1024);
+  mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 1024);
+  std::string X = rankerObj.unrank(words_in_language - 1);
+  mpz_class   C = rankerObj.rank(X);
+  EXPECT_EQ(words_in_language - 1, C);
+}
+
+
+TEST(RankerNormalUsage, Test17) {
+  fte::ranking::DFA rankerObj(VALID_DFA_5, 2048);
+  mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 2048);
+  std::string X = rankerObj.unrank(words_in_language - 1);
+  mpz_class   C = rankerObj.rank(X);
+  EXPECT_EQ(words_in_language - 1, C);
+}
+
+
 TEST(CauseException, InvalidFstFormatException1) {
   try {
     fte::ranking::DFA rankerObj(INVALID_DFA_1, 16);

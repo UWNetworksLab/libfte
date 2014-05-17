@@ -204,7 +204,6 @@ std::string DFA::unrank( const mpz_class c_in ) {
             
     std::string retval;
 
-    
     // walk the dfa subtracting values from c until we have our n symbols
     mpz_class c = c_in;
     uint32_t n = 0;
