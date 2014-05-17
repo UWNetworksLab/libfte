@@ -44,6 +44,8 @@ class FTE {
   ffx::FFX ffx_;
   uint32_t input_language_capacity_;
   uint32_t output_language_capacity_;
+  mpz_class words_in_input_language_;
+  mpz_class words_in_output_language_;
 
  public:
   FTE() {};

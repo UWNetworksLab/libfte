@@ -1,7 +1,6 @@
 #include <assert.h>
 #include <exception>
 #include <sstream>
-#include <iostream>
 
 #include "fte/ranking/dfa.h"
 
@@ -131,7 +130,7 @@ DFA::DFA(const std::string dfa_str, const uint32_t max_len)
     // perform our precalculation to speed up (un)ranking
     DFA::_buildTable();
 
-    if (1 < getNumWordsInLanguage(0, _fixed_slice)) {
+    if (1 >= getNumWordsInLanguage(0, _fixed_slice)) {
         throw fte::InvalidInputNoAcceptingPaths();
     }
 }
@@ -210,10 +209,7 @@ std::string DFA::unrank( const mpz_class c_in ) {
     mpz_class c = c_in;
     uint32_t n = 0;
     while (true) {
-        std::cout << n << std::endl;
         mpz_class words_in_slice = getNumWordsInLanguage( n, n );
-        std::cout << "c: " << c.get_str() << std::endl;
-        std::cout << "words_in_slice: " << words_in_slice.get_str() << std::endl;
         if ( words_in_slice <= c ) {
             c -= words_in_slice;
             n += 1;
