@@ -38,7 +38,10 @@ std::string FTE::encrypt(const std::string plaintext) {
   // TODO: catch exceptions from ranker
 
   mpz_class plaintext_rank = input_ranker_.rank(plaintext);
+  std::cout << plaintext_rank.get_str() << std::endl;
+  std::cout << "cap: " << output_language_capacity_ << std::endl;
   mpz_class C = ffx_.encrypt(key_, plaintext_rank, output_language_capacity_);
+  std::cout << mpz_sizeinbase(C.get_mpz_t(), 2) << std::endl;
   std::string retval = output_ranker_.unrank(C);
   
   return retval;

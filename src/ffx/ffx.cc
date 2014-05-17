@@ -91,7 +91,7 @@ mpz_class F(const Key K,
 
 mpz_class FFX::encrypt(const Key key ,
                        const mpz_class tweak, const uint32_t tweak_len,
-                       const mpz_class plaintext, const uint32_t X_len) {
+                       const mpz_class plaintext, const uint32_t plaintext_len) {
 
   if(key.length() != kFFXKeyLengthInNibbles) {
     throw InvalidKeyLength();
@@ -99,11 +99,11 @@ mpz_class FFX::encrypt(const Key key ,
 
   mpz_class retval = 0;
 
-  uint32_t n = X_len;
-  uint32_t l = floor(X_len / 2.0);
+  uint32_t n = plaintext_len;
+  uint32_t l = floor(plaintext_len / 2.0);
   uint32_t r = DEFAULT_FFX_ROUNDS;
-  mpz_class A = extract_bit_range(plaintext, X_len, 0, l - 1);
-  mpz_class B = extract_bit_range(plaintext, X_len, l, n - 1);
+  mpz_class A = extract_bit_range(plaintext, plaintext_len, 0, l - 1);
+  mpz_class B = extract_bit_range(plaintext, plaintext_len, l, n - 1);
   uint32_t B_len = n - l;
   uint32_t m = 0;
   mpz_class modulus = 0;
@@ -124,6 +124,9 @@ mpz_class FFX::encrypt(const Key key ,
   }
 
   retval = (A << B_len) + B;
+  
+  mpz_ui_pow_ui(modulus.get_mpz_t(), 2, plaintext_len);
+  retval = retval % modulus;
 
   return retval;
 }
@@ -164,6 +167,9 @@ mpz_class FFX::decrypt(const Key key,
   }
 
   retval = (A << B_len) + B;
+  
+  mpz_ui_pow_ui(modulus.get_mpz_t(), 2, cihpertext_len);
+  retval = retval % modulus;
 
   return retval;
 }

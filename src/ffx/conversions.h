@@ -1,6 +1,8 @@
 #ifndef _LIBFTE_SRC_FFX_CONVERSIONS_H
 #define _LIBFTE_SRC_FFX_CONVERSIONS_H
 
+#include <stdint.h>
+
 #include <gmpxx.h>
 
 namespace ffx {

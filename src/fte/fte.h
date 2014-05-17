@@ -46,6 +46,8 @@ class FTE {
   uint32_t output_language_capacity_;
 
  public:
+  FTE() {};
+
      /*
       * input_dfa and input_max_len specify the input plaintext language
       * ouput_dfa and out_max_len specificy the output ciphertext language

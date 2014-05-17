@@ -16,6 +16,7 @@
 
 #include <map>
 #include <vector>
+#include <stdint.h>
 
 #include <gmpxx.h>
 

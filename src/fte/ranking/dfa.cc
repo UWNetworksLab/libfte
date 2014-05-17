@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <exception>
 #include <sstream>
+#include <iostream>
 
 #include "fte/ranking/dfa.h"
 
@@ -130,7 +131,7 @@ DFA::DFA(const std::string dfa_str, const uint32_t max_len)
     // perform our precalculation to speed up (un)ranking
     DFA::_buildTable();
 
-    if (1 >= getNumWordsInLanguage(0, _fixed_slice)) {
+    if (1 < getNumWordsInLanguage(0, _fixed_slice)) {
         throw fte::InvalidInputNoAcceptingPaths();
     }
 }
@@ -200,13 +201,19 @@ void DFA::_buildTable() {
 
 
 std::string DFA::unrank( const mpz_class c_in ) {
+    assert(c_in < getNumWordsInLanguage(0, _fixed_slice));
+            
     std::string retval;
 
+    
     // walk the dfa subtracting values from c until we have our n symbols
     mpz_class c = c_in;
     uint32_t n = 0;
     while (true) {
+        std::cout << n << std::endl;
         mpz_class words_in_slice = getNumWordsInLanguage( n, n );
+        std::cout << "c: " << c.get_str() << std::endl;
+        std::cout << "words_in_slice: " << words_in_slice.get_str() << std::endl;
         if ( words_in_slice <= c ) {
             c -= words_in_slice;
             n += 1;
@@ -273,6 +280,8 @@ std::string DFA::unrank( const mpz_class c_in ) {
 }
 
 mpz_class DFA::rank( const std::string X ) {
+    assert(X.size() <=  _fixed_slice);
+    
     uint32_t n = X.size();
     mpz_class retval = 0;
 
@@ -338,6 +347,7 @@ mpz_class DFA::getNumWordsInLanguage( const uint32_t max_word_length ) {
 
 mpz_class DFA::getNumWordsInLanguage( const uint32_t min_word_length,
                                       const uint32_t max_word_length ) {
+    
     // TODO: remove asserts
     // verify min_word_length <= max_word_length <= _fixed_slice
     assert(0<=min_word_length);
