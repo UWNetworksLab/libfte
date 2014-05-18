@@ -3,8 +3,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <iostream>
-#include <string.h>
+#include <string>
 
 namespace ffx {
 

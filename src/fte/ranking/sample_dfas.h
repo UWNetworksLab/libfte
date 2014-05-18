@@ -1,6 +1,8 @@
 #ifndef _SAMPLE_DFAS_H
 #define _SAMPLE_DFAS_H
 
+#include <string>
+
 // TODO: more descriptive naming for DFAs
 
 extern std::string INVALID_DFA_1;
