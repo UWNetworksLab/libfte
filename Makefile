@@ -71,7 +71,7 @@ OBJ_LIBAES = $(THIRDPARTY_DIR)/aes/aes_modes.o \
           $(THIRDPARTY_DIR)/aes/aestab.o
 
 TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
-TARGET_GMP = $(GMP_LIB_DIR)/libgmp.dylib
+TARGET_GMP = $(GMP_LIB_DIR)/libgmp.a
 
 default: $(TARGET_TEST) $(TARGET_MAIN)
 
@@ -84,9 +84,9 @@ default: $(TARGET_TEST) $(TARGET_MAIN)
 $(TARGET_GTEST):
 	cd third_party/gtest-1.7.0 && ./configure --enable-static --disable-shared && $(MAKE)
 $(TARGET_GMP):
-	cd third_party/gmp-6.0.0 && ./configure --enable-shared --disable-static && $(MAKE)
+	cd third_party/gmp-6.0.0 && ./configure --disable-shared --enable-static && $(MAKE)
 
-$(TARGET_TEST): $(TARGET_GTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
+$(TARGET_TEST): $(TARGET_GTEST) $(TARGET_GMP) $(TARGET_LIBFTE) $(OBJ_TEST)
 	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_TEST) -o $@
 
 $(TARGET_TESTJS): $(TARGET_GTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
@@ -101,7 +101,7 @@ $(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
 $(TARGET_LIBAES): $(OBJ_LIBAES)
 	$(AR) $(ARFLAGS) $(TARGET_LIBAES) $^
 
-$(TARGET_LIBFTE): $(TARGET_GMP) $(OBJ_LIBFTE) $(OBJ_LIBAES)
+$(TARGET_LIBFTE): $(OBJ_LIBFTE) $(OBJ_LIBAES)
 	$(AR) $(ARFLAGS) $(TARGET_LIBFTE) $^
 
 clean:

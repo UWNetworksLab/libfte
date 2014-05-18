@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <assert.h>
 #include <exception>
 #include <sstream>
@@ -129,6 +131,14 @@ DFA::DFA(const std::string dfa_str, const uint32_t max_len)
 
     // perform our precalculation to speed up (un)ranking
     DFA::_buildTable();
+    
+    uint32_t max_word_len;
+    _words_in_language_inclusive.resize(_fixed_slice+1);
+    _words_in_language_exclusive.resize(_fixed_slice+1);
+    for (max_word_len = 0; max_word_len <= _fixed_slice; max_word_len++) {
+        _words_in_language_inclusive.at(max_word_len) = calculateNumWordsInLanguage( 0, max_word_len );
+        _words_in_language_exclusive.at(max_word_len) = calculateNumWordsInLanguage( max_word_len, max_word_len );
+    }
 
     if (1 >= getNumWordsInLanguage(0, _fixed_slice)) {
         throw fte::InvalidInputNoAcceptingPaths();
@@ -342,7 +352,19 @@ mpz_class DFA::getNumWordsInLanguage( const uint32_t max_word_length ) {
 
 mpz_class DFA::getNumWordsInLanguage( const uint32_t min_word_length,
                                       const uint32_t max_word_length ) {
-    
+    mpz_class retval;
+    if (min_word_length==0) {
+        retval = _words_in_language_inclusive.at(max_word_length);
+    } else if (min_word_length==max_word_length) {
+        retval = _words_in_language_exclusive.at(max_word_length);
+    } else {
+        // TODO: throw exception
+    }
+    return retval;
+}
+
+mpz_class DFA::calculateNumWordsInLanguage( const uint32_t min_word_length,
+                                            const uint32_t max_word_length ) {
     // TODO: remove asserts
     // verify min_word_length <= max_word_length <= _fixed_slice
     assert(0<=min_word_length);

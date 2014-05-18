@@ -145,10 +145,12 @@ TEST(RankerNormalUsage, Test17) {
   EXPECT_EQ(words_in_language - 1, C);
 }
 
+
 TEST(RankerNormalUsage, Test18) {
   fte::ranking::DFA rankerObj(VALID_DFA_5, 2048);
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 2048);
-  std::string X = rankerObj.unrank(words_in_language - 1);
+  for (uint32_t i=0; i<1000;i++)
+      std::string X = rankerObj.unrank(words_in_language - 1);
 }
 
 

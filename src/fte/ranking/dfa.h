@@ -29,6 +29,7 @@ namespace ranking {
 typedef std::vector<char> array_type_char_t1;
 typedef std::vector<bool> array_type_bool_t1;
 typedef std::vector<uint32_t> array_type_uint32_t1;
+typedef std::vector<mpz_class> array_type_mpz_t1;
 typedef std::vector< std::vector<uint32_t> > array_type_uint32_t2;
 typedef std::vector< std::vector<mpz_class> > array_type_mpz_t2;
 typedef std::vector< std::string > array_type_string_t1;
@@ -85,6 +86,10 @@ class DFA {
     // For a state q and integer i, the value _T[q][i] is the number of unique
     // accepting paths of length exactly i from state q.
     array_type_mpz_t2 _T;
+    
+    mpz_class calculateNumWordsInLanguage( const uint32_t, const uint32_t );
+    array_type_mpz_t1 _words_in_language_inclusive;
+    array_type_mpz_t1 _words_in_language_exclusive;
 
   public:
     DFA() {};
