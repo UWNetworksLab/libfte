@@ -4,10 +4,10 @@ AES_DIR = $(THIRDPARTY_DIR)/aes
 
 # TODO: create configure.ac script such that we don't have hard-code paths
 ifeq ($(GMP_DIR),)
-GMP_DIR = /usr/local
+GMP_DIR = third_party/gmp-6.0.0
 endif
 ifeq ($(GMP_LIB_DIR),)
-GMP_LIB_DIR = $(GMP_DIR)/lib
+GMP_LIB_DIR = $(GMP_DIR)/.libs
 endif
 ifeq ($(GMP_INC_DIR),)
 GMP_INC_DIR = $(GMP_DIR)/include
@@ -35,7 +35,7 @@ else
 OPTIMIZATION_FLAGS = -O3
 CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
 CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
-LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lfte -lgmp -lgmpxx
+LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lfte -lgmp -lgmpxx
 endif
 
 # the build target executable:
@@ -71,7 +71,7 @@ OBJ_LIBAES = $(THIRDPARTY_DIR)/aes/aes_modes.o \
           $(THIRDPARTY_DIR)/aes/aestab.o
 
 TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
-
+TARGET_GMP = $(GMP_LIB_DIR)/libgmp.dylib
 
 default: $(TARGET_TEST) $(TARGET_MAIN)
 
@@ -80,6 +80,11 @@ default: $(TARGET_TEST) $(TARGET_MAIN)
 
 %.o: %.cc
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
+
+$(TARGET_GTEST):
+	cd third_party/gtest-1.7.0 && ./configure --enable-static --disable-shared && $(MAKE)
+$(TARGET_GMP):
+	cd third_party/gmp-6.0.0 && ./configure --enable-shared --disable-static && $(MAKE)
 
 $(TARGET_TEST): $(TARGET_GTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
 	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_TEST) -o $@
@@ -96,7 +101,7 @@ $(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
 $(TARGET_LIBAES): $(OBJ_LIBAES)
 	$(AR) $(ARFLAGS) $(TARGET_LIBAES) $^
 
-$(TARGET_LIBFTE): $(OBJ_LIBFTE) $(OBJ_LIBAES)
+$(TARGET_LIBFTE): $(TARGET_GMP) $(OBJ_LIBFTE) $(OBJ_LIBAES)
 	$(AR) $(ARFLAGS) $(TARGET_LIBFTE) $^
 
 clean:
@@ -110,3 +115,5 @@ clean:
 	$(RM) $(OBJ_MAIN)
 	$(RM) $(OBJ_TEST)
 	$(RM) bin/*.map
+	cd third_party/gtest-1.7.0 && $(MAKE) clean
+	cd third_party/gmp-6.0.0 && $(MAKE) clean
