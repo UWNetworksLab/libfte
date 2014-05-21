@@ -2071,7 +2071,7 @@ $as_echo "$ac_cv_file_third_party_gmp_6_0_0_Makefile" >&6; }
 if test "x$ac_cv_file_third_party_gmp_6_0_0_Makefile" = xyes; then :
 
 else
-  cd third_party/gmp-6.0.0 && ./configure --disable-assembly --enable-static --disable-shared && cd ../..
+  cd third_party/gmp-6.0.0 && ./configure --disable-assembly --disable-static --enable-shared && cd ../..
 fi
 
 
