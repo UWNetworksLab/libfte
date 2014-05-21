@@ -9,6 +9,9 @@ Dependencies
 ### For building/testing
 
 * make, m4, gcc, g++, etc.
+
+### Third Party Libraries (Included)
+
 * GMP: https://gmplib.org/ (included: third\_party/gmp-6.0.0)
 * aes: http://brgladman.org/oldsite/AES/index.php (included: third\_party/aes)
 * googletest: https://code.google.com/p/googletest/ (included: third\_party/gtest-1.7.0)
@@ -16,13 +19,11 @@ Dependencies
 Tested on
 ---------
 
-* OSX 10.9.2, 64-bit, Xcode 5.1.1, GMP 5.1.3, GCC 4.2
-* Ubuntu 14.04, 32-bit, emscripten 1.17.0 compiled from source, build-essential
+* OSX 10.9.2, 64-bit, Xcode 5.1.1, Apple LLVM version 5.1
+* Ubuntu 14.04, 32-bit, emscripten 1.18.0 compiled from source, build-essential
 
 Build
 -----
-
-To build under gcc.
 
 ```
 $ ./configure
