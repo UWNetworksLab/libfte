@@ -29,7 +29,7 @@ $ ./configure
 $ make
 ```
 
-Running ```make``` will produce ```libfte.a``` and ```bin/test```. There is no ```make install``` target.
+Running ```make``` will produce ```.libs/libfte.a``` and ```bin/test```. There is no ```make install``` target.
 
 Test
 ----
