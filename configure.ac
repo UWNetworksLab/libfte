@@ -6,7 +6,7 @@ AC_CHECK_FILE(third_party/gtest-1.7.0/Makefile,
 
 AC_CHECK_FILE(third_party/gmp-6.0.0/Makefile,
               [],
-              cd third_party/gmp-6.0.0 && ./configure --enable-cxx --disable-assembly --enable-static --disable-shared && cd ../..)
+              cd third_party/gmp-6.0.0 && ./configure --disable-assembly --enable-static --disable-shared && cd ../..)
 
 AC_CONFIG_FILES([Makefile])
 

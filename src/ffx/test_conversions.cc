@@ -15,7 +15,7 @@ TEST(FFX2, ExtractBits1) {
   // should return exactly 1000b (bits in index 0 to 3)
   mpz_class retval = ffx::extract_bit_range(X, X_len, 0, 3);
 
-  EXPECT_EQ(retval, 0x8);
+  EXPECT_EQ(retval.get_ui(), 0x8);
 }
 
 TEST(FFX2, ExtractBits2) {
@@ -27,8 +27,8 @@ TEST(FFX2, ExtractBits2) {
   mpz_class retval_left = ffx::extract_bit_range(X, X_len, 0, 3);
   mpz_class retval_right = ffx::extract_bit_range(X, X_len, 4, 7);
 
-  EXPECT_EQ(retval_left, 0x8);
-  EXPECT_EQ(retval_right, 0x8);
+  EXPECT_EQ(retval_left.get_ui(), 0x8);
+  EXPECT_EQ(retval_right.get_ui(), 0x8);
 }
 
 TEST(FFX2, ExtractBits3) {
@@ -39,7 +39,7 @@ TEST(FFX2, ExtractBits3) {
   // should return exactly 1111b for left/right
   mpz_class retval = ffx::extract_bit_range(X, X_len, 0, 7);
 
-  EXPECT_EQ(retval, 0xFF);
+  EXPECT_EQ(retval.get_ui(), 0xFF);
 }
 
 TEST(FFX2, ExtractBits4) {
@@ -51,8 +51,8 @@ TEST(FFX2, ExtractBits4) {
   mpz_class retval_left = ffx::extract_bit_range(X, X_len, 0, 3);
   mpz_class retval_right = ffx::extract_bit_range(X, X_len, 4, 7);
 
-  EXPECT_EQ(retval_left, 0xF);
-  EXPECT_EQ(retval_right, 0xF);
+  EXPECT_EQ(retval_left.get_ui(), 0xF);
+  EXPECT_EQ(retval_right.get_ui(), 0xF);
 }
 
 TEST(FFX2, ExtractBits5) {
@@ -63,8 +63,8 @@ TEST(FFX2, ExtractBits5) {
   mpz_class retval_left = ffx::extract_bit_range(X, X_len, 0, 3);
   mpz_class retval_right = ffx::extract_bit_range(X, X_len, 4, 7);
 
-  EXPECT_EQ(retval_left, 0xF);
-  EXPECT_EQ(retval_right, 0x0);
+  EXPECT_EQ(retval_left.get_ui(), 0xF);
+  EXPECT_EQ(retval_right.get_ui(), 0x0);
 }
 
 TEST(FFX2, ExtractBits6) {
@@ -75,8 +75,8 @@ TEST(FFX2, ExtractBits6) {
   mpz_class retval_left = ffx::extract_bit_range(X, X_len, 0, 15);
   mpz_class retval_right = ffx::extract_bit_range(X, X_len, 16, 31);
 
-  EXPECT_EQ(retval_left, 0xFFFF);
-  EXPECT_EQ(retval_right, 0x0000);
+  EXPECT_EQ(retval_left.get_ui(), 0xFFFF);
+  EXPECT_EQ(retval_right.get_ui(), 0x0000);
 }
 
 TEST(FFX2, MpzCharConversion1) {
@@ -93,7 +93,7 @@ TEST(FFX2, MpzCharConversion1) {
 
   ffx::base256_to_mpz(Y, n, Z);
 
-  EXPECT_EQ(X, Z);
+  EXPECT_EQ(X.get_str(), Z.get_str());
 
   delete[] Y;
 }
@@ -107,7 +107,7 @@ TEST(FFX2, MpzCharConversion2) {
   ffx::mpz_to_base256(X, n, Y);
   ffx::base256_to_mpz(Y, n, Z);
 
-  EXPECT_EQ(X, Z);
+  EXPECT_EQ(X.get_str(), Z.get_str());
 
   delete[] Y;
 }

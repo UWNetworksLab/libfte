@@ -16,7 +16,7 @@ TEST(FFX2, EncryptDecrypt1) {
   uint32_t Y_len = 32;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
   mpz_class Z = ffxObj.decrypt(K, Y, Y_len);
-  EXPECT_EQ(X, Z);
+  EXPECT_EQ(X.get_str(), Z.get_str());
 }
 
 TEST(FFX2, EncryptDecrypt2) {
@@ -27,7 +27,7 @@ TEST(FFX2, EncryptDecrypt2) {
   uint32_t Y_len = 65;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
   mpz_class Z = ffxObj.decrypt(K, Y, Y_len);
-  EXPECT_EQ(X, Z);
+  EXPECT_EQ(X.get_str(), Z.get_str());
 }
 
 TEST(FFX2, TestVector1) {
@@ -36,8 +36,9 @@ TEST(FFX2, TestVector1) {
   mpz_class X = 1191613746;
   uint32_t X_len = 32;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y, 97422040);
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_ui(), 97422040);
+  EXPECT_EQ(X.get_ui(), Z.get_ui());
 }
 
 TEST(FFX2, TestVector2) {
@@ -46,8 +47,9 @@ TEST(FFX2, TestVector2) {
   mpz_class X = 1546594394;
   uint32_t X_len = 32;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y, 1394942153);
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_ui(), 1394942153);
+  EXPECT_EQ(X.get_ui(), Z.get_ui());
 }
 
 TEST(FFX2, TestVector3) {
@@ -56,8 +58,9 @@ TEST(FFX2, TestVector3) {
   mpz_class X = 1191613746;
   uint32_t X_len = 32;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y, 1475352427);
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_ui(), 1475352427);
+  EXPECT_EQ(X.get_ui(), Z.get_ui());
 }
 
 TEST(FFX2, TestVector4) {
@@ -66,8 +69,9 @@ TEST(FFX2, TestVector4) {
   mpz_class X = 1546594394;
   uint32_t X_len = 32;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y, 560889368);
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_ui(), 560889368);
+  EXPECT_EQ(X.get_ui(), Z.get_ui());
 }
 
 TEST(FFX2, TestVector5) {
@@ -76,8 +80,9 @@ TEST(FFX2, TestVector5) {
   mpz_class X = 1191613746;
   uint32_t X_len = 32;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y, 2017546936);
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_ui(), 2017546936);
+  EXPECT_EQ(X.get_ui(), Z.get_ui());
 }
 
 TEST(FFX2, TestVector6) {
@@ -87,8 +92,9 @@ TEST(FFX2, TestVector6) {
   mpz_class ciphertext = mpz_class("3223057243");
   uint32_t X_len = 32;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y, ciphertext);
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_ui(), ciphertext.get_ui());
+  EXPECT_EQ(X.get_ui(), Z.get_ui());
 }
 
 TEST(FFX2, TestVector7) {
@@ -97,8 +103,9 @@ TEST(FFX2, TestVector7) {
   mpz_class X = mpz_class("19531846666280701709");
   uint32_t X_len = 65;
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y, mpz_class("24174057300333921796"));
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_str(), mpz_class("24174057300333921796").get_str());
+  EXPECT_EQ(X.get_str(), Z.get_str());
 }
 
 TEST(FFX2, TestVector8) {
@@ -107,10 +114,11 @@ TEST(FFX2, TestVector8) {
   mpz_class X =
     mpz_class("9999999999999999999999999999999999999999999999999999999999999");
   uint32_t X_len = 203;
+  mpz_class ciphertext = mpz_class("5482742996470928218251101700126162483085479022017991609519811");
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y,
-            mpz_class("5482742996470928218251101700126162483085479022017991609519811"));
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_str(), ciphertext.get_str());
+  EXPECT_EQ(X.get_str(), Z.get_str());
 }
 
 TEST(FFX2, TestVector9) {
@@ -119,10 +127,11 @@ TEST(FFX2, TestVector9) {
   mpz_class X =
     mpz_class("9999999999999999999999999999999999999999999999999999999999999");
   uint32_t X_len = 203;
+  mpz_class ciphertext = mpz_class("10938813410323079160848491505823845089434306691692900319087087");
   mpz_class Y = ffxObj.encrypt(K, X, X_len);
-  EXPECT_EQ(Y,
-            mpz_class("10938813410323079160848491505823845089434306691692900319087087"));
-  EXPECT_EQ(X, ffxObj.decrypt(K, Y, X_len));
+  mpz_class Z = ffxObj.decrypt(K, Y, X_len);
+  EXPECT_EQ(Y.get_str(), ciphertext.get_str());
+  EXPECT_EQ(X.get_str(), Z.get_str());
 }
 
 TEST(FFX2Malicous, ShortKey1) {

@@ -11,35 +11,35 @@ TEST(RankerNormalUsage, Test1) {
   fte::ranking::DFA rankerObj(VALID_DFA_1, 16);
   std::string X = rankerObj.unrank(0);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(0, C);
+  EXPECT_EQ(0, C.get_ui());
 }
 
 TEST(RankerNormalUsage, Test2) {
   fte::ranking::DFA rankerObj(VALID_DFA_2, 16);
   std::string X = rankerObj.unrank(0);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(0, C);
+  EXPECT_EQ(0, C.get_ui());
 }
 
 TEST(RankerNormalUsage, Test3) {
   fte::ranking::DFA rankerObj(VALID_DFA_3, 16);
   std::string X = rankerObj.unrank(0);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(0, C);
+  EXPECT_EQ(0, C.get_ui());
 }
 
 TEST(RankerNormalUsage, Test4) {
   fte::ranking::DFA rankerObj(VALID_DFA_4, 16);
   std::string X = rankerObj.unrank(0);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(0, C);
+  EXPECT_EQ(0, C.get_ui());
 }
 
 TEST(RankerNormalUsage, Test5) {
   fte::ranking::DFA rankerObj(VALID_DFA_5, 16);
   std::string X = rankerObj.unrank(0);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(0, C);
+  EXPECT_EQ(0, C.get_ui());
 }
 
 TEST(RankerNormalUsage, Test6) {
@@ -47,7 +47,8 @@ TEST(RankerNormalUsage, Test6) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 16);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 TEST(RankerNormalUsage, Test7) {
@@ -55,7 +56,8 @@ TEST(RankerNormalUsage, Test7) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 16);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 TEST(RankerNormalUsage, Test8) {
@@ -63,7 +65,8 @@ TEST(RankerNormalUsage, Test8) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 16);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 TEST(RankerNormalUsage, Test9) {
@@ -71,7 +74,8 @@ TEST(RankerNormalUsage, Test9) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 16);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 TEST(RankerNormalUsage, Test10) {
@@ -79,7 +83,8 @@ TEST(RankerNormalUsage, Test10) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 16);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 
@@ -88,7 +93,8 @@ TEST(RankerNormalUsage, Test11) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 32);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 
@@ -97,7 +103,8 @@ TEST(RankerNormalUsage, Test12) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 64);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 
@@ -106,7 +113,8 @@ TEST(RankerNormalUsage, Test13) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 128);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 
@@ -115,7 +123,8 @@ TEST(RankerNormalUsage, Test14) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 256);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 
@@ -124,7 +133,8 @@ TEST(RankerNormalUsage, Test15) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 512);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 
@@ -133,7 +143,8 @@ TEST(RankerNormalUsage, Test16) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 1024);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 
@@ -142,15 +153,8 @@ TEST(RankerNormalUsage, Test17) {
   mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 2048);
   std::string X = rankerObj.unrank(words_in_language - 1);
   mpz_class   C = rankerObj.rank(X);
-  EXPECT_EQ(words_in_language - 1, C);
-}
-
-
-TEST(RankerNormalUsage, Test18) {
-  fte::ranking::DFA rankerObj(VALID_DFA_5, 2048);
-  mpz_class words_in_language = rankerObj.getNumWordsInLanguage(0, 2048);
-  for (uint32_t i=0; i<1000;i++)
-      std::string X = rankerObj.unrank(words_in_language - 1);
+  mpz_class expected_rank = words_in_language - 1;
+  EXPECT_EQ(expected_rank.get_str(), C.get_str());
 }
 
 

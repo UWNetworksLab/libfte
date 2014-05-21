@@ -13,7 +13,7 @@ GTEST_INC_DIR = $(GTEST_DIR)/include
 OPTIMIZATION_FLAGS = -O3
 CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
 CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
-LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lfte -lgmp -lgmpxx
+LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lfte -lgmp
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -75,5 +75,7 @@ clean:
 	cd $(GMP_DIR) && $(MAKE) clean
 
 distclean:
+	rm -f config.status
+	rm -f config.log
 	cd $(GTEST_DIR) && $(MAKE) distclean
 	cd $(GMP_DIR) && $(MAKE) distclean
