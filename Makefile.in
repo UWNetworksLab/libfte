@@ -13,7 +13,7 @@ GTEST_INC_DIR = $(GTEST_DIR)/include
 OPTIMIZATION_FLAGS = -O3
 CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
 CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
-LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lfte -lgmp -lgmpxx
+LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lfte -lgmp -lgmpxx
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -25,7 +25,7 @@ OBJ_TEST = src/tests.o \
            src/ffx/test_conversions.o \
            src/fte/ranking/test_dfa.o
 
-TARGET_LIBFTE = libfte.a
+TARGET_LIBFTE = .libs/libfte.a
 OBJ_LIBFTE = src/ffx/conversions.o \
              src/ffx/key.o \
              src/ffx/aes_cbc_mac.o \

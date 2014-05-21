@@ -22,27 +22,14 @@ Tested on
 Build
 -----
 
-To build normally under gcc
+To build under gcc.
 
 ```
 $ ./configure
-...
 $ make
-...
-$ ls bin
-test
 ```
 
-or to build under emscripten.
-
-```
-$ emconfigure ./configure
-...
-$ make
-...
-$ ls bin
-test
-```
+Running ```make``` will produce ```libfte.a``` and ```bin/test```. There is no ```make install``` target.
 
 Test
 ----
