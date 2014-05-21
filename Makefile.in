@@ -42,7 +42,7 @@ OBJ_LIBFTE = src/ffx/conversions.o \
 TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
 
 UNAME=$(shell uname)
-ifeq($(UNAME),Darwin)
+ifeq ($(UNAME),Darwin)
 TARGET_GMP = $(GMP_LIB_DIR)/libgmp.dylib
 else
 TARGET_GMP = $(GMP_LIB_DIR)/libgmp.so
