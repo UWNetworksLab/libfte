@@ -2031,6 +2031,28 @@ else
 fi
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for third_party/gtest-1.7.0/Makefile" >&5
+$as_echo_n "checking for third_party/gtest-1.7.0/Makefile... " >&6; }
+if ${ac_cv_file_third_party_gtest_1_7_0_Makefile+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "third_party/gtest-1.7.0/Makefile"; then
+  ac_cv_file_third_party_gtest_1_7_0_Makefile=yes
+else
+  ac_cv_file_third_party_gtest_1_7_0_Makefile=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file_third_party_gtest_1_7_0_Makefile" >&5
+$as_echo "$ac_cv_file_third_party_gtest_1_7_0_Makefile" >&6; }
+if test "x$ac_cv_file_third_party_gtest_1_7_0_Makefile" = xyes; then :
+
+else
+  as_fn_error $? "Failed to configure gtest." "$LINENO" 5
+fi
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for third_party/gmp-6.0.0/Makefile" >&5
 $as_echo_n "checking for third_party/gmp-6.0.0/Makefile... " >&6; }
 if ${ac_cv_file_third_party_gmp_6_0_0_Makefile+:} false; then :
@@ -2049,8 +2071,31 @@ $as_echo "$ac_cv_file_third_party_gmp_6_0_0_Makefile" >&6; }
 if test "x$ac_cv_file_third_party_gmp_6_0_0_Makefile" = xyes; then :
 
 else
-  cd third_party/gmp-6.0.0 && ./configure --enable-cxx --disable-assembly --enable-static --disable-shared && cd ../..
+  cd third_party/gmp-6.0.0 && ./configure --disable-assembly --enable-static --disable-shared && cd ../..
 fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for third_party/gmp-6.0.0/Makefile" >&5
+$as_echo_n "checking for third_party/gmp-6.0.0/Makefile... " >&6; }
+if ${ac_cv_file_third_party_gmp_6_0_0_Makefile+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "third_party/gmp-6.0.0/Makefile"; then
+  ac_cv_file_third_party_gmp_6_0_0_Makefile=yes
+else
+  ac_cv_file_third_party_gmp_6_0_0_Makefile=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file_third_party_gmp_6_0_0_Makefile" >&5
+$as_echo "$ac_cv_file_third_party_gmp_6_0_0_Makefile" >&6; }
+if test "x$ac_cv_file_third_party_gmp_6_0_0_Makefile" = xyes; then :
+
+else
+  as_fn_error $? "Failed to configure GMP." "$LINENO" 5
+fi
+
 
 
 ac_config_files="$ac_config_files Makefile"
