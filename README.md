@@ -48,7 +48,7 @@ Test
 ----
 
 ```
-$ ./bin/test (or ./bin/test.js)
+$ ./bin/test
 [==========] Running 43 tests from 6 test cases.
 [----------] Global test environment set-up.
 [----------] 7 tests from CauseException
