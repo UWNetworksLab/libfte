@@ -9,37 +9,15 @@ Dependencies
 ### For building/testing
 
 * make, m4, gcc, g++, etc.
-* 32-bit emscripten (asm.js only): https://github.com/kripken/emscripten
-* GMP: https://gmplib.org/
-* aes: http://brgladman.org/oldsite/AES/index.php (included: thirdparty/aes)
-* googletest: https://code.google.com/p/googletest/ (included: thirdparty/gtest-1.7.0)
-
-### asm.js
-
-[ vagrant instructions to appear here ]
-
-### OSX
-
-On OSX: install Xcode, homebrew, then
-
-```
-brew install --build-from-source gmp
-```
-
-### Debian/Ubuntu
-
-On Debian/Ubuntu
-
-```
-apt-get install build-essential
-apt-get install libgmp-dev
-```
+* GMP: https://gmplib.org/ (included: third\_party/gmp-6.0.0)
+* aes: http://brgladman.org/oldsite/AES/index.php (included: third\_party/aes)
+* googletest: https://code.google.com/p/googletest/ (included: third\_party/gtest-1.7.0)
 
 Tested on
 ---------
 
-* OSX 10.9.2 with Xcode 5.1.1, GMP 5.1.3, GCC 4.2
-* Ubuntu 14.04, emscripten 1.17.0 compiled from source, build-essential
+* OSX 10.9.2, 64-bit, Xcode 5.1.1, GMP 5.1.3, GCC 4.2
+* Ubuntu 14.04, 32-bit, emscripten 1.17.0 compiled from source, build-essential
 
 Build
 -----
@@ -47,10 +25,9 @@ Build
 To build normally under gcc
 
 ```
-$ cd third_party/gtest-*
-$ ./configure --enable-static --disable-shared && make
-$ cd ../..
-$ make bin/test
+$ ./configure
+...
+$ make
 ...
 $ ls bin
 test
@@ -59,20 +36,19 @@ test
 or to build under emscripten.
 
 ```
-$ cd third_party/gtest-*
-$ emconfigure ./configure ABI=32 --disable-assembly --enable-static --disable-shared
-$ cd ../..
-$ EMSCRIPTEN=1 make bin/test.js
+$ emconfigure ./configure
+...
+$ make
 ...
 $ ls bin
-test.js
+test
 ```
 
 Test
 ----
 
 ```
-$ ./bin/test (or ./bin/test.js)
+$ ./bin/test
 [==========] Running 43 tests from 6 test cases.
 [----------] Global test environment set-up.
 [----------] 7 tests from CauseException

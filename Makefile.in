@@ -1,0 +1,75 @@
+THIRDPARTY_DIR = third_party
+
+AES_DIR = $(THIRDPARTY_DIR)/aes
+
+GMP_DIR = third_party/gmp-6.0.0
+GMP_LIB_DIR = $(GMP_DIR)/.libs
+GMP_INC_DIR = $(GMP_DIR)
+
+GTEST_DIR = $(THIRDPARTY_DIR)/gtest-1.7.0
+GTEST_LIB_DIR = $(GTEST_DIR)/lib/.libs
+GTEST_INC_DIR = $(GTEST_DIR)/include
+
+OPTIMIZATION_FLAGS = -O3
+CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
+CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
+LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L. -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lfte -lgmp -lgmpxx
+
+# the build target executable:
+TARGET_TEST = bin/test
+OBJ_TEST = src/tests.o \
+           src/fte/test_fte.o \
+           src/ffx/test_ffx.o \
+           src/ffx/test_aes_ecb.o \
+           src/ffx/test_aes_cbc_mac.o \
+           src/ffx/test_conversions.o \
+           src/fte/ranking/test_dfa.o
+
+TARGET_LIBFTE = libfte.a
+OBJ_LIBFTE = src/ffx/conversions.o \
+             src/ffx/key.o \
+             src/ffx/aes_cbc_mac.o \
+             src/ffx/aes_ecb.o \
+             src/ffx/ffx.o \
+             src/fte/fte.o \
+             src/fte/ranking/sample_dfas.o \
+             src/fte/ranking/dfa.o \
+             $(THIRDPARTY_DIR)/aes/aes_modes.o \
+             $(THIRDPARTY_DIR)/aes/aescrypt.o \
+             $(THIRDPARTY_DIR)/aes/aeskey.o \
+             $(THIRDPARTY_DIR)/aes/aestab.o
+
+TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
+TARGET_GMP = $(GMP_LIB_DIR)/libgmp.a
+
+default: $(TARGET_TEST)
+
+%.o: %.c
+	$(CC) $(CFLAGS_) -c -o $@ $<
+
+%.o: %.cc
+	$(CXX) $(CXXFLAGS_) -c -o $@ $<
+
+$(TARGET_GTEST):
+	cd $(GTEST_DIR) && $(MAKE)
+
+$(TARGET_GMP):
+	cd $(GMP_DIR) && $(MAKE)
+
+$(TARGET_TEST): $(TARGET_GTEST) $(TARGET_GMP) $(TARGET_LIBFTE) $(OBJ_TEST)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_TEST) -o $@
+
+$(TARGET_LIBFTE): $(OBJ_LIBFTE)
+	$(AR) $(ARFLAGS) $(TARGET_LIBFTE) $^
+
+clean:
+	$(RM) $(TARGET_MAINJS)
+	$(RM) $(TARGET_MAIN)
+	$(RM) $(TARGET_TESTJS)
+	$(RM) $(TARGET_TEST)
+	$(RM) $(TARGET_LIBFTE)
+	$(RM) $(OBJ_LIBFTE)
+	$(RM) $(OBJ_MAIN)
+	$(RM) $(OBJ_TEST)
+	cd $(GTEST_DIR) && $(MAKE) clean
+	cd $(GMP_DIR) && $(MAKE) clean
