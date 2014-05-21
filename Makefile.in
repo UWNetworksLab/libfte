@@ -73,3 +73,7 @@ clean:
 	$(RM) $(OBJ_TEST)
 	cd $(GTEST_DIR) && $(MAKE) clean
 	cd $(GMP_DIR) && $(MAKE) clean
+
+distclean:
+	cd $(GTEST_DIR) && $(MAKE) distclean
+	cd $(GMP_DIR) && $(MAKE) distclean
