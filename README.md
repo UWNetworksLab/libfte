@@ -27,16 +27,18 @@ Build
 
 ```
 $ ./configure
-$ make
+$ make [bin/test|bin/test.js]
 ```
 
-Running ```make``` will produce ```.libs/libfte.a``` and ```bin/test```. There is no ```make install``` target.
+Running ```make``` will produce ```.libs/libfte.a``` and ```bin/test``` or ```bin/test.js```.
+
+There is currently no ```make install``` target.
 
 Test
 ----
 
 ```
-$ ./bin/test
+$ ./bin/test (or nodejs ./bin/test.js)
 [==========] Running 43 tests from 6 test cases.
 [----------] Global test environment set-up.
 [----------] 7 tests from CauseException
