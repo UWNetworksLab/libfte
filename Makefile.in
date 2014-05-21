@@ -40,7 +40,13 @@ OBJ_LIBFTE = src/ffx/conversions.o \
              $(THIRDPARTY_DIR)/aes/aestab.o
 
 TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
-TARGET_GMP = $(GMP_LIB_DIR)/libgmp.a
+
+UNAME=$(shell uname)
+ifeq($(UNAME),Darwin)
+TARGET_GMP = $(GMP_LIB_DIR)/libgmp.dylib
+else
+TARGET_GMP = $(GMP_LIB_DIR)/libgmp.so
+endif
 
 default: $(TARGET_TEST)
 
