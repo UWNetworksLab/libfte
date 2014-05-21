@@ -4,7 +4,7 @@ AES_DIR = $(THIRDPARTY_DIR)/aes
 
 # TODO: create configure.ac script such that we don't have hard-code paths
 ifeq ($(GMP_DIR),)
-GMP_DIR = third_party/gmp-6.0.0
+GMP_DIR = $(THIRDPARTY_DIR)/gmp-6.0.0
 endif
 ifeq ($(GMP_LIB_DIR),)
 GMP_LIB_DIR = $(GMP_DIR)/.libs
@@ -82,9 +82,9 @@ default: $(TARGET_TEST) $(TARGET_MAIN)
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
 
 $(TARGET_GTEST):
-	cd third_party/gtest-1.7.0 && ./configure --enable-static --disable-shared && $(MAKE)
+	cd $(GTEST_DIR) && ./configure --enable-static --disable-shared && $(MAKE)
 $(TARGET_GMP):
-	cd third_party/gmp-6.0.0 && ./configure --disable-shared --enable-static && $(MAKE)
+	cd $(GMP_DIR) && ./configure --disable-shared --enable-static && $(MAKE)
 
 $(TARGET_TEST): $(TARGET_GTEST) $(TARGET_GMP) $(TARGET_LIBFTE) $(OBJ_TEST)
 	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_TEST) -o $@
@@ -115,5 +115,5 @@ clean:
 	$(RM) $(OBJ_MAIN)
 	$(RM) $(OBJ_TEST)
 	$(RM) bin/*.map
-	cd third_party/gtest-1.7.0 && $(MAKE) clean
-	cd third_party/gmp-6.0.0 && $(MAKE) clean
+	cd $(GTEST_DIR) && $(MAKE) clean
+	cd $(GMP_DIR) && $(MAKE) clean
