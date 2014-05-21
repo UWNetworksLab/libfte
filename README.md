@@ -25,7 +25,9 @@ Build
 To build normally under gcc
 
 ```
-$ make bin/test
+$ ./configure
+...
+$ make
 ...
 $ ls bin
 test
@@ -34,10 +36,12 @@ test
 or to build under emscripten.
 
 ```
-$ EMSCRIPTEN=1 make bin/test.js
+$ emconfigure ./configure
+...
+$ make
 ...
 $ ls bin
-test.js
+test
 ```
 
 Test
