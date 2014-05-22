@@ -594,6 +594,7 @@ CPPFLAGS
 LDFLAGS
 CFLAGS
 CC
+gmpdir
 target_alias
 host_alias
 build_alias
@@ -635,6 +636,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_gmp
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1252,6 +1254,11 @@ if test -n "$ac_init_help"; then
    esac
   cat <<\_ACEOF
 
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-gmp=DIR          Specify path to the GMP directory
+
 Some influential environment variables:
   CC          C compiler command
   CFLAGS      C compiler flags
@@ -1769,6 +1776,20 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+
+
+
+# Check whether --with-gmp was given.
+if test "${with_gmp+set}" = set; then :
+  withval=$with_gmp; gmpdir="$withval"
+else
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "You must specify the path to the gmp directory
+See \`config.log' for more details" "$LINENO" 5; }
+
+fi
 
 
 ac_ext=c
@@ -2917,49 +2938,26 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for third_party/gtest-1.7.0/Makefile" >&5
-$as_echo_n "checking for third_party/gtest-1.7.0/Makefile... " >&6; }
-if ${ac_cv_file_third_party_gtest_1_7_0_Makefile+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for third_party/gtest/Makefile" >&5
+$as_echo_n "checking for third_party/gtest/Makefile... " >&6; }
+if ${ac_cv_file_third_party_gtest_Makefile+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   test "$cross_compiling" = yes &&
   as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "third_party/gtest-1.7.0/Makefile"; then
-  ac_cv_file_third_party_gtest_1_7_0_Makefile=yes
+if test -r "third_party/gtest/Makefile"; then
+  ac_cv_file_third_party_gtest_Makefile=yes
 else
-  ac_cv_file_third_party_gtest_1_7_0_Makefile=no
+  ac_cv_file_third_party_gtest_Makefile=no
 fi
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file_third_party_gtest_1_7_0_Makefile" >&5
-$as_echo "$ac_cv_file_third_party_gtest_1_7_0_Makefile" >&6; }
-if test "x$ac_cv_file_third_party_gtest_1_7_0_Makefile" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file_third_party_gtest_Makefile" >&5
+$as_echo "$ac_cv_file_third_party_gtest_Makefile" >&6; }
+if test "x$ac_cv_file_third_party_gtest_Makefile" = xyes; then :
 
 else
-  cd third_party/gtest-1.7.0 && ./configure --disable-static --enable-shared && cd ../..
+  cd third_party/gtest && ./configure --disable-static --enable-shared && cd ../..
 fi
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for third_party/gmp-6.0.0/Makefile" >&5
-$as_echo_n "checking for third_party/gmp-6.0.0/Makefile... " >&6; }
-if ${ac_cv_file_third_party_gmp_6_0_0_Makefile+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  test "$cross_compiling" = yes &&
-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "third_party/gmp-6.0.0/Makefile"; then
-  ac_cv_file_third_party_gmp_6_0_0_Makefile=yes
-else
-  ac_cv_file_third_party_gmp_6_0_0_Makefile=no
-fi
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file_third_party_gmp_6_0_0_Makefile" >&5
-$as_echo "$ac_cv_file_third_party_gmp_6_0_0_Makefile" >&6; }
-if test "x$ac_cv_file_third_party_gmp_6_0_0_Makefile" = xyes; then :
-
-else
-  cd third_party/gmp-6.0.0 && ./configure --disable-assembly --disable-static --enable-shared && cd ../..
-fi
-
 
 
 ac_config_files="$ac_config_files Makefile"

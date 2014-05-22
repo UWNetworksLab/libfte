@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <string>
 
+#include <gmp.h>
+
 namespace ffx {
 
 const uint32_t kFFXKeyLengthInBytes = 16;

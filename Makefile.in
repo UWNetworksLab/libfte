@@ -6,21 +6,25 @@ THIRDPARTY_DIR = third_party
 
 AES_DIR = $(THIRDPARTY_DIR)/aes
 
-GMP_DIR = third_party/gmp-6.0.0
-GMP_LIB_DIR = $(GMP_DIR)/.libs
-GMP_INC_DIR = $(GMP_DIR)
+GMP_DIR = @gmpdir@
+GMP_LIB_DIR = $(GMP_DIR)/lib
+GMP_INC_DIR = $(GMP_DIR)/include
 
-GTEST_DIR = $(THIRDPARTY_DIR)/gtest-1.7.0
+GTEST_DIR = $(THIRDPARTY_DIR)/gtest
 GTEST_LIB_DIR = $(GTEST_DIR)/lib/.libs
 GTEST_INC_DIR = $(GTEST_DIR)/include
+
+INSTALL_INC_DIR = @prefix@/include
+INSTALL_LIB_DIR = @prefix@/lib
 
 OPTIMIZATION_FLAGS = -O3
 CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
 CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
-LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lfte -lgmp
+LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte
 
 # the build target executable:
 TARGET_TEST = bin/test
+TARGET_TESTJS = bin/test.js
 OBJ_TEST = src/tests.o \
            src/fte/test_fte.o \
            src/ffx/test_ffx.o \
@@ -43,14 +47,7 @@ OBJ_LIBFTE = src/ffx/conversions.o \
              $(THIRDPARTY_DIR)/aes/aeskey.o \
              $(THIRDPARTY_DIR)/aes/aestab.o
 
-TARGET_GTEST = $(GTEST_LIB_DIR)/libgtest.a
-
-UNAME=$(shell uname)
-ifeq ($(UNAME),Darwin)
-TARGET_GMP = $(GMP_LIB_DIR)/libgmp.dylib
-else
-TARGET_GMP = $(GMP_LIB_DIR)/libgmp.so
-endif
+TARGET_LIBGTEST = $(GTEST_LIB_DIR)/libgtest.a
 
 default: $(TARGET_TEST)
 
@@ -60,17 +57,32 @@ default: $(TARGET_TEST)
 %.o: %.cc
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
 
-$(TARGET_GTEST):
+$(TARGET_LIBGTEST):
 	cd $(GTEST_DIR) && $(MAKE)
 
-$(TARGET_GMP):
-	cd $(GMP_DIR) && $(MAKE)
+$(TARGET_TEST): $(TARGET_LIBGTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_TEST) -o $@
 
-$(TARGET_TEST): $(TARGET_GTEST) $(TARGET_GMP) $(TARGET_LIBFTE) $(OBJ_TEST)
+$(TARGET_TESTJS): $(TARGET_LIBGTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
 	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_TEST) -o $@
 
 $(TARGET_LIBFTE): $(OBJ_LIBFTE)
 	$(AR) $(ARFLAGS) $(TARGET_LIBFTE) $^
+
+$(INSTALL_LIB_DIR):
+	mkdir -p $(INSTALL_LIB_DIR)
+
+$(INSTALL_INC_DIR):
+	mkdir -p $(INSTALL_INC_DIR)
+
+install: $(INSTALL_LIB_DIR) $(INSTALL_INC_DIR)
+	mkdir -p $(INSTALL_INC_DIR)/ffx
+	mkdir -p $(INSTALL_INC_DIR)/fte
+	mkdir -p $(INSTALL_INC_DIR)/fte/ranking
+	cp -f $(TARGET_LIBFTE) $(INSTALL_LIB_DIR)
+	cp -f src/ffx/*.h $(INSTALL_INC_DIR)/ffx
+	cp -f src/fte/*.h $(INSTALL_INC_DIR)/fte
+	cp -f src/fte/ranking/*.h $(INSTALL_INC_DIR)/fte/ranking
 
 clean:
 	$(RM) $(TARGET_MAINJS)
@@ -82,10 +94,8 @@ clean:
 	$(RM) $(OBJ_MAIN)
 	$(RM) $(OBJ_TEST)
 	cd $(GTEST_DIR) && $(MAKE) clean
-	cd $(GMP_DIR) && $(MAKE) clean
 
 distclean:
 	rm -f config.status
 	rm -f config.log
 	cd $(GTEST_DIR) && $(MAKE) distclean
-	cd $(GMP_DIR) && $(MAKE) distclean

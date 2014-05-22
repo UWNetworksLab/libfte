@@ -6,8 +6,6 @@
 #include <string.h>
 #include <assert.h>
 
-#include <gmpxx.h>
-
 #include "aes/aes.h"
 
 #include "ffx/ffx.h"

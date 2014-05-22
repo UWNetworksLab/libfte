@@ -25,12 +25,13 @@
 
 #include <exception>
 
-#include <gmpxx.h>
+#include <gmp.h>
 
 #include "ffx/conversions.h"
 #include "ffx/aes_ecb.h"
 #include "ffx/aes_cbc_mac.h"
 #include "ffx/key.h"
+
 
 namespace ffx {
 

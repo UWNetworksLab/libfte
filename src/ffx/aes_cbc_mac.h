@@ -1,9 +1,9 @@
 #ifndef _LIBFTE_SRC_FFX_AES_CBC_MAC_H
 #define _LIBFTE_SRC_FFX_AES_CBC_MAC_H
 
-#include <gmpxx.h>
-
 #include "ffx/key.h"
+
+#include <gmpxx.h>
 
 namespace ffx {
     
