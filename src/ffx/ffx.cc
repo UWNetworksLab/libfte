@@ -96,7 +96,7 @@ mpz_class Ffx::Encrypt(const std::string & key ,
 
   uint32_t n = plaintext_len_in_bits;
   uint32_t l = floor(plaintext_len_in_bits / 2.0);
-  uint32_t r = DEFAULT_FFX_ROUNDS;
+  uint32_t r = kDefaultFfxRounds;
   mpz_class A = BitMask(plaintext, plaintext_len_in_bits, 0, l - 1);
   mpz_class B = BitMask(plaintext, plaintext_len_in_bits, l, n - 1);
   uint32_t B_len = n - l;
@@ -138,7 +138,7 @@ mpz_class Ffx::Decrypt(const std::string & key,
 
   uint32_t n = cihpertext_len_bits;
   uint32_t l = floor(cihpertext_len_bits / 2.0);
-  uint32_t r = DEFAULT_FFX_ROUNDS;
+  uint32_t r = kDefaultFfxRounds;
   mpz_class A = BitMask(cihpertext, cihpertext_len_bits, 0, l - 1);
   mpz_class B = BitMask(cihpertext, cihpertext_len_bits, l, n - 1);
   uint32_t B_len = n - l;

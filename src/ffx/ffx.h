@@ -33,8 +33,8 @@
 
 namespace ffx {
 
-const uint32_t DEFAULT_FFX_RADIX = 2;
-const uint32_t DEFAULT_FFX_ROUNDS = 10;
+const uint32_t kDefaultFfxRadix = 2;
+const uint32_t kDefaultFfxRounds = 10;
 const uint32_t kFFXKeyLengthInBytes = 16;
 const uint32_t kFFXKeyLengthInNibbles = kFFXKeyLengthInBytes * 2;
 const uint32_t kFFXKeyLengthInBits = kFFXKeyLengthInBytes * 8;
@@ -63,12 +63,12 @@ class Ffx {
 
  public:
   Ffx()
-    : radix_(DEFAULT_FFX_RADIX) {
+    : radix_(kDefaultFfxRadix) {
   }
 
   Ffx(const uint32_t radix)
     : radix_(radix) {
-    if(radix_ != DEFAULT_FFX_RADIX) {
+    if(radix_ != kDefaultFfxRadix) {
       throw InvalidRadix();
     }
   }
