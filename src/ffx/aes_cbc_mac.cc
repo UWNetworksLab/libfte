@@ -1,11 +1,13 @@
+#include "ffx/aes_cbc_mac.h"
+
 #include "third_party/aes/aes.h"
 
+#include "ffx/ffx.h"
 #include "ffx/conversions.h"
-#include "ffx/aes_cbc_mac.h"
 
 namespace ffx {
 
-mpz_class AesCbcMac(const Key key,
+mpz_class AesCbcMac(const std::string key,
                       const mpz_class plaintext,
                       const uint32_t plaintext_len) {
   mpz_class retval = 0;
@@ -30,7 +32,7 @@ mpz_class AesCbcMac(const Key key,
   }
 
   MpzClassToBase256(plaintext, byte_string_len, pInBuffer);
-  Base16ToBase256(key.key(), kFFXKeyLengthInBytes, pKey);
+  Base16ToBase256(key, kFFXKeyLengthInBytes, pKey);
 
   aes_init();
   aes_encrypt_key128(pKey, pCtx);

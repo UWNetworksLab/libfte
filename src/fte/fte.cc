@@ -7,7 +7,7 @@ namespace fte {
 
 Fte::Fte(const std::string input_dfa, const uint32_t input_max_len,
          const std::string output_dfa, const uint32_t output_max_len,
-         const Key key) {
+         const std::string key) {
 
   // TODO: don't throw an exception in the constructor
   if(key.length() != kFteKeyLengthInNibbles) {

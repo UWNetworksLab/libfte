@@ -29,18 +29,11 @@ namespace fte {
 const uint32_t kFfxRadix = 2;
 const uint32_t kFteKeyLengthInNibbles = 32;
 
-class Key : public ffx::Key {
- public:
-  Key() : ffx::Key() {};
-  Key(std::string key) : ffx::Key(key) {};
-  Key(const char * key) : ffx::Key(key) {};
-};
-
 class Fte {
  private:
   ranking::DfaRanker input_ranker_;
   ranking::DfaRanker output_ranker_;
-  Key key_;
+  std::string key_;
   ffx::Ffx ffx_;
   uint32_t input_language_capacity_;
   uint32_t output_language_capacity_;
@@ -57,7 +50,7 @@ class Fte {
    */
   Fte(const std::string input_dfa, const uint32_t input_max_len,
       const std::string output_dfa, const uint32_t output_max_len,
-      const Key key);
+      const std::string key);
 
   /*
    * On input of a string that is accepted by input_dfa (specified in the constructor)

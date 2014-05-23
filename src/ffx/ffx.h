@@ -30,13 +30,14 @@
 #include "ffx/conversions.h"
 #include "ffx/aes_ecb.h"
 #include "ffx/aes_cbc_mac.h"
-#include "ffx/key.h"
-
 
 namespace ffx {
 
 const uint32_t DEFAULT_FFX_RADIX = 2;
 const uint32_t DEFAULT_FFX_ROUNDS = 10;
+const uint32_t kFFXKeyLengthInBytes = 16;
+const uint32_t kFFXKeyLengthInNibbles = kFFXKeyLengthInBytes * 2;
+const uint32_t kFFXKeyLengthInBits = kFFXKeyLengthInBytes * 8;
 
 class FFXException : public std::exception {
   virtual const char* what() const throw() {
@@ -86,12 +87,12 @@ class Ffx {
    * This encrypt function preserves the length of the input plaintext. That is,
    * the resultant ciphertext will be a bitstring of length plaintext_len.
    */
-  mpz_class Encrypt(const Key key,
+  mpz_class Encrypt(const std::string key,
                     const mpz_class plaintext,
                     const uint32_t plaintext_len);
 
   // tweak can be specified, but will be ignored
-  mpz_class Encrypt(const Key key,
+  mpz_class Encrypt(const std::string key,
                     const mpz_class tweak,
                     const uint32_t tweak_len,
                     const mpz_class plaintext,
@@ -102,12 +103,12 @@ class Ffx {
    * Given a ciphertext output from FFX.Encrypt[radix], a ciphertext_len and
    * key, recovers the input plaintext.
    */
-  mpz_class Decrypt(const Key key,
+  mpz_class Decrypt(const std::string key,
                     const mpz_class ciphertext,
                     const uint32_t ciphertext_len);
 
   // tweak can be specified, but will be ignored
-  mpz_class Decrypt(const Key key,
+  mpz_class Decrypt(const std::string key,
                     const mpz_class tweak,
                     const uint32_t tweak_len,
                     const mpz_class ciphertext,
