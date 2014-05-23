@@ -27,7 +27,7 @@ namespace ffx {
  *   bin(X).rjust(X_len,'0')[2:][start:end+1]
  *
  */
-mpz_class extract_bit_range(const mpz_class X, const uint32_t X_len,
+mpz_class BitMask(const mpz_class X, const uint32_t X_len,
                             const uint32_t start, const uint32_t end);
 
 /*
@@ -40,16 +40,16 @@ mpz_class extract_bit_range(const mpz_class X, const uint32_t X_len,
  *                 It is the caller's job to initialize out.
  */
 
-void mpz_to_base256(const mpz_class in,
+void MpzClassToBase256(const mpz_class in,
                     const uint32_t out_len, unsigned char * & out);
-void base256_to_mpz(unsigned char * in, const uint32_t in_len,
+void Base256ToMpzClass(unsigned char * in, const uint32_t in_len,
                     mpz_class & out);
 
 /*
  * Given a base-16 encoded string of length in_len pointed to
  * by in, puts It is the callers job to init. out.
  */
-void base16_to_base256(const std::string,
+void Base16ToBase256(const std::string,
                        const uint32_t, unsigned char * &);
 
 } // namespace ffx

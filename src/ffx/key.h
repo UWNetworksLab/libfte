@@ -25,7 +25,7 @@ class Key {
   Key(const std::string);
   Key(const char *);
 
-  std::string get_key() const;
+  std::string key() const;
   uint32_t length() const;
 };
 

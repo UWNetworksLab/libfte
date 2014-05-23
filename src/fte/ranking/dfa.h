@@ -78,18 +78,18 @@ class DFA {
   //   i: an integer
   //   n: the number of words in our language that have a path to a final
   //      state that is exactly length i
-  void _buildTable();
+  void PopulateCachedTable();
 
   // Checks the properties of our ranker, to ensure that we meet all constraints.
   // Throws an exception upon failure.
-  void _validate();
+  void SanityCheck();
 
   // _T is our cached table, the output of buildTable
   // For a state q and integer i, the value _T[q][i] is the number of unique
   // accepting paths of length exactly i from state q.
   MpzClassMatrixT CachedTable_;
 
-  mpz_class calculateNumWordsInLanguage( const uint32_t, const uint32_t );
+  mpz_class CalculateNumWordsInLanguage( const uint32_t, const uint32_t );
   MpzClassVectorT words_in_language_inclusive_;
   MpzClassVectorT words_in_language_exclusive_;
 
@@ -102,15 +102,15 @@ class DFA {
   // our unrank function an int -> str mapping
   // given an integer i, return the ith lexicographically ordered string in
   // the language accepted by the ranker
-  std::string unrank( const mpz_class );
+  std::string Unrank( const mpz_class );
 
   // our rank function performs the inverse operation of unrank
-  mpz_class rank( const std::string );
+  mpz_class Rank( const std::string );
 
   // given integers [n,m] returns the number of words accepted by the
   // ranker that are at least length n and no greater than length m
-  mpz_class getNumWordsInLanguage( const uint32_t );
-  mpz_class getNumWordsInLanguage( const uint32_t, const uint32_t );
+  mpz_class WordsInLanguage( const uint32_t );
+  mpz_class WordsInLanguage( const uint32_t, const uint32_t );
 };
 
 } // namespace ranking

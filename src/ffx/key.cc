@@ -10,7 +10,7 @@ Key::Key(const char * key) {
   key_ = key;
 }
 
-std::string Key::get_key() const {
+std::string Key::key() const {
   return key_;
 }
 

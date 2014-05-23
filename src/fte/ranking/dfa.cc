@@ -127,26 +127,26 @@ DFA::DFA(const std::string dfa_str, const uint32_t max_len)
     }
   }
 
-  DFA::_validate();
+  DFA::SanityCheck();
 
   // perform our precalculation to speed up (un)ranking
-  DFA::_buildTable();
+  DFA::PopulateCachedTable();
 
   uint32_t max_word_len;
   words_in_language_inclusive_.resize(fixed_slice_+1);
   words_in_language_exclusive_.resize(fixed_slice_+1);
   for (max_word_len = 0; max_word_len <= fixed_slice_; max_word_len++) {
-    words_in_language_inclusive_.at(max_word_len) = calculateNumWordsInLanguage( 0, max_word_len );
-    words_in_language_exclusive_.at(max_word_len) = calculateNumWordsInLanguage( max_word_len, max_word_len );
+    words_in_language_inclusive_.at(max_word_len) = CalculateNumWordsInLanguage( 0, max_word_len );
+    words_in_language_exclusive_.at(max_word_len) = CalculateNumWordsInLanguage( max_word_len, max_word_len );
   }
 
-  if (1 >= getNumWordsInLanguage(0, fixed_slice_)) {
+  if (1 >= WordsInLanguage(0, fixed_slice_)) {
     throw fte::InvalidInputNoAcceptingPaths();
   }
 }
 
 
-void DFA::_validate() {
+void DFA::SanityCheck() {
   // ensure dfa has at least one state
   if (0 == states_.size())
     throw fte::InvalidFstFormat();
@@ -175,7 +175,7 @@ void DFA::_validate() {
   }
 }
 
-void DFA::_buildTable() {
+void DFA::PopulateCachedTable() {
   uint32_t i;
   uint32_t q;
   uint32_t a;
@@ -209,8 +209,8 @@ void DFA::_buildTable() {
 }
 
 
-std::string DFA::unrank( const mpz_class c_in ) {
-  assert(c_in < getNumWordsInLanguage(0, fixed_slice_));
+std::string DFA::Unrank( const mpz_class c_in ) {
+  assert(c_in < WordsInLanguage(0, fixed_slice_));
 
   std::string retval;
 
@@ -218,7 +218,7 @@ std::string DFA::unrank( const mpz_class c_in ) {
   mpz_class c = c_in;
   uint32_t n = 0;
   while (true) {
-    mpz_class words_in_slice = getNumWordsInLanguage( n, n );
+    mpz_class words_in_slice = WordsInLanguage( n, n );
     if ( words_in_slice <= c ) {
       c -= words_in_slice;
       n += 1;
@@ -284,7 +284,7 @@ std::string DFA::unrank( const mpz_class c_in ) {
   return retval;
 }
 
-mpz_class DFA::rank( const std::string X ) {
+mpz_class DFA::Rank( const std::string X ) {
   assert(X.size() <=  fixed_slice_);
 
   uint32_t n = X.size();
@@ -341,16 +341,16 @@ mpz_class DFA::rank( const std::string X ) {
     throw fte::InvalidInputNoAcceptingPaths();
   }
 
-  retval += getNumWordsInLanguage( 0, n-1 );
+  retval += WordsInLanguage( 0, n-1 );
 
   return retval;
 }
 
-mpz_class DFA::getNumWordsInLanguage( const uint32_t max_word_length ) {
-  return getNumWordsInLanguage( 0, max_word_length );
+mpz_class DFA::WordsInLanguage( const uint32_t max_word_length ) {
+  return WordsInLanguage( 0, max_word_length );
 }
 
-mpz_class DFA::getNumWordsInLanguage( const uint32_t min_word_length,
+mpz_class DFA::WordsInLanguage( const uint32_t min_word_length,
                                       const uint32_t max_word_length ) {
   mpz_class retval;
   if (min_word_length==0) {
@@ -363,7 +363,7 @@ mpz_class DFA::getNumWordsInLanguage( const uint32_t min_word_length,
   return retval;
 }
 
-mpz_class DFA::calculateNumWordsInLanguage( const uint32_t min_word_length,
+mpz_class DFA::CalculateNumWordsInLanguage( const uint32_t min_word_length,
     const uint32_t max_word_length ) {
   // TODO: remove asserts
   // verify min_word_length <= max_word_length <= _fixed_slice

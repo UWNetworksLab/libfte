@@ -75,7 +75,7 @@ class FFX {
   /*
    * Returns the radix for the current FFX instantiation.
    */
-  const uint32_t get_radix() const {
+  const uint32_t radix() const {
     return radix_;
   }
 
@@ -86,12 +86,12 @@ class FFX {
    * This encrypt function preserves the length of the input plaintext. That is,
    * the resultant ciphertext will be a bitstring of length plaintext_len.
    */
-  mpz_class encrypt(const Key key,
+  mpz_class Encrypt(const Key key,
                     const mpz_class plaintext,
                     const uint32_t plaintext_len);
 
   // tweak can be specified, but will be ignored
-  mpz_class encrypt(const Key key,
+  mpz_class Encrypt(const Key key,
                     const mpz_class tweak,
                     const uint32_t tweak_len,
                     const mpz_class plaintext,
@@ -102,12 +102,12 @@ class FFX {
    * Given a ciphertext output from FFX.Encrypt[radix], a ciphertext_len and
    * key, recovers the input plaintext.
    */
-  mpz_class decrypt(const Key key,
+  mpz_class Decrypt(const Key key,
                     const mpz_class ciphertext,
                     const uint32_t ciphertext_len);
 
   // tweak can be specified, but will be ignored
-  mpz_class decrypt(const Key key,
+  mpz_class Decrypt(const Key key,
                     const mpz_class tweak,
                     const uint32_t tweak_len,
                     const mpz_class ciphertext,

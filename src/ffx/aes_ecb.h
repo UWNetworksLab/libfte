@@ -11,7 +11,7 @@ namespace ffx {
  * On input of plaintext bitstring of length plaintext_len, returns the
  * 128-bit aes_ecb ciphertext under the provided key.
  */
-mpz_class aes_ecb_encrypt(const Key key,
+mpz_class AesEcbEncrypt(const Key key,
                           const mpz_class plaintext,
                           const uint32_t plaintext_len);
 

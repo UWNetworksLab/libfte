@@ -2,7 +2,7 @@
 
 namespace ffx {
 
-mpz_class extract_bit_range(const mpz_class X, const uint32_t X_len,
+mpz_class BitMask(const mpz_class X, const uint32_t X_len,
                             const uint32_t start, const uint32_t end) {
   mpz_class retval = X;
   retval = retval >> (X_len - end - 1);
@@ -12,7 +12,7 @@ mpz_class extract_bit_range(const mpz_class X, const uint32_t X_len,
   return retval;
 }
 
-void mpz_to_base256(const mpz_class in,
+void MpzClassToBase256(const mpz_class in,
                     const uint32_t out_len,
                     unsigned char * & out) {
   mpz_class tmp = in;
@@ -26,7 +26,7 @@ void mpz_to_base256(const mpz_class in,
   }
 }
 
-void base256_to_mpz(unsigned char * in, const uint32_t in_len,
+void Base256ToMpzClass(unsigned char * in, const uint32_t in_len,
                     mpz_class & out) {
   out = 0;
   int32_t i = 0;
@@ -36,7 +36,7 @@ void base256_to_mpz(unsigned char * in, const uint32_t in_len,
   }
 }
 
-void base16_to_base256(const std::string in,
+void Base16ToBase256(const std::string in,
                        const uint32_t out_len, unsigned char * & out) {
   int32_t i = 0;
   for(i = 0; i < out_len; i++) {

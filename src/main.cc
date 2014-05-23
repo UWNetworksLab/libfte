@@ -6,15 +6,15 @@
 #include "ffx/ffx.h"
 #include "fte/ranking/dfa.h"
 
-void fte_example() {
+void FteExample() {
   // fte example
   fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
   fte::FTE fteObj = fte::FTE(VALID_DFA_5, 16,
                              VALID_DFA_1, 128,
                              K);
   std::string input_plaintext = "Hello, Word!";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   std::cout << "fte:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext << std::endl;
@@ -24,15 +24,15 @@ void fte_example() {
   assert(input_plaintext == output_plaintext);
 }
 
-void ffx_example() {
+void FfxExample() {
   // ffx example
   uint32_t radix = 2;
   ffx::FFX ffxObj = ffx::FFX(radix);
   ffx::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
   mpz_class input_plaintext = 65535;
   uint32_t input_plaintext_len = 16; // in bits
-  mpz_class ciphertext = ffxObj.encrypt(K, input_plaintext, input_plaintext_len);
-  mpz_class output_plaintext = ffxObj.decrypt(K, ciphertext, input_plaintext_len);
+  mpz_class ciphertext = ffxObj.Encrypt(K, input_plaintext, input_plaintext_len);
+  mpz_class output_plaintext = ffxObj.Decrypt(K, ciphertext, input_plaintext_len);
 
   std::cout << "ffx:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext.get_str() << std::endl;
@@ -42,14 +42,14 @@ void ffx_example() {
   assert(input_plaintext == output_plaintext);
 }
 
-void ranking_example() {
+void RankingExample() {
 
   // ranking example
   uint32_t N  = 8;
   fte::ranking::DFA rankerObj(VALID_DFA_1, N);
   std::string input_plaintext = "bbbbbbbb";
-  mpz_class ciphertext   = rankerObj.rank(input_plaintext);
-  std::string output_plaintext = rankerObj.unrank(ciphertext);
+  mpz_class ciphertext   = rankerObj.Rank(input_plaintext);
+  std::string output_plaintext = rankerObj.Unrank(ciphertext);
 
   std::cout << "ranking:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext << std::endl;
@@ -61,8 +61,8 @@ void ranking_example() {
 }
 
 int main(int argc, char **argv) {
-  fte_example();
-  ffx_example();
-  ranking_example();
+  FteExample();
+  FfxExample();
+  RankingExample();
   return 0;
 }

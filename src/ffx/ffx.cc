@@ -13,7 +13,7 @@
 
 namespace ffx {
 
-mpz_class F(const Key K,
+mpz_class RoundFunction(const Key K,
             const uint32_t n,
             const mpz_class tweak,
             const uint32_t tweak_len,
@@ -64,20 +64,20 @@ mpz_class F(const Key K,
   assert(((P_len / 8) % 16) == 0);
   assert(((Q_len / 8) % 16) == 0);
 
-  Y = aes_cbc_mac(K, (P << Q_len) + Q, P_len + Q_len);
+  Y = AesCbcMac(K, (P << Q_len) + Q, P_len + Q_len);
 
   mpz_class Z = Y;
   uint32_t Z_len = 16;
   mpz_class counter = 1;
   while(Z_len < (d + 4)) {
-    mpz_class ctxt = aes_ecb_encrypt(K, (Y + counter), 128);
+    mpz_class ctxt = AesEcbEncrypt(K, (Y + counter), 128);
     Z_len += 16;
     Z = Z << 128;
     Z += ctxt;
     counter += 1;
   }
 
-  Y = extract_bit_range(Z, Z_len * 8, 0, ((d + 4) * 8) - 1);
+  Y = BitMask(Z, Z_len * 8, 0, ((d + 4) * 8) - 1);
 
   mpz_class modulus = 0;
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
@@ -88,7 +88,7 @@ mpz_class F(const Key K,
   return retval;
 }
 
-mpz_class FFX::encrypt(const Key key ,
+mpz_class FFX::Encrypt(const Key key ,
                        const mpz_class tweak, const uint32_t tweak_len,
                        const mpz_class plaintext, const uint32_t plaintext_len) {
 
@@ -101,8 +101,8 @@ mpz_class FFX::encrypt(const Key key ,
   uint32_t n = plaintext_len;
   uint32_t l = floor(plaintext_len / 2.0);
   uint32_t r = DEFAULT_FFX_ROUNDS;
-  mpz_class A = extract_bit_range(plaintext, plaintext_len, 0, l - 1);
-  mpz_class B = extract_bit_range(plaintext, plaintext_len, l, n - 1);
+  mpz_class A = BitMask(plaintext, plaintext_len, 0, l - 1);
+  mpz_class B = BitMask(plaintext, plaintext_len, l, n - 1);
   uint32_t B_len = n - l;
   uint32_t m = 0;
   mpz_class modulus = 0;
@@ -116,7 +116,7 @@ mpz_class FFX::encrypt(const Key key ,
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
-    C = A + F(key, n, tweak, tweak_len, i, B, m);
+    C = A + RoundFunction(key, n, tweak, tweak_len, i, B, m);
     C = C % modulus;
     A = B;
     B = C;
@@ -130,7 +130,7 @@ mpz_class FFX::encrypt(const Key key ,
   return retval;
 }
 
-mpz_class FFX::decrypt(const Key key,
+mpz_class FFX::Decrypt(const Key key,
                        const mpz_class tweak, const uint32_t tweak_len,
                        const mpz_class cihpertext, const uint32_t cihpertext_len) {
 
@@ -143,8 +143,8 @@ mpz_class FFX::decrypt(const Key key,
   uint32_t n = cihpertext_len;
   uint32_t l = floor(cihpertext_len / 2.0);
   uint32_t r = DEFAULT_FFX_ROUNDS;
-  mpz_class A = extract_bit_range(cihpertext, cihpertext_len, 0, l - 1);
-  mpz_class B = extract_bit_range(cihpertext, cihpertext_len, l, n - 1);
+  mpz_class A = BitMask(cihpertext, cihpertext_len, 0, l - 1);
+  mpz_class B = BitMask(cihpertext, cihpertext_len, l, n - 1);
   uint32_t B_len = n - l;
   uint32_t m = 0;
   mpz_class modulus = 0;
@@ -160,7 +160,7 @@ mpz_class FFX::decrypt(const Key key,
 
     C = B;
     B = A;
-    A = C - F(key, n, tweak, tweak_len, i, B, m);
+    A = C - RoundFunction(key, n, tweak, tweak_len, i, B, m);
     while(A < 0) A += modulus;
     A = A % modulus;
   }
@@ -173,16 +173,16 @@ mpz_class FFX::decrypt(const Key key,
   return retval;
 }
 
-mpz_class FFX::encrypt(const Key key,
+mpz_class FFX::Encrypt(const Key key,
                        const mpz_class plaintext,
                        const uint32_t plaintext_len) {
-  return FFX::encrypt(key, 0, 0, plaintext, plaintext_len);
+  return FFX::Encrypt(key, 0, 0, plaintext, plaintext_len);
 }
 
-mpz_class FFX::decrypt(const Key key,
+mpz_class FFX::Decrypt(const Key key,
                        const mpz_class ciphertext,
                        const uint32_t ciphertext_len) {
-  return FFX::decrypt(key, 0, 0, ciphertext, ciphertext_len);
+  return FFX::Decrypt(key, 0, 0, ciphertext, ciphertext_len);
 }
 
 

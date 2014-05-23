@@ -20,9 +20,9 @@ FTE::FTE(const std::string input_dfa, const uint32_t input_max_len,
   ffx_ = ffx::FFX(kFFXRadix);
 
   // validate that _input/_output rankers are compatible
-  words_in_input_language_ = input_ranker_.getNumWordsInLanguage(
+  words_in_input_language_ = input_ranker_.WordsInLanguage(
                                input_max_len);
-  words_in_output_language_ = output_ranker_.getNumWordsInLanguage(
+  words_in_output_language_ = output_ranker_.WordsInLanguage(
                                 output_max_len);
 
   if(words_in_input_language_ > words_in_output_language_) {
@@ -35,28 +35,28 @@ FTE::FTE(const std::string input_dfa, const uint32_t input_max_len,
                                 words_in_output_language_.get_mpz_t(), kFFXRadix);
 }
 
-std::string FTE::encrypt(const std::string plaintext) {
+std::string FTE::Encrypt(const std::string plaintext) {
   // TODO: catch exceptions from ranker
 
-  mpz_class plaintext_rank = input_ranker_.rank(plaintext);
-  mpz_class C = ffx_.encrypt(key_, plaintext_rank, output_language_capacity_);
+  mpz_class plaintext_rank = input_ranker_.Rank(plaintext);
+  mpz_class C = ffx_.Encrypt(key_, plaintext_rank, output_language_capacity_);
   while (C >= words_in_output_language_) {
-    C = ffx_.encrypt(key_, C, output_language_capacity_);
+    C = ffx_.Encrypt(key_, C, output_language_capacity_);
   }
-  std::string retval = output_ranker_.unrank(C);
+  std::string retval = output_ranker_.Unrank(C);
 
   return retval;
 }
 
-std::string FTE::decrypt(const std::string ciphertext) {
+std::string FTE::Decrypt(const std::string ciphertext) {
   // TODO: catch exceptions from ranker
 
-  mpz_class C = output_ranker_.rank(ciphertext);
-  mpz_class plaintext_rank = ffx_.decrypt(key_, C, output_language_capacity_);
+  mpz_class C = output_ranker_.Rank(ciphertext);
+  mpz_class plaintext_rank = ffx_.Decrypt(key_, C, output_language_capacity_);
   while (plaintext_rank >= words_in_input_language_) {
-    plaintext_rank = ffx_.decrypt(key_, plaintext_rank, output_language_capacity_);
+    plaintext_rank = ffx_.Decrypt(key_, plaintext_rank, output_language_capacity_);
   }
-  std::string retval = input_ranker_.unrank(plaintext_rank);
+  std::string retval = input_ranker_.Unrank(plaintext_rank);
 
   return retval;
 }

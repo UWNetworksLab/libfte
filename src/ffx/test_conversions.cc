@@ -10,7 +10,7 @@ TEST(FFX2, ExtractBits1) {
   uint8_t X_len = 4;
 
   // should return exactly 1000b (bits in index 0 to 3)
-  mpz_class retval = ffx::extract_bit_range(X, X_len, 0, 3);
+  mpz_class retval = ffx::BitMask(X, X_len, 0, 3);
 
   EXPECT_EQ(retval.get_ui(), 0x8);
 }
@@ -21,8 +21,8 @@ TEST(FFX2, ExtractBits2) {
   uint8_t X_len = 8;
 
   // should return exactly 1000b for left/right
-  mpz_class retval_left = ffx::extract_bit_range(X, X_len, 0, 3);
-  mpz_class retval_right = ffx::extract_bit_range(X, X_len, 4, 7);
+  mpz_class retval_left = ffx::BitMask(X, X_len, 0, 3);
+  mpz_class retval_right = ffx::BitMask(X, X_len, 4, 7);
 
   EXPECT_EQ(retval_left.get_ui(), 0x8);
   EXPECT_EQ(retval_right.get_ui(), 0x8);
@@ -34,7 +34,7 @@ TEST(FFX2, ExtractBits3) {
   uint8_t X_len = 8;
 
   // should return exactly 1111b for left/right
-  mpz_class retval = ffx::extract_bit_range(X, X_len, 0, 7);
+  mpz_class retval = ffx::BitMask(X, X_len, 0, 7);
 
   EXPECT_EQ(retval.get_ui(), 0xFF);
 }
@@ -45,8 +45,8 @@ TEST(FFX2, ExtractBits4) {
   uint8_t X_len = 8;
 
   // should return exactly 1111b for left/right
-  mpz_class retval_left = ffx::extract_bit_range(X, X_len, 0, 3);
-  mpz_class retval_right = ffx::extract_bit_range(X, X_len, 4, 7);
+  mpz_class retval_left = ffx::BitMask(X, X_len, 0, 3);
+  mpz_class retval_right = ffx::BitMask(X, X_len, 4, 7);
 
   EXPECT_EQ(retval_left.get_ui(), 0xF);
   EXPECT_EQ(retval_right.get_ui(), 0xF);
@@ -57,8 +57,8 @@ TEST(FFX2, ExtractBits5) {
   mpz_class X = 0xF0;
   uint8_t X_len = 8;
 
-  mpz_class retval_left = ffx::extract_bit_range(X, X_len, 0, 3);
-  mpz_class retval_right = ffx::extract_bit_range(X, X_len, 4, 7);
+  mpz_class retval_left = ffx::BitMask(X, X_len, 0, 3);
+  mpz_class retval_right = ffx::BitMask(X, X_len, 4, 7);
 
   EXPECT_EQ(retval_left.get_ui(), 0xF);
   EXPECT_EQ(retval_right.get_ui(), 0x0);
@@ -69,8 +69,8 @@ TEST(FFX2, ExtractBits6) {
   mpz_class X = 0xFFFF0000;
   uint8_t X_len = 32;
 
-  mpz_class retval_left = ffx::extract_bit_range(X, X_len, 0, 15);
-  mpz_class retval_right = ffx::extract_bit_range(X, X_len, 16, 31);
+  mpz_class retval_left = ffx::BitMask(X, X_len, 0, 15);
+  mpz_class retval_right = ffx::BitMask(X, X_len, 16, 31);
 
   EXPECT_EQ(retval_left.get_ui(), 0xFFFF);
   EXPECT_EQ(retval_right.get_ui(), 0x0000);
@@ -82,13 +82,13 @@ TEST(FFX2, MpzCharConversion1) {
   unsigned char * Y = new unsigned char[n];
   mpz_class Z = 0;
 
-  ffx::mpz_to_base256(X, n, Y);
+  ffx::MpzClassToBase256(X, n, Y);
 
   EXPECT_EQ(n, 2);
   EXPECT_EQ(Y[1], '\00');
   EXPECT_EQ(Y[0], '\04');
 
-  ffx::base256_to_mpz(Y, n, Z);
+  ffx::Base256ToMpzClass(Y, n, Z);
 
   EXPECT_EQ(X.get_str(), Z.get_str());
 
@@ -101,8 +101,8 @@ TEST(FFX2, MpzCharConversion2) {
   unsigned char * Y = new unsigned char[n];
   mpz_class Z = 0;
 
-  ffx::mpz_to_base256(X, n, Y);
-  ffx::base256_to_mpz(Y, n, Z);
+  ffx::MpzClassToBase256(X, n, Y);
+  ffx::Base256ToMpzClass(Y, n, Z);
 
   EXPECT_EQ(X.get_str(), Z.get_str());
 
@@ -114,7 +114,7 @@ TEST(FFX2, 16to256) {
   uint32_t sizeInBase256 = 16;
   unsigned char * Y = new unsigned char[sizeInBase256];
 
-  ffx::base16_to_base256(X, sizeInBase256, Y);
+  ffx::Base16ToBase256(X, sizeInBase256, Y);
 
   uint32_t i = 0;
   for (; i<sizeInBase256; i++) {

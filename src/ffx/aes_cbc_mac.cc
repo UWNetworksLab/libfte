@@ -5,7 +5,7 @@
 
 namespace ffx {
 
-mpz_class aes_cbc_mac(const Key key,
+mpz_class AesCbcMac(const Key key,
                       const mpz_class plaintext,
                       const uint32_t plaintext_len) {
   mpz_class retval = 0;
@@ -29,16 +29,16 @@ mpz_class aes_cbc_mac(const Key key,
     pKey[i] = 0x00;
   }
 
-  mpz_to_base256(plaintext, byte_string_len, pInBuffer);
-  base16_to_base256(key.get_key(), kFFXKeyLengthInBytes, pKey);
+  MpzClassToBase256(plaintext, byte_string_len, pInBuffer);
+  Base16ToBase256(key.key(), kFFXKeyLengthInBytes, pKey);
 
   aes_init();
   aes_encrypt_key128(pKey, pCtx);
   aes_cbc_encrypt(pInBuffer, pOutBuffer, byte_string_len, pIv, pCtx);
 
-  base256_to_mpz(pOutBuffer, byte_string_len, retval);
+  Base256ToMpzClass(pOutBuffer, byte_string_len, retval);
 
-  retval = extract_bit_range(retval,
+  retval = BitMask(retval,
                              byte_string_len * 8,
                              byte_string_len * 8 - 128,
                              byte_string_len * 8 - 1);

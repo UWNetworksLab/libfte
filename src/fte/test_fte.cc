@@ -56,8 +56,8 @@ TEST(FteNormalUsage, FpeTest1) {
 
   std::string input_plaintext =
     "aaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -73,8 +73,8 @@ TEST(FteNormalUsage, FpeTest2) {
                   K);
 
   std::string input_plaintext = "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -90,8 +90,8 @@ TEST(FteNormalUsage, FpeTest3) {
                   K);
 
   std::string input_plaintext = "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -108,8 +108,8 @@ TEST(FteNormalUsage, FpeTest4) {
 
   std::string input_plaintext =
     "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -126,8 +126,8 @@ TEST(FteNormalUsage, FpeTest5) {
 
   std::string input_plaintext =
     "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -144,8 +144,8 @@ TEST(FteNormalUsage, FpeTest6) {
 
   std::string input_plaintext =
     "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -161,8 +161,8 @@ TEST(FteNormalUsage, FteTest1) {
                   K);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -178,8 +178,8 @@ TEST(FteNormalUsage, FteTest2) {
                   K);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext = fteObj.Encrypt(input_plaintext);
+  std::string output_plaintext = fteObj.Decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
