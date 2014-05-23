@@ -2,8 +2,6 @@
 
 #include "ffx/ffx.h"
 
-const uint32_t FFX_RADIX = 2;
-
 TEST(FFX2, ExtractBits1) {
   // We have the 4-bit X as 0b1000
   mpz_class X = 0x08;

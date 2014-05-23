@@ -26,16 +26,15 @@ LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR
 TARGET_TEST = bin/test
 TARGET_TESTJS = bin/test.js
 OBJ_TEST = src/tests.o \
-           src/fte/test_fte.o \
-           src/ffx/test_ffx.o \
-           src/ffx/test_aes_ecb.o \
-           src/ffx/test_aes_cbc_mac.o \
-           src/ffx/test_conversions.o \
-           src/fte/ranking/test_dfa.o
+           src/fte/fte_test.o \
+           src/ffx/ffx_test.o \
+           src/ffx/aes_ecb_test.o \
+           src/ffx/aes_cbc_mac_test.o \
+           src/ffx/conversions_test.o \
+           src/fte/ranking/dfa_ranker_test.o
 
 TARGET_LIBFTE = .libs/libfte.a
 OBJ_LIBFTE = src/ffx/conversions.o \
-             src/ffx/key.o \
              src/ffx/aes_cbc_mac.o \
              src/ffx/aes_ecb.o \
              src/ffx/ffx.o \
