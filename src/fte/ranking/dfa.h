@@ -27,13 +27,14 @@ namespace fte {
 
 namespace ranking {
 
-typedef std::vector<char> array_type_char_t1;
-typedef std::vector<bool> array_type_bool_t1;
-typedef std::vector<uint32_t> array_type_uint32_t1;
-typedef std::vector<mpz_class> array_type_mpz_t1;
-typedef std::vector< std::vector<uint32_t> > array_type_uint32_t2;
-typedef std::vector< std::vector<mpz_class> > array_type_mpz_t2;
-typedef std::vector< std::string > array_type_string_t1;
+typedef std::vector<char> CharVectorT;
+typedef std::vector<bool> BoolVectorT;
+typedef std::vector<uint32_t> Uint32VectorT;
+typedef std::vector<mpz_class> MpzClassVectorT;
+typedef std::vector< std::string > StringVectorT;
+
+typedef std::vector< Uint32VectorT > Uint32MatrixT;
+typedef std::vector< MpzClassVectorT > MpzClassMatrixT;
 
 class DFA {
 
@@ -51,7 +52,7 @@ class DFA {
   uint32_t num_symbols_;
 
   // the symbols of our ranker alphabet
-  array_type_uint32_t1 symbols_;
+  Uint32VectorT symbols_;
 
   // our mapping between integers and the symbols in our alphabet; ints -> chars
   std::map<uint32_t, char> sigma_;
@@ -60,17 +61,17 @@ class DFA {
   std::map<char, uint32_t> sigma_reverse_;
 
   // the states in our ranker
-  array_type_uint32_t1 states_;
+  Uint32VectorT states_;
 
   // our transitions table
-  array_type_uint32_t2 delta_;
+  Uint32MatrixT delta_;
 
   // a lookup table used for additional performance gain
   // for each state we detect if all outgoing transitions are to the same state
-  array_type_bool_t1 delta_dense_;
+  BoolVectorT delta_dense_;
 
   // the set of final states in our ranker
-  array_type_uint32_t1 final_states_;
+  Uint32VectorT final_states_;
 
   // buildTable builds a mapping from [q, i] -> n
   //   q: a state in our ranker
@@ -86,11 +87,11 @@ class DFA {
   // _T is our cached table, the output of buildTable
   // For a state q and integer i, the value _T[q][i] is the number of unique
   // accepting paths of length exactly i from state q.
-  array_type_mpz_t2 CachedTable_;
+  MpzClassMatrixT CachedTable_;
 
   mpz_class calculateNumWordsInLanguage( const uint32_t, const uint32_t );
-  array_type_mpz_t1 words_in_language_inclusive_;
-  array_type_mpz_t1 words_in_language_exclusive_;
+  MpzClassVectorT words_in_language_inclusive_;
+  MpzClassVectorT words_in_language_exclusive_;
 
  public:
   DFA() {};

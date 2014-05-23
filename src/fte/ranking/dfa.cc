@@ -18,8 +18,8 @@ namespace ranking {
 
 // Helper fuction. Given a string and a token, performs a python .split()
 // Returns a list of string delimnated on the token
-array_type_string_t1 tokenize( std::string line, char delim ) {
-  array_type_string_t1 retval;
+StringVectorT tokenize( std::string line, char delim ) {
+  StringVectorT retval;
 
   std::istringstream iss(line);
   std::string fragment;
@@ -46,7 +46,7 @@ DFA::DFA(const std::string dfa_str, const uint32_t max_len)
   while ( getline (my_str_stream,line) ) {
     if (line.empty()) break;
 
-    array_type_string_t1 split_vec = tokenize( line, '\t' );
+    StringVectorT split_vec = tokenize( line, '\t' );
     if (split_vec.size() == 4) {
       uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
       uint32_t new_state = strtol(split_vec.at(1).c_str(),NULL,10);
@@ -103,7 +103,7 @@ DFA::DFA(const std::string dfa_str, const uint32_t max_len)
   // fill our our transition function delta
   std::istringstream my_str_stream2(dfa_str);
   while ( getline (my_str_stream2,line) ) {
-    array_type_string_t1 split_vec = tokenize( line, '\t' );
+    StringVectorT split_vec = tokenize( line, '\t' );
     if (split_vec.size() == 4) {
       uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
       uint32_t symbol = strtol(split_vec.at(2).c_str(),NULL,10);
@@ -160,7 +160,7 @@ void DFA::_validate() {
     throw fte::InvalidFstFormat();
 
   // ensure we have N states, labeled 0,1,..N-1
-  array_type_uint32_t1::iterator state;
+  Uint32VectorT::iterator state;
   for (state=states_.begin(); state!=states_.end(); state++) {
     if (*state >= states_.size()) {
       throw fte::InvalidFstStateName();
@@ -190,7 +190,7 @@ void DFA::_buildTable() {
   }
 
   // set all _T.at(q).at(0) = 1 for all states in _final_states
-  array_type_uint32_t1::iterator state;
+  Uint32VectorT::iterator state;
   for (state=final_states_.begin(); state!=final_states_.end(); state++) {
     CachedTable_.at(*state).at(0) = 1;
   }
