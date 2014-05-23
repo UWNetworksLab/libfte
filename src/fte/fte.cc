@@ -5,19 +5,19 @@
 
 namespace fte {
 
-FTE::FTE(const std::string input_dfa, const uint32_t input_max_len,
+Fte::Fte(const std::string input_dfa, const uint32_t input_max_len,
          const std::string output_dfa, const uint32_t output_max_len,
          const Key key) {
 
   // TODO: don't throw an exception in the constructor
-  if(key.length() != kFTEKeyLengthInNibbles) {
+  if(key.length() != kFteKeyLengthInNibbles) {
     throw InvalidKeyLength();
   }
 
-  input_ranker_ = ranking::DFA(input_dfa, input_max_len);
-  output_ranker_ = ranking::DFA(output_dfa, output_max_len);
+  input_ranker_ = ranking::DfaRanker(input_dfa, input_max_len);
+  output_ranker_ = ranking::DfaRanker(output_dfa, output_max_len);
   key_ = key;
-  ffx_ = ffx::FFX(kFFXRadix);
+  ffx_ = ffx::Ffx(kFfxRadix);
 
   // validate that _input/_output rankers are compatible
   words_in_input_language_ = input_ranker_.WordsInLanguage(
@@ -26,16 +26,16 @@ FTE::FTE(const std::string input_dfa, const uint32_t input_max_len,
                                 output_max_len);
 
   if(words_in_input_language_ > words_in_output_language_) {
-    throw FTEException();
+    throw FteException();
   }
 
   input_language_capacity_ = mpz_sizeinbase(words_in_input_language_.get_mpz_t(),
-                             kFFXRadix);
+                             kFfxRadix);
   output_language_capacity_ = mpz_sizeinbase(
-                                words_in_output_language_.get_mpz_t(), kFFXRadix);
+                                words_in_output_language_.get_mpz_t(), kFfxRadix);
 }
 
-std::string FTE::Encrypt(const std::string plaintext) {
+std::string Fte::Encrypt(const std::string plaintext) {
   // TODO: catch exceptions from ranker
 
   mpz_class plaintext_rank = input_ranker_.Rank(plaintext);
@@ -48,7 +48,7 @@ std::string FTE::Encrypt(const std::string plaintext) {
   return retval;
 }
 
-std::string FTE::Decrypt(const std::string ciphertext) {
+std::string Fte::Decrypt(const std::string ciphertext) {
   // TODO: catch exceptions from ranker
 
   mpz_class C = output_ranker_.Rank(ciphertext);

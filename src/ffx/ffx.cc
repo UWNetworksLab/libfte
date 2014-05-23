@@ -88,7 +88,7 @@ mpz_class RoundFunction(const Key K,
   return retval;
 }
 
-mpz_class FFX::Encrypt(const Key key ,
+mpz_class Ffx::Encrypt(const Key key ,
                        const mpz_class tweak, const uint32_t tweak_len,
                        const mpz_class plaintext, const uint32_t plaintext_len) {
 
@@ -130,7 +130,7 @@ mpz_class FFX::Encrypt(const Key key ,
   return retval;
 }
 
-mpz_class FFX::Decrypt(const Key key,
+mpz_class Ffx::Decrypt(const Key key,
                        const mpz_class tweak, const uint32_t tweak_len,
                        const mpz_class cihpertext, const uint32_t cihpertext_len) {
 
@@ -173,16 +173,16 @@ mpz_class FFX::Decrypt(const Key key,
   return retval;
 }
 
-mpz_class FFX::Encrypt(const Key key,
+mpz_class Ffx::Encrypt(const Key key,
                        const mpz_class plaintext,
                        const uint32_t plaintext_len) {
-  return FFX::Encrypt(key, 0, 0, plaintext, plaintext_len);
+  return Ffx::Encrypt(key, 0, 0, plaintext, plaintext_len);
 }
 
-mpz_class FFX::Decrypt(const Key key,
+mpz_class Ffx::Decrypt(const Key key,
                        const mpz_class ciphertext,
                        const uint32_t ciphertext_len) {
-  return FFX::Decrypt(key, 0, 0, ciphertext, ciphertext_len);
+  return Ffx::Decrypt(key, 0, 0, ciphertext, ciphertext_len);
 }
 
 

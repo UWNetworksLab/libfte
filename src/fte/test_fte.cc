@@ -50,7 +50,7 @@ TEST(SanityCheckNoMatch, Test4) {
 
 TEST(FteNormalUsage, FpeTest1) {
   fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_1, 64,
+  fte::Fte fteObj(VALID_DFA_1, 64,
                   VALID_DFA_1, 64,
                   K);
 
@@ -68,7 +68,7 @@ TEST(FteNormalUsage, FpeTest1) {
 
 TEST(FteNormalUsage, FpeTest2) {
   fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 128,
+  fte::Fte fteObj(VALID_DFA_5, 128,
                   VALID_DFA_5, 128,
                   K);
 
@@ -85,7 +85,7 @@ TEST(FteNormalUsage, FpeTest2) {
 
 TEST(FteNormalUsage, FpeTest3) {
   fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 256,
+  fte::Fte fteObj(VALID_DFA_5, 256,
                   VALID_DFA_5, 256,
                   K);
 
@@ -102,7 +102,7 @@ TEST(FteNormalUsage, FpeTest3) {
 
 TEST(FteNormalUsage, FpeTest4) {
   fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 512,
+  fte::Fte fteObj(VALID_DFA_5, 512,
                   VALID_DFA_5, 512,
                   K);
 
@@ -120,7 +120,7 @@ TEST(FteNormalUsage, FpeTest4) {
 
 TEST(FteNormalUsage, FpeTest5) {
   fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 1024,
+  fte::Fte fteObj(VALID_DFA_5, 1024,
                   VALID_DFA_5, 1024,
                   K);
 
@@ -138,7 +138,7 @@ TEST(FteNormalUsage, FpeTest5) {
 
 TEST(FteNormalUsage, FpeTest6) {
   fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 2048,
+  fte::Fte fteObj(VALID_DFA_5, 2048,
                   VALID_DFA_5, 2048,
                   K);
 
@@ -156,7 +156,7 @@ TEST(FteNormalUsage, FpeTest6) {
 
 TEST(FteNormalUsage, FteTest1) {
   fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_1, 32,
+  fte::Fte fteObj(VALID_DFA_1, 32,
                   VALID_DFA_1, 64,
                   K);
 
@@ -173,7 +173,7 @@ TEST(FteNormalUsage, FteTest1) {
 
 TEST(FteNormalUsage, FteTest2) {
   fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_1, 32,
+  fte::Fte fteObj(VALID_DFA_1, 32,
                   VALID_DFA_5, 32,
                   K);
 

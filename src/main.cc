@@ -27,7 +27,7 @@ void FteExample() {
 void FfxExample() {
   // ffx example
   uint32_t radix = 2;
-  ffx::FFX ffxObj = ffx::FFX(radix);
+  ffx::Ffx ffxObj = ffx::Ffx(radix);
   ffx::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
   mpz_class input_plaintext = 65535;
   uint32_t input_plaintext_len = 16; // in bits
@@ -46,7 +46,7 @@ void RankingExample() {
 
   // ranking example
   uint32_t N  = 8;
-  fte::ranking::DFA rankerObj(VALID_DFA_1, N);
+  fte::ranking::DfaRanker rankerObj(VALID_DFA_1, N);
   std::string input_plaintext = "bbbbbbbb";
   mpz_class ciphertext   = rankerObj.Rank(input_plaintext);
   std::string output_plaintext = rankerObj.Unrank(ciphertext);

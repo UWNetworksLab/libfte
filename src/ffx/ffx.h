@@ -56,16 +56,16 @@ class InvalidRadix : public FFXException {
   }
 };
 
-class FFX {
+class Ffx {
  private:
   uint32_t radix_;
 
  public:
-  FFX()
+  Ffx()
     : radix_(DEFAULT_FFX_RADIX) {
   }
 
-  FFX(const uint32_t radix)
+  Ffx(const uint32_t radix)
     : radix_(radix) {
     if(radix_ != DEFAULT_FFX_RADIX) {
       throw InvalidRadix();

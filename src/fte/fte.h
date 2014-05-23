@@ -22,12 +22,12 @@
 
 #include "ffx/ffx.h"
 #include "fte/exceptions.h"
-#include "fte/ranking/dfa.h"
+#include "fte/ranking/dfa_ranker.h"
 
 namespace fte {
 
-const uint32_t kFFXRadix = 2;
-const uint32_t kFTEKeyLengthInNibbles = 32;
+const uint32_t kFfxRadix = 2;
+const uint32_t kFteKeyLengthInNibbles = 32;
 
 class Key : public ffx::Key {
  public:
@@ -36,26 +36,26 @@ class Key : public ffx::Key {
   Key(const char * key) : ffx::Key(key) {};
 };
 
-class FTE {
+class Fte {
  private:
-  ranking::DFA input_ranker_;
-  ranking::DFA output_ranker_;
+  ranking::DfaRanker input_ranker_;
+  ranking::DfaRanker output_ranker_;
   Key key_;
-  ffx::FFX ffx_;
+  ffx::Ffx ffx_;
   uint32_t input_language_capacity_;
   uint32_t output_language_capacity_;
   mpz_class words_in_input_language_;
   mpz_class words_in_output_language_;
 
  public:
-  FTE() {};
+  Fte() {};
 
   /*
    * input_dfa and input_max_len specify the input plaintext language
    * ouput_dfa and out_max_len specificy the output ciphertext language
    * the key is a 32-character hex string string
    */
-  FTE(const std::string input_dfa, const uint32_t input_max_len,
+  Fte(const std::string input_dfa, const uint32_t input_max_len,
       const std::string output_dfa, const uint32_t output_max_len,
       const Key key);
 

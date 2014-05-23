@@ -36,7 +36,7 @@ typedef std::vector< std::string > StringVectorT;
 typedef std::vector< Uint32VectorT > Uint32MatrixT;
 typedef std::vector< MpzClassVectorT > MpzClassMatrixT;
 
-class DFA {
+class DfaRanker {
 
  private:
   // the maximum value for which buildTable is computed
@@ -94,10 +94,10 @@ class DFA {
   MpzClassVectorT words_in_language_exclusive_;
 
  public:
-  DFA() {};
+  DfaRanker() {};
 
   // The constructor of our rank/urank ranker class
-  DFA( const std::string, const uint32_t );
+  DfaRanker( const std::string, const uint32_t );
 
   // our unrank function an int -> str mapping
   // given an integer i, return the ith lexicographically ordered string in

@@ -31,7 +31,7 @@ mpz_class AesEcbEncrypt(const Key key,
 
   aes_init();
   aes_encrypt_key128(pKey, pCtx);
-  AesEcbEncrypt(pInBuffer, pOutBuffer, byte_string_len, pCtx);
+  aes_ecb_encrypt(pInBuffer, pOutBuffer, byte_string_len, pCtx);
 
   Base256ToMpzClass(pOutBuffer, byte_string_len, retval);
 
