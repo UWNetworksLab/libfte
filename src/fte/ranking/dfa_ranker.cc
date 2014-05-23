@@ -23,8 +23,9 @@ StringVectorT tokenize( std::string & line, char delim ) {
 
   std::istringstream iss(line);
   std::string fragment;
-  while(std::getline(iss, fragment, delim))
+  while(std::getline(iss, fragment, delim)) {
     retval.push_back(fragment);
+  }
 
   return retval;
 }
