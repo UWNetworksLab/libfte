@@ -86,16 +86,16 @@ DfaRanker::DfaRanker(const std::string dfa_str, const uint32_t max_len)
   // build up our sigma/sigma_reverse tables which enable mappings between
   // bytes/integers
   uint32_t j, k;
-  for (j=0; j<num_symbols_; j++) {
+  for (j=0; j<num_symbols_; ++j) {
     sigma_.insert( std::pair<uint32_t,char>( j, (char)(symbols_.at(j))) );
     sigma_reverse_.insert( std::pair<char,uint32_t>((char)(symbols_.at(j)), j) );
   }
 
   // initialize all transitions in our dfa to our dead state
   delta_.resize(num_states_);
-  for (j=0; j<num_states_; j++) {
+  for (j=0; j<num_states_; ++j) {
     delta_.at(j).resize(num_symbols_);
-    for (k=0; k < num_symbols_; k++) {
+    for (k=0; k < num_symbols_; ++k) {
       delta_.at(j).at(k) = num_states_ - 1;
     }
   }
@@ -117,9 +117,9 @@ DfaRanker::DfaRanker(const std::string dfa_str, const uint32_t max_len)
 
   delta_dense_.resize(num_states_);
   uint32_t q, a;
-  for (q=0; q < num_states_; q++ ) {
+  for (q=0; q < num_states_; ++q ) {
     delta_dense_.at(q) = true;
-    for (a=1; a < num_symbols_; a++) {
+    for (a=1; a < num_symbols_; ++a) {
       if (delta_.at(q).at(a-1) != delta_.at(q).at(a)) {
         delta_dense_.at(q) = false;
         break;
@@ -135,7 +135,7 @@ DfaRanker::DfaRanker(const std::string dfa_str, const uint32_t max_len)
   uint32_t max_word_len;
   words_in_language_inclusive_.resize(fixed_slice_+1);
   words_in_language_exclusive_.resize(fixed_slice_+1);
-  for (max_word_len = 0; max_word_len <= fixed_slice_; max_word_len++) {
+  for (max_word_len = 0; max_word_len <= fixed_slice_; ++max_word_len) {
     words_in_language_inclusive_.at(max_word_len) = CalculateNumWordsInLanguage( 0, max_word_len );
     words_in_language_exclusive_.at(max_word_len) = CalculateNumWordsInLanguage( max_word_len, max_word_len );
   }
@@ -161,14 +161,14 @@ void DfaRanker::SanityCheck() {
 
   // ensure we have N states, labeled 0,1,..N-1
   Uint32VectorT::iterator state;
-  for (state=states_.begin(); state!=states_.end(); state++) {
+  for (state=states_.begin(); state!=states_.end(); ++state) {
     if (*state >= states_.size()) {
       throw fte::InvalidFstStateName();
     }
   }
 
   // ensure all symbols are in the range 0,1,...,255
-  for (uint32_t i = 0; i < symbols_.size(); i++) {
+  for (uint32_t i = 0; i < symbols_.size(); ++i) {
     if (symbols_.at(i) > 256) {
       throw fte::InvalidSymbol();
     }
@@ -182,25 +182,25 @@ void DfaRanker::PopulateCachedTable() {
 
   // ensure our table _T is the correct size
   CachedTable_.resize(num_states_);
-  for (q=0; q<num_states_; q++) {
+  for (q=0; q<num_states_; ++q) {
     CachedTable_.at(q).resize(fixed_slice_+1);
-    for (i=0; i<=fixed_slice_; i++) {
+    for (i=0; i<=fixed_slice_; ++i) {
       CachedTable_.at(q).at(i) = 0;
     }
   }
 
   // set all _T.at(q).at(0) = 1 for all states in _final_states
   Uint32VectorT::iterator state;
-  for (state=final_states_.begin(); state!=final_states_.end(); state++) {
+  for (state=final_states_.begin(); state!=final_states_.end(); ++state) {
     CachedTable_.at(*state).at(0) = 1;
   }
 
   // walk through our table _T
   // we want each entry _T.at(q).at(i) to contain the number of strings that start
   // from state q, terminate in a final state, and are of length i
-  for (i=1; i<=fixed_slice_; i++) {
-    for (q=0; q<delta_.size(); q++) {
-      for (a=0; a<delta_.at(0).size(); a++) {
+  for (i=1; i<=fixed_slice_; ++i) {
+    for (q=0; q<delta_.size(); ++q) {
+      for (a=0; a<delta_.at(0).size(); ++a) {
         uint32_t state = delta_.at(q).at(a);
         CachedTable_.at(q).at(i) += CachedTable_.at(state).at(i-1);
       }
@@ -236,7 +236,7 @@ std::string DfaRanker::Unrank( const mpz_class c_in ) {
   uint32_t char_cursor = 0;
   uint32_t state = 0;
   mpz_class char_index = 0;
-  for (i=1; i<=n; i++) {
+  for (i=1; i<=n; ++i) {
     if (delta_dense_.at(q)) {
       // our optimized version, when _delta[q][i] is equal to n for all symbols i
       state = delta_.at(q).at(0);
@@ -297,7 +297,7 @@ mpz_class DfaRanker::Rank( const std::string X ) {
   uint32_t q = start_state_;
   uint32_t state = 0;
   mpz_class tmp = 0;
-  for (i=1; i<=n; i++) {
+  for (i=1; i<=n; ++i) {
     try {
       symbol_as_int = sigma_reverse_.at(X.at(i-1));
     } catch (std::exception& e) {
@@ -322,7 +322,7 @@ mpz_class DfaRanker::Rank( const std::string X ) {
                tmp.get_mpz_t() );
     } else {
       // traditional goldberg-sipser ranking
-      for (j=1; j<=symbol_as_int; j++) {
+      for (j=1; j<=symbol_as_int; ++j) {
         state = delta_.at(q).at(j-1);
 
         // mpz_add is faster than +=
@@ -376,7 +376,7 @@ mpz_class DfaRanker::CalculateNumWordsInLanguage( const uint32_t min_word_length
   mpz_class num_words = 0;
   for (uint32_t word_length = min_word_length;
        word_length <= max_word_length;
-       word_length++) {
+       ++word_length) {
     num_words += CachedTable_.at(start_state_).at(word_length);
   }
   return num_words;

@@ -108,7 +108,7 @@ mpz_class Ffx::Encrypt(const Key key ,
   mpz_class modulus = 0;
   mpz_class C = 0;
   uint32_t i = 0;
-  for(i = 0; i <= (r - 1); i++) {
+  for(i = 0; i <= (r - 1); ++i) {
     if((i % 2) == 0) {
       m = floor(n / 2.0);
     } else {
@@ -150,7 +150,7 @@ mpz_class Ffx::Decrypt(const Key key,
   mpz_class modulus = 0;
   mpz_class C = 0;
   int32_t i = 0;
-  for(i = r - 1; i >= 0; i--) {
+  for(i = r - 1; i >= 0; --i) {
     if((i % 2) == 0) {
       m = floor(n / 2.0);
     } else {

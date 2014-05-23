@@ -117,7 +117,7 @@ TEST(FFX2, 16to256) {
   ffx::Base16ToBase256(X, sizeInBase256, Y);
 
   uint32_t i = 0;
-  for (; i<sizeInBase256; i++) {
+  for (; i<sizeInBase256; ++i) {
     EXPECT_EQ(Y[i], 0);
   }
 

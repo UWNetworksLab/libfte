@@ -19,12 +19,12 @@ mpz_class AesCbcMac(const Key key,
   unsigned char * pOutBuffer = new unsigned char[byte_string_len];
 
   uint32_t i = 0;
-  for(i = 0; i < byte_string_len; i++) {
+  for(i = 0; i < byte_string_len; ++i) {
     pInBuffer[i] = 0;
     pOutBuffer[i] = 0;
   }
 
-  for(i = 0; i < kFFXKeyLengthInBytes; i++) {
+  for(i = 0; i < kFFXKeyLengthInBytes; ++i) {
     pIv[i] = 0x00;
     pKey[i] = 0x00;
   }
