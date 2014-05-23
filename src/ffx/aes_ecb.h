@@ -1,5 +1,5 @@
-#ifndef _LIBFTE_SRC_FFX_AES_ECB_H
-#define _LIBFTE_SRC_FFX_AES_ECB_H
+#ifndef _FFX_AES_ECB_H
+#define _FFX_AES_ECB_H
 
 #include <gmpxx.h>
 
@@ -17,4 +17,4 @@ mpz_class aes_ecb_encrypt(const Key key,
 
 } // namespace ffx
 
-#endif /* _LIBFTE_SRC_FFX_AES_ECB_H */
+#endif /* _FFX_AES_ECB_H */

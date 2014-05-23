@@ -1,5 +1,5 @@
-#ifndef _SAMPLE_DFAS_H
-#define _SAMPLE_DFAS_H
+#ifndef _FTE_RANKING_SAMPLE_DFAS_H
+#define _FTE_RANKING_SAMPLE_DFAS_H
 
 #include <string>
 
@@ -19,4 +19,4 @@ extern std::string VALID_DFA_4;
 extern std::string VALID_DFA_5;
 extern std::string VALID_DFA_6;
 
-#endif // _SAMPLE_DFAS_H
+#endif // _FTE_RANKING_SAMPLE_DFAS_H

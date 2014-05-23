@@ -1,5 +1,5 @@
-#ifndef _LIBFTE_SRC_FFX_AES_CBC_MAC_H
-#define _LIBFTE_SRC_FFX_AES_CBC_MAC_H
+#ifndef _FFX_AES_CBC_MAC_H
+#define _FFX_AES_CBC_MAC_H
 
 #include "ffx/key.h"
 
@@ -17,4 +17,4 @@ mpz_class aes_cbc_mac(const Key key,
 
 } // namespace ffx
 
-#endif /* _LIBFTE_SRC_FFX_AES_CBC_MAC_H */
+#endif /* _FFX_AES_CBC_MAC_H */

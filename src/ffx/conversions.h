@@ -1,5 +1,5 @@
-#ifndef _LIBFTE_SRC_FFX_CONVERSIONS_H
-#define _LIBFTE_SRC_FFX_CONVERSIONS_H
+#ifndef _FFX_CONVERSIONS_H
+#define _FFX_CONVERSIONS_H
 
 #include <stdint.h>
 
@@ -54,4 +54,4 @@ void base16_to_base256(const std::string,
 
 } // namespace ffx
 
-#endif /* _LIBFTE_SRC_FFX_CONVERSIONS_H */
+#endif /* _FFX_CONVERSIONS_H */

@@ -20,8 +20,8 @@
  * [3] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf
  */
 
-#ifndef _LIBFTE_SRC_FFX_FFX_H
-#define _LIBFTE_SRC_FFX_FFX_H
+#ifndef _FFX_FFX_H
+#define _FFX_FFX_H
 
 #include <exception>
 
@@ -116,4 +116,4 @@ class FFX {
 
 }
 
-#endif /* _LIBFTE_SRC_FTE_ENCRYPTER_H */
+#endif /* _FTE_ENCRYPTER_H */

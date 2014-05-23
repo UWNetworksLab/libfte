@@ -11,8 +11,8 @@
  */
 
 
-#ifndef _LIBFTE_SRC_FTE_RANKING_DFA_H
-#define _LIBFTE_SRC_FTE_RANKING_DFA_H
+#ifndef _FTE_RANKING_DFA_H
+#define _FTE_RANKING_DFA_H
 
 #include <stdint.h>
 
@@ -116,4 +116,4 @@ class DFA {
 
 } // namespace fte
 
-#endif /* _LIBFTE_SRC_FTE_RANKING_DFA_H */
+#endif /* _FTE_RANKING_DFA_H */

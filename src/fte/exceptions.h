@@ -1,5 +1,5 @@
-#ifndef _LIBFTE_SRC_EXCEPTIONS_H
-#define _LIBFTE_SRC_EXCEPTIONS_H
+#ifndef _FTE_EXCEPTIONS_H
+#define _FTE_EXCEPTIONS_H
 
 #include <exception>
 
@@ -65,4 +65,4 @@ class InvalidKeyLength : public FTEException {
 
 } // namespace fte
 
-#endif /* _LIBFTE_SRC_EXCEPTIONS_H */
+#endif /* _FTE_EXCEPTIONS_H */
