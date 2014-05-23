@@ -39,38 +39,38 @@ class DFA {
 
  private:
   // the maximum value for which buildTable is computed
-  uint32_t _fixed_slice;
+  uint32_t fixed_slice_;
 
   // our ranker start state
-  uint32_t _start_state;
+  uint32_t start_state_;
 
   // the number of states in our ranker
-  uint32_t _num_states;
+  uint32_t num_states_;
 
   // the number of symbols in our ranker alphabet
-  uint32_t _num_symbols;
+  uint32_t num_symbols_;
 
   // the symbols of our ranker alphabet
-  array_type_uint32_t1 _symbols;
+  array_type_uint32_t1 symbols_;
 
   // our mapping between integers and the symbols in our alphabet; ints -> chars
-  std::map<uint32_t, char> _sigma;
+  std::map<uint32_t, char> sigma_;
 
   // the reverse mapping of sigma, chars -> ints
-  std::map<char, uint32_t> _sigma_reverse;
+  std::map<char, uint32_t> sigma_reverse_;
 
   // the states in our ranker
-  array_type_uint32_t1 _states;
+  array_type_uint32_t1 states_;
 
   // our transitions table
-  array_type_uint32_t2 _delta;
+  array_type_uint32_t2 delta_;
 
   // a lookup table used for additional performance gain
   // for each state we detect if all outgoing transitions are to the same state
-  array_type_bool_t1 _delta_dense;
+  array_type_bool_t1 delta_dense_;
 
   // the set of final states in our ranker
-  array_type_uint32_t1 _final_states;
+  array_type_uint32_t1 final_states_;
 
   // buildTable builds a mapping from [q, i] -> n
   //   q: a state in our ranker
@@ -86,11 +86,11 @@ class DFA {
   // _T is our cached table, the output of buildTable
   // For a state q and integer i, the value _T[q][i] is the number of unique
   // accepting paths of length exactly i from state q.
-  array_type_mpz_t2 _T;
+  array_type_mpz_t2 CachedTable_;
 
   mpz_class calculateNumWordsInLanguage( const uint32_t, const uint32_t );
-  array_type_mpz_t1 _words_in_language_inclusive;
-  array_type_mpz_t1 _words_in_language_exclusive;
+  array_type_mpz_t1 words_in_language_inclusive_;
+  array_type_mpz_t1 words_in_language_exclusive_;
 
  public:
   DFA() {};
