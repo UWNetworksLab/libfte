@@ -1,7 +1,7 @@
 #include "fte/ranking/dfa_ranker.h"
 
-#include <iostream>
-#include <exception>
+#include <algorithm>
+#include <stdexcept>
 #include <sstream>
 
 namespace fte {
@@ -144,6 +144,10 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
   if (1 >= WordsInLanguage(0, fixed_slice_)) {
     throw fte::InvalidInputNoAcceptingPaths();
   }
+
+  std::sort(symbols_.begin(),symbols_.end());
+  std::sort(states_.begin(),states_.end());
+  std::sort(final_states_.begin(),final_states_.end());
 }
 
 
@@ -214,7 +218,7 @@ void DfaRanker::PopulateCachedTable() {
 }
 
 
-std::string DfaRanker::Unrank( const mpz_class & c_in ) {
+std::string DfaRanker::Unrank(const mpz_class & c_in) {
   std::string retval;
 
   // walk the dfa subtracting values from c until we have our n symbols
@@ -222,24 +226,25 @@ std::string DfaRanker::Unrank( const mpz_class & c_in ) {
   uint32_t n = 0;
   while (true) {
     mpz_class words_in_slice = WordsInLanguage( n, n );
-    if ( words_in_slice <= c ) {
-      c -= words_in_slice;
-      n += 1;
-    } else {
+    bool c_lt_words_in_slice = (mpz_cmp(c.get_mpz_t(), words_in_slice.get_mpz_t())<0);
+    if (c_lt_words_in_slice) {
       break;
     }
+    mpz_sub(c.get_mpz_t(),
+            c.get_mpz_t(),
+            words_in_slice.get_mpz_t());
+    ++n;
   }
 
   if (n>fixed_slice_) {
     throw fte::InvalidRankInput();
   }
 
-  uint32_t i = 0;
   uint32_t q = start_state_;
   uint32_t char_cursor = 0;
   uint32_t state = 0;
   mpz_class char_index = 0;
-  for (i=1; i<=n; ++i) {
+  for (uint32_t i=1; i<=n; ++i) {
     if (delta_dense_.at(q)) {
       // our optimized version, when _delta[q][i] is equal to n for all symbols i
       state = delta_.at(q).at(0);
@@ -261,14 +266,14 @@ std::string DfaRanker::Unrank( const mpz_class & c_in ) {
 
       // A call to mpz_cmp is faster than using >= directly.
       // while (c >= _T.at(state).at(n-i)) {
-      while (mpz_cmp( c.get_mpz_t(),
-                      CachedTable_.at(state).at(n-i).get_mpz_t() )>=0) {
+      while (mpz_cmp(c.get_mpz_t(),
+                     CachedTable_.at(state).at(n-i).get_mpz_t() )>=0) {
 
         // Much faster to call mpz_sub, than -=.
         // c -= _T.at(state).at(n-i);
-        mpz_sub( c.get_mpz_t(),
-                 c.get_mpz_t(),
-                 CachedTable_.at(state).at(n-i).get_mpz_t() );
+        mpz_sub(c.get_mpz_t(),
+                c.get_mpz_t(),
+                CachedTable_.at(state).at(n-i).get_mpz_t() );
 
         char_cursor += 1;
         state =delta_.at(q).at(char_cursor);
@@ -279,8 +284,9 @@ std::string DfaRanker::Unrank( const mpz_class & c_in ) {
   }
 
   // bail if our last state q is not in _final_states
-  if (find(final_states_.begin(),
-           final_states_.end(), q)==final_states_.end()) {
+  bool q_in_final_states = std::binary_search(final_states_.begin(),
+                                              final_states_.end(), q);
+  if (!q_in_final_states) {
     throw fte::InvalidInputNoAcceptingPaths();
   }
 
@@ -288,29 +294,27 @@ std::string DfaRanker::Unrank( const mpz_class & c_in ) {
 }
 
 mpz_class DfaRanker::Rank( const std::string & word ) {
-  uint32_t n = word.size();
+  size_t n = word.size();
   mpz_class retval = 0;
 
   // walk the dfa, adding values from _T to c
-  uint32_t i = 0;
-  uint32_t j = 0;
   uint32_t symbol_as_int = 0;
   uint32_t q = start_state_;
   uint32_t state = 0;
   mpz_class tmp = 0;
-  for (i=1; i<=n; ++i) {
+  for (uint32_t i=1; i<=n; ++i) {
     try {
       symbol_as_int = sigma_reverse_.at(word.at(i-1));
-    } catch (std::exception& e) {
+    } catch (const std::out_of_range& e) {
       throw fte::InvalidSymbol();
     }
 
     if (delta_dense_.at(q)) {
-      // our optimized version, when _delta[q][i] is equal to n for all symbols i
+      // our optimized version, when _delta[q][i] is equal to some value state for all symbols i
       state = delta_.at(q).at(0);
 
       // Orders of magnitude faster to use mpz_mul_ui,
-      // compared to *.
+      // compared to:
       // tmp = _T.at(state).at(n-i) * symbol_as_int
       mpz_mul_ui( tmp.get_mpz_t(),
                   CachedTable_.at(state).at(n-i).get_mpz_t(),
@@ -323,7 +327,7 @@ mpz_class DfaRanker::Rank( const std::string & word ) {
                tmp.get_mpz_t() );
     } else {
       // traditional goldberg-sipser ranking
-      for (j=1; j<=symbol_as_int; ++j) {
+      for (uint32_t j=1; j<=symbol_as_int; ++j) {
         state = delta_.at(q).at(j-1);
 
         // mpz_add is faster than +=
@@ -337,12 +341,15 @@ mpz_class DfaRanker::Rank( const std::string & word ) {
   }
 
   // bail if our last state q is not in _final_states
-  if (find(final_states_.begin(),
-           final_states_.end(), q)==final_states_.end()) {
+  bool q_in_final_states = std::binary_search(final_states_.begin(),
+                                              final_states_.end(), q);
+  if (!q_in_final_states) {
     throw fte::InvalidInputNoAcceptingPaths();
   }
 
-  retval += WordsInLanguage( 0, n-1 );
+  mpz_class words_in_language = WordsInLanguage( 0, n-1 );
+  mpz_add( retval.get_mpz_t(), retval.get_mpz_t(),
+           words_in_language.get_mpz_t() );
 
   return retval;
 }

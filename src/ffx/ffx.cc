@@ -12,7 +12,7 @@
 
 namespace ffx {
 
-mpz_class RoundFunction(const std::string & K,
+static mpz_class RoundFunction(const std::string & K,
             uint32_t n,
             const mpz_class & tweak,
             uint32_t tweak_len_in_bits,
