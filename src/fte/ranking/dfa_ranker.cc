@@ -45,10 +45,12 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
   std::string line;
   std::istringstream my_str_stream(dfa);
   while ( getline (my_str_stream,line) ) {
-    if (line.empty()) break;
+    if (line.empty()) {
+      break;
+    }
 
     StringVectorT split_vec = tokenize(line, '\t');
-    if (split_vec.size() == 4) {
+    if (4 == split_vec.size()) {
       uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
       uint32_t new_state = strtol(split_vec.at(1).c_str(),NULL,10);
       uint32_t symbol = strtol(split_vec.at(2).c_str(),NULL,10);
@@ -67,7 +69,7 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
         start_state_ = current_state;
         startStateIsntSet = false;
       }
-    } else if (split_vec.size()==1) {
+    } else if (1==split_vec.size()) {
       uint32_t final_state = strtol(split_vec.at(0).c_str(),NULL,10);
       if (find(final_states_.begin(), final_states_.end(), final_state)==final_states_.end()) {
         final_states_.push_back( final_state );
@@ -105,7 +107,7 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
   std::istringstream my_str_stream2(dfa);
   while ( getline (my_str_stream2,line) ) {
     StringVectorT split_vec = tokenize( line, '\t' );
-    if (split_vec.size() == 4) {
+    if (4 == split_vec.size()) {
       uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
       uint32_t symbol = strtol(split_vec.at(2).c_str(),NULL,10);
       uint32_t new_state = strtol(split_vec.at(1).c_str(),NULL,10);
@@ -149,16 +151,20 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
 
 void DfaRanker::SanityCheck() {
   // ensure dfa has at least one state
-  if (0 == states_.size())
+  if (0 == states_.size()) {
     throw fte::InvalidFstFormat();
-  if (0 == final_states_.size())
+  }
+  if (0 == final_states_.size()) {
     throw fte::InvalidFstFormat();
+  }
 
   // ensure dfa has at least one symbol
-  if (0 == sigma_.size())
+  if (0 == sigma_.size()) {
     throw fte::InvalidFstFormat();
-  if (0 == sigma_reverse_.size())
+  }
+  if (0 == sigma_reverse_.size()) {
     throw fte::InvalidFstFormat();
+  }
 
   // ensure we have N states, labeled 0,1,..N-1
   Uint32VectorT::iterator state;
@@ -354,7 +360,7 @@ mpz_class DfaRanker::WordsInLanguage(uint32_t max_word_length) {
 mpz_class DfaRanker::WordsInLanguage(uint32_t min_word_length,
                                      uint32_t max_word_length) {
   mpz_class retval;
-  if (min_word_length==0) {
+  if (0 == min_word_length) {
     retval = words_in_language_inclusive_.at(max_word_length);
   } else if (min_word_length==max_word_length) {
     retval = words_in_language_exclusive_.at(max_word_length);
