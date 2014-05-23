@@ -1,14 +1,9 @@
 #include <assert.h>
+
 #include <iostream>
 
-// fte includes
 #include "fte/fte.h"
-#include "fte/ranking/sample_dfas.h"
-
-// ffx includes
 #include "ffx/ffx.h"
-
-// ranking includes
 #include "fte/ranking/dfa.h"
 
 void fte_example() {

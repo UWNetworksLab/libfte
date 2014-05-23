@@ -1,7 +1,7 @@
 #include <math.h>
 
-#include "ffx/ffx.h"
 #include "fte/fte.h"
+#include "ffx/ffx.h"
 
 namespace fte {
 

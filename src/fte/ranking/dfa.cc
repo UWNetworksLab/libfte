@@ -1,10 +1,10 @@
-#include <iostream>
+#include "fte/ranking/dfa.h"
 
 #include <assert.h>
+
+#include <iostream>
 #include <exception>
 #include <sstream>
-
-#include "fte/ranking/dfa.h"
 
 namespace fte {
 

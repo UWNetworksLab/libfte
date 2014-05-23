@@ -14,9 +14,10 @@
 #ifndef _LIBFTE_SRC_FTE_RANKING_DFA_H
 #define _LIBFTE_SRC_FTE_RANKING_DFA_H
 
+#include <stdint.h>
+
 #include <map>
 #include <vector>
-#include <stdint.h>
 
 #include <gmpxx.h>
 

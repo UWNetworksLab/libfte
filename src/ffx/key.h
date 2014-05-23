@@ -1,11 +1,11 @@
 #ifndef _LIBFTE_SRC_FFX_KEY_H
 #define _LIBFTE_SRC_FFX_KEY_H
 
-#include <stdio.h>
 #include <stdint.h>
+
 #include <string>
 
-#include <gmp.h>
+#include <gmpxx.h>
 
 namespace ffx {
 

@@ -18,7 +18,7 @@
 #ifndef _LIBFTE_SRC_FTE_FTE_H
 #define _LIBFTE_SRC_FTE_FTE_H
 
-#include <string.h>
+#include <string>
 
 #include "ffx/ffx.h"
 #include "fte/exceptions.h"

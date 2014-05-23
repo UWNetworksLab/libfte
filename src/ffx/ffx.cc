@@ -2,13 +2,14 @@
  * See ffx.h for details about FFX.
  */
 
+#include "ffx/ffx.h"
+
 #include <math.h>
-#include <string.h>
 #include <assert.h>
 
-#include "aes/aes.h"
+#include <string>
 
-#include "ffx/ffx.h"
+#include "third_party/aes/aes.h"
 
 namespace ffx {
 

@@ -1,10 +1,6 @@
-#define __STDC_LIMIT_MACROS
-#define __STDC_CONSTANT_MACROS
-
 #include "gtest/gtest.h"
 
 #include "fte/ranking/dfa.h"
-
 #include "fte/ranking/sample_dfas.h"
 
 TEST(RankerNormalUsage, Test1) {

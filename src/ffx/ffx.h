@@ -25,7 +25,7 @@
 
 #include <exception>
 
-#include <gmp.h>
+#include <gmpxx.h>
 
 #include "ffx/conversions.h"
 #include "ffx/aes_ecb.h"
