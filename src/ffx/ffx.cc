@@ -88,7 +88,7 @@ mpz_class Ffx::Encrypt(const std::string & key ,
                        const mpz_class & tweak, uint32_t tweak_len_in_bits,
                        const mpz_class & plaintext, uint32_t plaintext_len_in_bits) {
 
-  if(key.length() != kFFXKeyLengthInNibbles) {
+  if(key.length() != kFfxKeyLengthInNibbles) {
     throw InvalidKeyLength();
   }
 
@@ -130,7 +130,7 @@ mpz_class Ffx::Decrypt(const std::string & key,
                        const mpz_class & tweak, uint32_t tweak_len_in_bits,
                        const mpz_class & cihpertext, uint32_t cihpertext_len_bits) {
 
-  if(key.length() != kFFXKeyLengthInNibbles) {
+  if(key.length() != kFfxKeyLengthInNibbles) {
     throw InvalidKeyLength();
   }
 

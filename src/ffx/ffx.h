@@ -35,9 +35,9 @@ namespace ffx {
 
 const uint32_t kDefaultFfxRadix = 2;
 const uint32_t kDefaultFfxRounds = 10;
-const uint32_t kFFXKeyLengthInBytes = 16;
-const uint32_t kFFXKeyLengthInNibbles = kFFXKeyLengthInBytes * 2;
-const uint32_t kFFXKeyLengthInBits = kFFXKeyLengthInBytes * 8;
+const uint32_t kFfxKeyLengthInBytes = 16;
+const uint32_t kFfxKeyLengthInNibbles = kFfxKeyLengthInBytes * 2;
+const uint32_t kFfxKeyLengthInBits = kFfxKeyLengthInBytes * 8;
 
 class FFXException : public std::exception {
   virtual const char* what() const throw() {

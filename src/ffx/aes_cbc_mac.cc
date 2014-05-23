@@ -15,8 +15,8 @@ mpz_class AesCbcMac(const std::string & key,
   uint32_t byte_string_len = plaintext_len_in_bits / 8;
 
   aes_encrypt_ctx * pCtx = new aes_encrypt_ctx[1];
-  unsigned char * pIv = new unsigned char[kFFXKeyLengthInBytes];
-  unsigned char * pKey = new unsigned char[kFFXKeyLengthInBytes];
+  unsigned char * pIv = new unsigned char[kFfxKeyLengthInBytes];
+  unsigned char * pKey = new unsigned char[kFfxKeyLengthInBytes];
   unsigned char * pInBuffer = new unsigned char[byte_string_len];
   unsigned char * pOutBuffer = new unsigned char[byte_string_len];
 
@@ -26,13 +26,13 @@ mpz_class AesCbcMac(const std::string & key,
     pOutBuffer[i] = 0;
   }
 
-  for(i = 0; i < kFFXKeyLengthInBytes; ++i) {
+  for(i = 0; i < kFfxKeyLengthInBytes; ++i) {
     pIv[i] = 0x00;
     pKey[i] = 0x00;
   }
 
   MpzClassToBase256(plaintext, byte_string_len, pInBuffer);
-  Base16ToBase256(key, kFFXKeyLengthInBytes, pKey);
+  Base16ToBase256(key, kFfxKeyLengthInBytes, pKey);
 
   aes_init();
   aes_encrypt_key128(pKey, pCtx);
