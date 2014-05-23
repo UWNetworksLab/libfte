@@ -19,7 +19,7 @@ INSTALL_LIB_DIR = @prefix@/lib
 
 OPTIMIZATION_FLAGS = -O3
 CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
-CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
+CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -I. -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
 LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte
 
 # the build target executable:
@@ -84,15 +84,16 @@ install: $(INSTALL_LIB_DIR) $(INSTALL_INC_DIR)
 	cp -f src/fte/*.h $(INSTALL_INC_DIR)/fte
 	cp -f src/fte/ranking/*.h $(INSTALL_INC_DIR)/fte/ranking
 
-clean:
-	$(RM) $(TARGET_MAINJS)
-	$(RM) $(TARGET_MAIN)
+clean: cleanlibfte cleanlibgtest
+
+cleanlibfte:
 	$(RM) $(TARGET_TESTJS)
 	$(RM) $(TARGET_TEST)
 	$(RM) $(TARGET_LIBFTE)
 	$(RM) $(OBJ_LIBFTE)
-	$(RM) $(OBJ_MAIN)
 	$(RM) $(OBJ_TEST)
+
+cleanlibgtest:
 	cd $(GTEST_DIR) && $(MAKE) clean
 
 distclean:
