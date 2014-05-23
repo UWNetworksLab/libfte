@@ -154,25 +154,6 @@ TEST(RankerNormalUsage, Test17) {
 }
 
 
-TEST(RankerNormalUsage, Test17_Rank1K) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 2048);
-  mpz_class words_in_language = rankerObj.WordsInLanguage(0, 2048);
-  std::string X = rankerObj.Unrank(words_in_language - 1);
-  for (uint32_t i=0; i<1000; ++i) {
-    mpz_class   C = rankerObj.Rank(X); 
-  }
-}
-
-
-TEST(RankerNormalUsage, Test17_Unrank1K) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 2048);
-  mpz_class words_in_language = rankerObj.WordsInLanguage(0, 2048);
-  for (uint32_t i=0; i<1000; ++i) {
-    std::string X = rankerObj.Unrank(words_in_language - 1); 
-  }
-}
-
-
 TEST(CauseException, InvalidFstFormatException1) {
   try {
     fte::ranking::DfaRanker rankerObj(INVALID_DFA_1, 16);
