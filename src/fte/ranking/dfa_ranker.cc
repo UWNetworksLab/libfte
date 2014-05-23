@@ -251,8 +251,8 @@ std::string DfaRanker::Unrank(const mpz_class & c_in) {
 
       // We do the following two lines with a single call
       // to mpz_fdiv_qr, which is much faster.
-      // char_index = (c / _T.at(state).at(n-i));
-      // c = c % _T.at(state).at(n-i);
+      //   char_index = (c / CachedTable_.at(state).at(n-i));
+      //   c = c % CachedTable_.at(state).at(n-i);
       mpz_fdiv_qr( char_index.get_mpz_t(),
                    c.get_mpz_t(),
                    c.get_mpz_t(),
@@ -275,7 +275,7 @@ std::string DfaRanker::Unrank(const mpz_class & c_in) {
                 c.get_mpz_t(),
                 CachedTable_.at(state).at(n-i).get_mpz_t() );
 
-        char_cursor += 1;
+        ++char_cursor;
         state =delta_.at(q).at(char_cursor);
       }
     }

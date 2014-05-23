@@ -70,7 +70,7 @@ static mpz_class RoundFunction(const std::string & K,
     Z_len += 16;
     Z = Z << 128;
     Z += ctxt;
-    counter += 1;
+    ++counter;
   }
 
   Y = BitMask(Z, Z_len * 8, 0, ((d + 4) * 8) - 1);
