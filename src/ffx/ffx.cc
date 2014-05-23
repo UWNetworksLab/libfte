@@ -5,7 +5,6 @@
 #include "ffx/ffx.h"
 
 #include <math.h>
-#include <assert.h>
 
 #include <string>
 
@@ -60,9 +59,6 @@ mpz_class RoundFunction(const std::string & K,
   Q += B;
 
   mpz_class Y = 0;
-
-  assert(((P_len / 8) % 16) == 0);
-  assert(((Q_len / 8) % 16) == 0);
 
   Y = AesCbcMac(K, (P << Q_len) + Q, P_len + Q_len);
 

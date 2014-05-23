@@ -1,7 +1,5 @@
 #include "fte/ranking/dfa_ranker.h"
 
-#include <assert.h>
-
 #include <iostream>
 #include <exception>
 #include <sstream>
@@ -217,8 +215,6 @@ void DfaRanker::PopulateCachedTable() {
 
 
 std::string DfaRanker::Unrank( const mpz_class & c_in ) {
-  assert(c_in < WordsInLanguage(0, fixed_slice_));
-
   std::string retval;
 
   // walk the dfa subtracting values from c until we have our n symbols
@@ -292,8 +288,6 @@ std::string DfaRanker::Unrank( const mpz_class & c_in ) {
 }
 
 mpz_class DfaRanker::Rank( const std::string & word ) {
-  assert(word.size() <=  fixed_slice_);
-
   uint32_t n = word.size();
   mpz_class retval = 0;
 
@@ -372,12 +366,6 @@ mpz_class DfaRanker::WordsInLanguage(uint32_t min_word_length,
 
 mpz_class DfaRanker::CalculateNumWordsInLanguage( uint32_t min_word_length,
                                                   uint32_t max_word_length ) {
-  // TODO: remove asserts
-  // verify min_word_length <= max_word_length <= _fixed_slice
-  assert(0<=min_word_length);
-  assert(min_word_length<=max_word_length);
-  assert(max_word_length<=fixed_slice_);
-
   // count the number of words in the language of length
   // at least min_word_length and no greater than max_word_length
   mpz_class num_words = 0;
