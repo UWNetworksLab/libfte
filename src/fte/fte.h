@@ -33,10 +33,13 @@ class Fte {
  private:
   ranking::DfaRanker input_ranker_;
   ranking::DfaRanker output_ranker_;
+
   std::string key_;
   ffx::Ffx ffx_;
+
   uint32_t input_language_capacity_;
   uint32_t output_language_capacity_;
+
   mpz_class words_in_input_language_;
   mpz_class words_in_output_language_;
 
@@ -48,22 +51,22 @@ class Fte {
    * ouput_dfa and out_max_len specificy the output ciphertext language
    * the key is a 32-character hex string string
    */
-  Fte(const std::string input_dfa, const uint32_t input_max_len,
-      const std::string output_dfa, const uint32_t output_max_len,
-      const std::string key);
+  Fte(const std::string & input_dfa, uint32_t input_max_len,
+      const std::string & output_dfa, uint32_t output_max_len,
+      const std::string & key);
 
   /*
    * On input of a string that is accepted by input_dfa (specified in the constructor)
    * the encrypt function outputs a ciphertext that is accepted by output_dfa.
    * The plaintext cannot exceed length input_max_len.
    */
-  std::string Encrypt(const std::string plaintext);
+  std::string Encrypt(const std::string & plaintext);
 
   /*
    * On input of a string that is accepted by output_dfa (specified in the constructor)
    * the decrypt function recovers a plaintext.
    */
-  std::string Decrypt(const std::string ciphertext);
+  std::string Decrypt(const std::string & ciphertext);
 
 };
 

@@ -88,7 +88,7 @@ TEST(FFX2, MpzCharConversion1) {
   EXPECT_EQ(Y[1], '\00');
   EXPECT_EQ(Y[0], '\04');
 
-  ffx::Base256ToMpzClass(Y, n, Z);
+  ffx::Base256ToMpzClass(Y, n, &Z);
 
   EXPECT_EQ(X.get_str(), Z.get_str());
 
@@ -102,7 +102,7 @@ TEST(FFX2, MpzCharConversion2) {
   mpz_class Z = 0;
 
   ffx::MpzClassToBase256(X, n, Y);
-  ffx::Base256ToMpzClass(Y, n, Z);
+  ffx::Base256ToMpzClass(Y, n, &Z);
 
   EXPECT_EQ(X.get_str(), Z.get_str());
 

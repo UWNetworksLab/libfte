@@ -5,9 +5,9 @@
 
 namespace fte {
 
-Fte::Fte(const std::string input_dfa, const uint32_t input_max_len,
-         const std::string output_dfa, const uint32_t output_max_len,
-         const std::string key) {
+Fte::Fte(const std::string & input_dfa, uint32_t input_max_len,
+         const std::string & output_dfa, uint32_t output_max_len,
+         const std::string & key) {
 
   // TODO: don't throw an exception in the constructor
   if(key.length() != kFteKeyLengthInNibbles) {
@@ -35,7 +35,7 @@ Fte::Fte(const std::string input_dfa, const uint32_t input_max_len,
                                 words_in_output_language_.get_mpz_t(), kFfxRadix);
 }
 
-std::string Fte::Encrypt(const std::string plaintext) {
+std::string Fte::Encrypt(const std::string & plaintext) {
   // TODO: catch exceptions from ranker
 
   mpz_class plaintext_rank = input_ranker_.Rank(plaintext);
@@ -48,7 +48,7 @@ std::string Fte::Encrypt(const std::string plaintext) {
   return retval;
 }
 
-std::string Fte::Decrypt(const std::string ciphertext) {
+std::string Fte::Decrypt(const std::string & ciphertext) {
   // TODO: catch exceptions from ranker
 
   mpz_class C = output_ranker_.Rank(ciphertext);

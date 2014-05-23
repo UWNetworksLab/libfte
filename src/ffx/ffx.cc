@@ -13,18 +13,18 @@
 
 namespace ffx {
 
-mpz_class RoundFunction(const std::string K,
-            const uint32_t n,
-            const mpz_class tweak,
-            const uint32_t tweak_len,
-            const uint32_t i,
-            const mpz_class B,
-            const uint32_t B_len) {
+mpz_class RoundFunction(const std::string & K,
+            uint32_t n,
+            const mpz_class & tweak,
+            uint32_t tweak_len_in_bits,
+            uint32_t i,
+            const mpz_class & B,
+            uint32_t B_len) {
 
   mpz_class retval = 0;
 
   uint32_t vers = 1;
-  uint32_t t = ceil(tweak_len / 8.0);
+  uint32_t t = ceil(tweak_len_in_bits / 8.0);
   uint32_t beta = ceil(n / 2.0);
   uint32_t b = ceil(beta / 8.0);
   uint32_t d = 4 * ceil(b / 4.0);
@@ -54,7 +54,7 @@ mpz_class RoundFunction(const std::string K,
   T_offset += 8;
   T_offset += B_bits;
 
-  uint32_t Q_len = tweak_len + T_offset;
+  uint32_t Q_len = tweak_len_in_bits + T_offset;
   Q += mpz_class(tweak) << T_offset;
   Q += mpz_class(i) << B_bits;
   Q += B;
@@ -88,9 +88,9 @@ mpz_class RoundFunction(const std::string K,
   return retval;
 }
 
-mpz_class Ffx::Encrypt(const std::string key ,
-                       const mpz_class tweak, const uint32_t tweak_len,
-                       const mpz_class plaintext, const uint32_t plaintext_len) {
+mpz_class Ffx::Encrypt(const std::string & key ,
+                       const mpz_class & tweak, uint32_t tweak_len_in_bits,
+                       const mpz_class & plaintext, uint32_t plaintext_len_in_bits) {
 
   if(key.length() != kFFXKeyLengthInNibbles) {
     throw InvalidKeyLength();
@@ -98,11 +98,11 @@ mpz_class Ffx::Encrypt(const std::string key ,
 
   mpz_class retval = 0;
 
-  uint32_t n = plaintext_len;
-  uint32_t l = floor(plaintext_len / 2.0);
+  uint32_t n = plaintext_len_in_bits;
+  uint32_t l = floor(plaintext_len_in_bits / 2.0);
   uint32_t r = DEFAULT_FFX_ROUNDS;
-  mpz_class A = BitMask(plaintext, plaintext_len, 0, l - 1);
-  mpz_class B = BitMask(plaintext, plaintext_len, l, n - 1);
+  mpz_class A = BitMask(plaintext, plaintext_len_in_bits, 0, l - 1);
+  mpz_class B = BitMask(plaintext, plaintext_len_in_bits, l, n - 1);
   uint32_t B_len = n - l;
   uint32_t m = 0;
   mpz_class modulus = 0;
@@ -116,7 +116,7 @@ mpz_class Ffx::Encrypt(const std::string key ,
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
-    C = A + RoundFunction(key, n, tweak, tweak_len, i, B, m);
+    C = A + RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m);
     C = C % modulus;
     A = B;
     B = C;
@@ -124,15 +124,15 @@ mpz_class Ffx::Encrypt(const std::string key ,
 
   retval = (A << B_len) + B;
 
-  mpz_ui_pow_ui(modulus.get_mpz_t(), 2, plaintext_len);
+  mpz_ui_pow_ui(modulus.get_mpz_t(), 2, plaintext_len_in_bits);
   retval = retval % modulus;
 
   return retval;
 }
 
-mpz_class Ffx::Decrypt(const std::string key,
-                       const mpz_class tweak, const uint32_t tweak_len,
-                       const mpz_class cihpertext, const uint32_t cihpertext_len) {
+mpz_class Ffx::Decrypt(const std::string & key,
+                       const mpz_class & tweak, uint32_t tweak_len_in_bits,
+                       const mpz_class & cihpertext, uint32_t cihpertext_len_bits) {
 
   if(key.length() != kFFXKeyLengthInNibbles) {
     throw InvalidKeyLength();
@@ -140,11 +140,11 @@ mpz_class Ffx::Decrypt(const std::string key,
 
   mpz_class retval = 0;
 
-  uint32_t n = cihpertext_len;
-  uint32_t l = floor(cihpertext_len / 2.0);
+  uint32_t n = cihpertext_len_bits;
+  uint32_t l = floor(cihpertext_len_bits / 2.0);
   uint32_t r = DEFAULT_FFX_ROUNDS;
-  mpz_class A = BitMask(cihpertext, cihpertext_len, 0, l - 1);
-  mpz_class B = BitMask(cihpertext, cihpertext_len, l, n - 1);
+  mpz_class A = BitMask(cihpertext, cihpertext_len_bits, 0, l - 1);
+  mpz_class B = BitMask(cihpertext, cihpertext_len_bits, l, n - 1);
   uint32_t B_len = n - l;
   uint32_t m = 0;
   mpz_class modulus = 0;
@@ -160,29 +160,29 @@ mpz_class Ffx::Decrypt(const std::string key,
 
     C = B;
     B = A;
-    A = C - RoundFunction(key, n, tweak, tweak_len, i, B, m);
+    A = C - RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m);
     while(A < 0) A += modulus;
     A = A % modulus;
   }
 
   retval = (A << B_len) + B;
 
-  mpz_ui_pow_ui(modulus.get_mpz_t(), 2, cihpertext_len);
+  mpz_ui_pow_ui(modulus.get_mpz_t(), 2, cihpertext_len_bits);
   retval = retval % modulus;
 
   return retval;
 }
 
-mpz_class Ffx::Encrypt(const std::string key,
-                       const mpz_class plaintext,
-                       const uint32_t plaintext_len) {
-  return Ffx::Encrypt(key, 0, 0, plaintext, plaintext_len);
+mpz_class Ffx::Encrypt(const std::string & key,
+                       const mpz_class & plaintext,
+                       uint32_t plaintext_len_in_bits) {
+  return Ffx::Encrypt(key, 0, 0, plaintext, plaintext_len_in_bits);
 }
 
-mpz_class Ffx::Decrypt(const std::string key,
-                       const mpz_class ciphertext,
-                       const uint32_t ciphertext_len) {
-  return Ffx::Decrypt(key, 0, 0, ciphertext, ciphertext_len);
+mpz_class Ffx::Decrypt(const std::string & key,
+                       const mpz_class & ciphertext,
+                       uint32_t ciphertext_len_in_bits) {
+  return Ffx::Decrypt(key, 0, 0, ciphertext, ciphertext_len_in_bits);
 }
 
 

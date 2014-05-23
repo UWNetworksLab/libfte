@@ -27,8 +27,10 @@ namespace ffx {
  *   bin(X).rjust(X_len,'0')[2:][start:end+1]
  *
  */
-mpz_class BitMask(const mpz_class X, const uint32_t X_len,
-                            const uint32_t start, const uint32_t end);
+mpz_class BitMask(const mpz_class & in,
+                  uint32_t in_len_in_bits,
+                  uint32_t start,
+                  uint32_t end);
 
 /*
  * mpz_to_base256: Given an mpz_class returns a pointer to a string out
@@ -40,17 +42,21 @@ mpz_class BitMask(const mpz_class X, const uint32_t X_len,
  *                 It is the caller's job to initialize out.
  */
 
-void MpzClassToBase256(const mpz_class in,
-                    const uint32_t out_len, unsigned char * & out);
-void Base256ToMpzClass(unsigned char * in, const uint32_t in_len,
-                    mpz_class & out);
+void MpzClassToBase256(const mpz_class & in,
+                       uint32_t out_len_in_bytes,
+                       unsigned char * out);
+
+void Base256ToMpzClass(unsigned char * in,
+                       uint32_t in_len_in_bytes,
+                       mpz_class * out);
 
 /*
  * Given a base-16 encoded string of length in_len pointed to
  * by in, puts It is the callers job to init. out.
  */
-void Base16ToBase256(const std::string,
-                       const uint32_t, unsigned char * &);
+void Base16ToBase256(const std::string & in,
+                     uint32_t out_len_in_bytes, 
+                     unsigned char * out);
 
 } // namespace ffx
 

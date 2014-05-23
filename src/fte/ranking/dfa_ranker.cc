@@ -18,7 +18,7 @@ namespace ranking {
 
 // Helper fuction. Given a string and a token, performs a python .split()
 // Returns a list of string delimnated on the token
-StringVectorT tokenize( std::string line, char delim ) {
+StringVectorT tokenize( std::string & line, char delim ) {
   StringVectorT retval;
 
   std::istringstream iss(line);
@@ -31,22 +31,22 @@ StringVectorT tokenize( std::string line, char delim ) {
 
 /*
  * Parameters:
- *   dfa_str: a minimized ATT FST formatted dfa, see: http://www2.research.att.com/~fsmtools/fsm/man4/fsm.5.html
+ *   dfa: a minimized ATT FST formatted dfa, see: http://www2.research.att.com/~fsmtools/fsm/man4/fsm.5.html
  *   max_len: the maxium length to compute DFA::buildTable
  */
-DfaRanker::DfaRanker(const std::string dfa_str, const uint32_t max_len)
-  : fixed_slice_(max_len),
+DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
+  : fixed_slice_(max_word_length),
     start_state_(0),
     num_states_(0),
     num_symbols_(0) {
   // construct the _start_state, _final_states and symbols/states of our dfa
   bool startStateIsntSet = true;
   std::string line;
-  std::istringstream my_str_stream(dfa_str);
+  std::istringstream my_str_stream(dfa);
   while ( getline (my_str_stream,line) ) {
     if (line.empty()) break;
 
-    StringVectorT split_vec = tokenize( line, '\t' );
+    StringVectorT split_vec = tokenize(line, '\t');
     if (split_vec.size() == 4) {
       uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
       uint32_t new_state = strtol(split_vec.at(1).c_str(),NULL,10);
@@ -101,7 +101,7 @@ DfaRanker::DfaRanker(const std::string dfa_str, const uint32_t max_len)
   }
 
   // fill our our transition function delta
-  std::istringstream my_str_stream2(dfa_str);
+  std::istringstream my_str_stream2(dfa);
   while ( getline (my_str_stream2,line) ) {
     StringVectorT split_vec = tokenize( line, '\t' );
     if (split_vec.size() == 4) {
@@ -209,7 +209,7 @@ void DfaRanker::PopulateCachedTable() {
 }
 
 
-std::string DfaRanker::Unrank( const mpz_class c_in ) {
+std::string DfaRanker::Unrank( const mpz_class & c_in ) {
   assert(c_in < WordsInLanguage(0, fixed_slice_));
 
   std::string retval;
@@ -284,10 +284,10 @@ std::string DfaRanker::Unrank( const mpz_class c_in ) {
   return retval;
 }
 
-mpz_class DfaRanker::Rank( const std::string X ) {
-  assert(X.size() <=  fixed_slice_);
+mpz_class DfaRanker::Rank( const std::string & word ) {
+  assert(word.size() <=  fixed_slice_);
 
-  uint32_t n = X.size();
+  uint32_t n = word.size();
   mpz_class retval = 0;
 
   // walk the dfa, adding values from _T to c
@@ -299,7 +299,7 @@ mpz_class DfaRanker::Rank( const std::string X ) {
   mpz_class tmp = 0;
   for (i=1; i<=n; ++i) {
     try {
-      symbol_as_int = sigma_reverse_.at(X.at(i-1));
+      symbol_as_int = sigma_reverse_.at(word.at(i-1));
     } catch (std::exception& e) {
       throw fte::InvalidSymbol();
     }
@@ -346,12 +346,12 @@ mpz_class DfaRanker::Rank( const std::string X ) {
   return retval;
 }
 
-mpz_class DfaRanker::WordsInLanguage( const uint32_t max_word_length ) {
+mpz_class DfaRanker::WordsInLanguage(uint32_t max_word_length) {
   return WordsInLanguage( 0, max_word_length );
 }
 
-mpz_class DfaRanker::WordsInLanguage( const uint32_t min_word_length,
-                                      const uint32_t max_word_length ) {
+mpz_class DfaRanker::WordsInLanguage(uint32_t min_word_length,
+                                     uint32_t max_word_length) {
   mpz_class retval;
   if (min_word_length==0) {
     retval = words_in_language_inclusive_.at(max_word_length);
@@ -363,8 +363,8 @@ mpz_class DfaRanker::WordsInLanguage( const uint32_t min_word_length,
   return retval;
 }
 
-mpz_class DfaRanker::CalculateNumWordsInLanguage( const uint32_t min_word_length,
-    const uint32_t max_word_length ) {
+mpz_class DfaRanker::CalculateNumWordsInLanguage( uint32_t min_word_length,
+                                                  uint32_t max_word_length ) {
   // TODO: remove asserts
   // verify min_word_length <= max_word_length <= _fixed_slice
   assert(0<=min_word_length);

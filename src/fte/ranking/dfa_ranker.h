@@ -89,7 +89,7 @@ class DfaRanker {
   // accepting paths of length exactly i from state q.
   MpzClassMatrixT CachedTable_;
 
-  mpz_class CalculateNumWordsInLanguage( const uint32_t, const uint32_t );
+  mpz_class CalculateNumWordsInLanguage(uint32_t min_word_len, uint32_t max_word_len);
   MpzClassVectorT words_in_language_inclusive_;
   MpzClassVectorT words_in_language_exclusive_;
 
@@ -97,20 +97,20 @@ class DfaRanker {
   DfaRanker() {};
 
   // The constructor of our rank/urank ranker class
-  DfaRanker( const std::string, const uint32_t );
+  DfaRanker( const std::string & dfa, uint32_t max_word_length );
 
   // our unrank function an int -> str mapping
   // given an integer i, return the ith lexicographically ordered string in
   // the language accepted by the ranker
-  std::string Unrank( const mpz_class );
+  std::string Unrank( const mpz_class & c_in );
 
   // our rank function performs the inverse operation of unrank
-  mpz_class Rank( const std::string );
+  mpz_class Rank( const std::string & word );
 
   // given integers [n,m] returns the number of words accepted by the
   // ranker that are at least length n and no greater than length m
-  mpz_class WordsInLanguage( const uint32_t );
-  mpz_class WordsInLanguage( const uint32_t, const uint32_t );
+  mpz_class WordsInLanguage( uint32_t max_word_length );
+  mpz_class WordsInLanguage( uint32_t min_word_length, uint32_t max_word_length );
 };
 
 } // namespace ranking

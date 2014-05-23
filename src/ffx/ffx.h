@@ -76,7 +76,7 @@ class Ffx {
   /*
    * Returns the radix for the current FFX instantiation.
    */
-  const uint32_t radix() const {
+  const uint32_t radix() {
     return radix_;
   }
 
@@ -87,32 +87,32 @@ class Ffx {
    * This encrypt function preserves the length of the input plaintext. That is,
    * the resultant ciphertext will be a bitstring of length plaintext_len.
    */
-  mpz_class Encrypt(const std::string key,
-                    const mpz_class plaintext,
-                    const uint32_t plaintext_len);
+  mpz_class Encrypt(const std::string & key,
+                    const mpz_class & plaintext,
+                    uint32_t plaintext_len_in_bits);
 
   // tweak can be specified, but will be ignored
-  mpz_class Encrypt(const std::string key,
-                    const mpz_class tweak,
-                    const uint32_t tweak_len,
-                    const mpz_class plaintext,
-                    const uint32_t plaintext_len);
+  mpz_class Encrypt(const std::string & key,
+                    const mpz_class & tweak,
+                    uint32_t tweak_len_in_bits,
+                    const mpz_class & plaintext,
+                    uint32_t plaintext_len_in_bits);
 
 
   /*
    * Given a ciphertext output from FFX.Encrypt[radix], a ciphertext_len and
    * key, recovers the input plaintext.
    */
-  mpz_class Decrypt(const std::string key,
-                    const mpz_class ciphertext,
-                    const uint32_t ciphertext_len);
+  mpz_class Decrypt(const std::string & key,
+                    const mpz_class & ciphertext,
+                    uint32_t ciphertext_len_in_bits);
 
   // tweak can be specified, but will be ignored
-  mpz_class Decrypt(const std::string key,
-                    const mpz_class tweak,
-                    const uint32_t tweak_len,
-                    const mpz_class ciphertext,
-                    const uint32_t ciphertext_len);
+  mpz_class Decrypt(const std::string & key,
+                    const mpz_class & tweak,
+                    uint32_t tweak_len_in_bits,
+                    const mpz_class & ciphertext,
+                    uint32_t ciphertext_len_in_bits);
 };
 
 }
