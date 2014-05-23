@@ -7,10 +7,10 @@
 
 namespace ffx {
 
-/* 
+/*
  * Given a bitstring X of length X_len, extract_bit_range returns
  * the bits in index start to end, inclusive.
- * 
+ *
  * For example:
  * inputs:
  *  - X = 0b10001000
@@ -21,11 +21,11 @@ namespace ffx {
  *    because  0b10001000
  *               [  ]
  *   position    01234567
- * 
+ *
  * In Python, this is equivalent to:
- *   
+ *
  *   bin(X).rjust(X_len,'0')[2:][start:end+1]
- * 
+ *
  */
 mpz_class extract_bit_range(const mpz_class X, const uint32_t X_len,
                             const uint32_t start, const uint32_t end);
@@ -42,7 +42,7 @@ mpz_class extract_bit_range(const mpz_class X, const uint32_t X_len,
 
 void mpz_to_base256(const mpz_class in,
                     const uint32_t out_len, unsigned char * & out);
-void base256_to_mpz(unsigned char * in, const uint32_t in_len, 
+void base256_to_mpz(unsigned char * in, const uint32_t in_len,
                     mpz_class & out);
 
 /*

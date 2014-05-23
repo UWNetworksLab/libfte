@@ -1,20 +1,20 @@
 /*
  * FFX is a Format-Preserving block cipher. It can be used to implement a
  * variable-input length blockcipher over an arbitrary radix.
- * 
+ *
  * This is an implementation for FFX[radix=2] based on the proposed FFX NIST
  * standard, and the updated FFX specification by Rogaway et al. [2,3].
- * 
+ *
  * Unfortunately, test vectors for FFX[2] do not exist. In this directory I've
  * included aes-ffx-vectors.txt, which has test vectors for radix=10,36. I've
  * used these test vectors to implement an FFX implementation in Python [1].
  * In turn I used the Python implementation to generate FFX[2] vectors.
- * 
+ *
  * TODO: This implementation only supports radix=2.
  * TODO: This implementation does not support tweaks.
- * 
+ *
  * - Kevin P. Dyer
- * 
+ *
  * [1] https://github.com/kpdyer/libffx
  * [2] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf
  * [3] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf
@@ -82,14 +82,14 @@ class FFX {
   /*
    * On input of plaintext, plaintext_len, performs FFX.Encrypt[radix]
    * w.r.t. to the key.
-   * 
+   *
    * This encrypt function preserves the length of the input plaintext. That is,
    * the resultant ciphertext will be a bitstring of length plaintext_len.
    */
   mpz_class encrypt(const Key key,
                     const mpz_class plaintext,
                     const uint32_t plaintext_len);
-  
+
   // tweak can be specified, but will be ignored
   mpz_class encrypt(const Key key,
                     const mpz_class tweak,
@@ -105,7 +105,7 @@ class FFX {
   mpz_class decrypt(const Key key,
                     const mpz_class ciphertext,
                     const uint32_t ciphertext_len);
-  
+
   // tweak can be specified, but will be ignored
   mpz_class decrypt(const Key key,
                     const mpz_class tweak,

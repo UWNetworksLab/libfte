@@ -94,7 +94,7 @@ TEST(FteNormalUsage, FpeTest3) {
   std::string output_plaintext = fteObj.decrypt(ciphertext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
-  
+
   std::regex rx("^[\\x00-\\xFF]{1,256}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);

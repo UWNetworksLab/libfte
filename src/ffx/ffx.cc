@@ -1,5 +1,5 @@
 /*
- * See ffx.h for details about FFX. 
+ * See ffx.h for details about FFX.
  */
 
 #include <math.h>
@@ -122,7 +122,7 @@ mpz_class FFX::encrypt(const Key key ,
   }
 
   retval = (A << B_len) + B;
-  
+
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, plaintext_len);
   retval = retval % modulus;
 
@@ -165,7 +165,7 @@ mpz_class FFX::decrypt(const Key key,
   }
 
   retval = (A << B_len) + B;
-  
+
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, cihpertext_len);
   retval = retval % modulus;
 

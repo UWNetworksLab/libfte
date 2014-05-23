@@ -13,8 +13,8 @@ mpz_class extract_bit_range(const mpz_class X, const uint32_t X_len,
 }
 
 void mpz_to_base256(const mpz_class in,
-                       const uint32_t out_len,
-                       unsigned char * & out) {
+                    const uint32_t out_len,
+                    unsigned char * & out) {
   mpz_class tmp = in;
   int32_t i;
   for(i = out_len - 1; i >= 0; i--) {
@@ -27,7 +27,7 @@ void mpz_to_base256(const mpz_class in,
 }
 
 void base256_to_mpz(unsigned char * in, const uint32_t in_len,
-                       mpz_class & out) {
+                    mpz_class & out) {
   out = 0;
   int32_t i = 0;
   for(i = 0; i < in_len; i++) {

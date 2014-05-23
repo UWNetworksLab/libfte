@@ -5,10 +5,10 @@
 
 namespace ffx {
 
-mpz_class aes_ecb_encrypt(const Key key, 
-                          const mpz_class plaintext, 
+mpz_class aes_ecb_encrypt(const Key key,
+                          const mpz_class plaintext,
                           const uint32_t plaintext_len) {
-    
+
   mpz_class retval = 0;
   uint32_t byte_string_len = plaintext_len / 8;
   aes_encrypt_ctx * pCtx = new aes_encrypt_ctx[1];
