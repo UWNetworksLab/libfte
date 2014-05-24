@@ -23,8 +23,6 @@
 #ifndef _FFX_FFX_H
 #define _FFX_FFX_H
 
-#include <exception>
-
 #include <gmpxx.h>
 
 #include "ffx/conversions.h"
@@ -39,24 +37,6 @@ const uint32_t kFfxKeyLengthInBytes = 16;
 const uint32_t kFfxKeyLengthInNibbles = kFfxKeyLengthInBytes * 2;
 const uint32_t kFfxKeyLengthInBits = kFfxKeyLengthInBytes * 8;
 
-class FFXException : public std::exception {
-  virtual const char* what() const throw() {
-    return "FteException";
-  }
-};
-
-class InvalidKeyLength : public FFXException {
-  virtual const char* what() const throw() {
-    return "Invalid key length.";
-  }
-};
-
-class InvalidRadix : public FFXException {
-  virtual const char* what() const throw() {
-    return "We currently only support radix=2.";
-  }
-};
-
 class Ffx {
  private:
   uint32_t radix_;
@@ -68,9 +48,6 @@ class Ffx {
 
   Ffx(const uint32_t radix)
     : radix_(radix) {
-    if(radix_ != kDefaultFfxRadix) {
-      throw InvalidRadix();
-    }
   }
 
   /*

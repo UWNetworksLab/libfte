@@ -21,7 +21,6 @@
 #include <string>
 
 #include "ffx/ffx.h"
-#include "fte/exceptions.h"
 #include "fte/ranking/dfa_ranker.h"
 
 namespace fte {
@@ -31,29 +30,33 @@ const uint32_t kFteKeyLengthInNibbles = 32;
 
 class Fte {
  private:
-  ranking::DfaRanker input_ranker_;
-  ranking::DfaRanker output_ranker_;
+  ranking::DfaRanker plaintext_ranker_;
+  ranking::DfaRanker ciphertext_ranker_;
 
   std::string key_;
   ffx::Ffx ffx_;
 
-  uint32_t input_language_capacity_;
-  uint32_t output_language_capacity_;
+  uint32_t plaintext_language_capacity_;
+  uint32_t ciphertext_language_capacity_;
 
-  mpz_class words_in_input_language_;
-  mpz_class words_in_output_language_;
+  mpz_class words_in_plaintext_language_;
+  mpz_class words_in_ciphertext_language_;
 
  public:
-  Fte() {};
 
   /*
    * input_dfa and input_max_len specify the input plaintext language
    * ouput_dfa and out_max_len specificy the output ciphertext language
    * the key is a 32-character hex string string
    */
-  Fte(const std::string & input_dfa, uint32_t input_max_len,
-      const std::string & output_dfa, uint32_t output_max_len,
-      const std::string & key);
+  Fte();
+
+  bool set_key(const std::string & key);
+
+  bool SetLanguages(const std::string & plaintext_dfa,
+                    uint32_t plaintext_max_len,
+                    const std::string & ciphertext_dfa,
+                    uint32_t ciphertext_max_len);
 
   /*
    * On input of a string that is accepted by input_dfa (specified in the constructor)

@@ -92,7 +92,7 @@ bool Ffx::Encrypt(const std::string & key ,
                   mpz_class * ciphertext) {
 
   if(key.length() != kFfxKeyLengthInNibbles) {
-    throw InvalidKeyLength();
+    return false;
   }
 
   mpz_class & retval = *ciphertext;
@@ -137,7 +137,7 @@ bool Ffx::Decrypt(const std::string & key,
                        mpz_class * plaintext) {
 
   if(key.length() != kFfxKeyLengthInNibbles) {
-    throw InvalidKeyLength();
+    return false;
   }
 
   mpz_class & retval = *plaintext;

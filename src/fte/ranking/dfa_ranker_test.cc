@@ -4,7 +4,8 @@
 #include "fte/ranking/sample_dfas.h"
 
 TEST(RankerNormalUsage, Test1) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_1, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_1, 16);
   std::string X;
   mpz_class C;
   rankerObj.Unrank(0, &X);
@@ -13,7 +14,8 @@ TEST(RankerNormalUsage, Test1) {
 }
 
 TEST(RankerNormalUsage, Test2) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_2, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_2, 16);
   std::string X;
   mpz_class C;
   rankerObj.Unrank(0, &X);
@@ -22,7 +24,8 @@ TEST(RankerNormalUsage, Test2) {
 }
 
 TEST(RankerNormalUsage, Test3) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_3, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_3, 16);
   std::string X;
   mpz_class C;
   rankerObj.Unrank(0, &X);
@@ -31,7 +34,8 @@ TEST(RankerNormalUsage, Test3) {
 }
 
 TEST(RankerNormalUsage, Test4) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_4, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_4, 16);
   std::string X;
   mpz_class C;
   rankerObj.Unrank(0, &X);
@@ -40,7 +44,8 @@ TEST(RankerNormalUsage, Test4) {
 }
 
 TEST(RankerNormalUsage, Test5) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 16);
   std::string X;
   mpz_class C;
   rankerObj.Unrank(0, &X);
@@ -49,7 +54,8 @@ TEST(RankerNormalUsage, Test5) {
 }
 
 TEST(RankerNormalUsage, Test6) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_1, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_1, 16);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 16, &words_in_language);
   std::string X;
@@ -61,7 +67,8 @@ TEST(RankerNormalUsage, Test6) {
 }
 
 TEST(RankerNormalUsage, Test7) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_2, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_2, 16);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 16, &words_in_language);
   std::string X;
@@ -73,7 +80,8 @@ TEST(RankerNormalUsage, Test7) {
 }
 
 TEST(RankerNormalUsage, Test8) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_3, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_3, 16);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 16, &words_in_language);
   std::string X;
@@ -85,7 +93,8 @@ TEST(RankerNormalUsage, Test8) {
 }
 
 TEST(RankerNormalUsage, Test9) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_4, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_4, 16);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 16, &words_in_language);
   std::string X;
@@ -97,7 +106,8 @@ TEST(RankerNormalUsage, Test9) {
 }
 
 TEST(RankerNormalUsage, Test10) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 16);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 16);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 16, &words_in_language);
   std::string X;
@@ -110,7 +120,8 @@ TEST(RankerNormalUsage, Test10) {
 
 
 TEST(RankerNormalUsage, Test11) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 32);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 32);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 32, &words_in_language);
   std::string X;
@@ -123,7 +134,8 @@ TEST(RankerNormalUsage, Test11) {
 
 
 TEST(RankerNormalUsage, Test12) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 64);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 64);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 32, &words_in_language);
   std::string X;
@@ -136,7 +148,8 @@ TEST(RankerNormalUsage, Test12) {
 
 
 TEST(RankerNormalUsage, Test13) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 128);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 128);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 128, &words_in_language);
   std::string X;
@@ -149,7 +162,8 @@ TEST(RankerNormalUsage, Test13) {
 
 
 TEST(RankerNormalUsage, Test14) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 256);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 256);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 256, &words_in_language);
   std::string X;
@@ -162,7 +176,8 @@ TEST(RankerNormalUsage, Test14) {
 
 
 TEST(RankerNormalUsage, Test15) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 512);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 512);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 512, &words_in_language);
   std::string X;
@@ -175,7 +190,8 @@ TEST(RankerNormalUsage, Test15) {
 
 
 TEST(RankerNormalUsage, Test16) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 1024);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 1024);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 1024, &words_in_language);
   std::string X;
@@ -188,7 +204,8 @@ TEST(RankerNormalUsage, Test16) {
 
 
 TEST(RankerNormalUsage, Test17) {
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_5, 2048);
+  fte::ranking::DfaRanker rankerObj;
+  rankerObj.SetLanguage(VALID_DFA_5, 2048);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 2048, &words_in_language);
   std::string X;
@@ -201,60 +218,47 @@ TEST(RankerNormalUsage, Test17) {
 
 
 TEST(CauseException, InvalidFstFormatException1) {
-  try {
-    fte::ranking::DfaRanker rankerObj(INVALID_DFA_1, 16);
-    EXPECT_TRUE(false);
-  } catch(fte::InvalidFstFormat e) {
-  }
+
+    fte::ranking::DfaRanker rankerObj;
+    bool success = rankerObj.SetLanguage(INVALID_DFA_1, 16);
+    EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidFstFormatExceptionAsFteException1) {
-  try {
-    fte::ranking::DfaRanker rankerObj(INVALID_DFA_1, 16);
-    EXPECT_TRUE(false);
-  } catch(fte::FteException e) {
-  }
+    fte::ranking::DfaRanker rankerObj;
+    bool success = rankerObj.SetLanguage(INVALID_DFA_1, 16);
+    EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidFstFormatException2) {
-  try {
-    fte::ranking::DfaRanker rankerObj(INVALID_DFA_2, 16);
-    EXPECT_TRUE(false);
-  } catch(fte::InvalidFstFormat e) {
-  }
+    fte::ranking::DfaRanker rankerObj;
+    bool success = rankerObj.SetLanguage(INVALID_DFA_2, 16);
+    EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidFstFormatException3) {
-  try {
-    fte::ranking::DfaRanker rankerObj(INVALID_DFA_3, 16);
-    EXPECT_TRUE(false);
-  } catch(fte::InvalidFstFormat e) {
-  }
+    fte::ranking::DfaRanker rankerObj;
+    bool success = rankerObj.SetLanguage(INVALID_DFA_3, 16);
+    EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidFstFormatException4) {
-  try {
-    fte::ranking::DfaRanker rankerObj(INVALID_DFA_4, 16);
-    EXPECT_TRUE(false);
-  } catch(fte::InvalidFstFormat e) {
-  }
+    fte::ranking::DfaRanker rankerObj;
+    bool success = rankerObj.SetLanguage(INVALID_DFA_4, 16);
+    EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidInputNoAcceptingPathsException1) {
-  try {
-    fte::ranking::DfaRanker rankerObj(INVALID_DFA_5, 16);
-    EXPECT_TRUE(false);
-  } catch(fte::InvalidInputNoAcceptingPaths e) {
-  }
+    fte::ranking::DfaRanker rankerObj;
+    bool success = rankerObj.SetLanguage(INVALID_DFA_5, 16);
+    EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidRankInputException) {
-  try {
-    fte::ranking::DfaRanker rankerObj(VALID_DFA_1, 16);
+    fte::ranking::DfaRanker rankerObj;
+    bool success = rankerObj.SetLanguage(VALID_DFA_1, 16);
     mpz_class rank;
     rankerObj.Rank("xxx", &rank);
-    EXPECT_TRUE(false);
-  } catch(fte::InvalidSymbol e) {
-  }
+    EXPECT_FALSE(success);
 }
 

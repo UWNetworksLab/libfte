@@ -21,8 +21,6 @@
 
 #include <gmpxx.h>
 
-#include "fte/exceptions.h"
-
 namespace fte {
 
 namespace ranking {
@@ -96,10 +94,8 @@ class DfaRanker {
   MpzClassVectorT words_in_language_exclusive_;
 
  public:
-  DfaRanker() {};
-
-  // The constructor of our rank/urank ranker class
-  DfaRanker(const std::string & dfa,
+  // ...
+  bool SetLanguage(const std::string & dfa,
             uint32_t max_word_length);
 
   // our unrank function an int -> str mapping
@@ -114,6 +110,8 @@ class DfaRanker {
 
   // given integers [n,m] returns the number of words accepted by the
   // ranker that are at least length n and no greater than length m
+  bool WordsInLanguage(mpz_class * words_in_language );
+
   bool WordsInLanguage(uint32_t max_word_length,
                        mpz_class * words_in_language );
 

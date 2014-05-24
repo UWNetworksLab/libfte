@@ -33,11 +33,14 @@ static StringVectorT tokenize( std::string & line, char delim ) {
  *   dfa: a minimized ATT FST formatted dfa, see: http://www2.research.att.com/~fsmtools/fsm/man4/fsm.5.html
  *   max_len: the maxium length to compute DFA::buildTable
  */
-DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
-  : fixed_slice_(max_word_length),
-    start_state_(0),
-    num_states_(0),
-    num_symbols_(0) {
+bool DfaRanker::SetLanguage(const std::string & dfa,
+                       uint32_t max_word_length) {
+  
+  fixed_slice_ = max_word_length;
+  start_state_ = 0;
+  num_states_ = 0;
+  num_symbols_ = 0;
+
   // construct the _start_state, _final_states and symbols/states of our dfa
   bool startStateIsntSet = true;
   std::string line;
@@ -73,7 +76,7 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
         final_states_.push_back( final_state );
       }
     } else if (split_vec.size()>0) {
-      throw fte::InvalidFstFormat();
+      return false;
     } else {
       // blank line, ignore
     }
@@ -147,7 +150,7 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
   mpz_class total_words_in_language;
   WordsInLanguage(0, fixed_slice_, &total_words_in_language);
   if (1 >= total_words_in_language) {
-    throw fte::InvalidInputNoAcceptingPaths();
+    return false;
   }
 
   std::sort(symbols_.begin(),symbols_.end());
@@ -159,32 +162,32 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
 bool DfaRanker::SanityCheck() {
   // ensure dfa has at least one state
   if (0 == states_.size()) {
-    throw fte::InvalidFstFormat();
+    return false;
   }
   if (0 == final_states_.size()) {
-    throw fte::InvalidFstFormat();
+    return false;
   }
 
   // ensure dfa has at least one symbol
   if (0 == sigma_.size()) {
-    throw fte::InvalidFstFormat();
+    return false;
   }
   if (0 == sigma_reverse_.size()) {
-    throw fte::InvalidFstFormat();
+    return false;
   }
 
   // ensure we have N states, labeled 0,1,..N-1
   Uint32VectorT::iterator state;
   for (state=states_.begin(); state!=states_.end(); ++state) {
     if (*state >= states_.size()) {
-      throw fte::InvalidFstStateName();
+      return false;
     }
   }
 
   // ensure all symbols are in the range 0,1,...,255
   for (uint32_t i = 0; i < symbols_.size(); ++i) {
     if (symbols_.at(i) > 256) {
-      throw fte::InvalidSymbol();
+      return false;
     }
   }
 }
@@ -245,7 +248,7 @@ bool DfaRanker::Unrank(const mpz_class & rank,
   }
 
   if (n>fixed_slice_) {
-    throw fte::InvalidRankInput();
+    return false;
   }
 
   uint32_t q = start_state_;
@@ -295,7 +298,7 @@ bool DfaRanker::Unrank(const mpz_class & rank,
   bool q_in_final_states = std::binary_search(final_states_.begin(),
                                               final_states_.end(), q);
   if (!q_in_final_states) {
-    throw fte::InvalidInputNoAcceptingPaths();
+    return false;
   }
 }
 
@@ -312,7 +315,7 @@ bool DfaRanker::Rank(const std::string & word,
     try {
       symbol_as_int = sigma_reverse_.at(word.at(i-1));
     } catch (const std::out_of_range& e) {
-      throw fte::InvalidSymbol();
+      return false;
     }
 
     if (delta_dense_.at(q)) {
@@ -350,7 +353,7 @@ bool DfaRanker::Rank(const std::string & word,
   bool q_in_final_states = std::binary_search(final_states_.begin(),
                                               final_states_.end(), q);
   if (!q_in_final_states) {
-    throw fte::InvalidInputNoAcceptingPaths();
+    return false;
   }
 
   mpz_class words_in_language;
@@ -360,6 +363,12 @@ bool DfaRanker::Rank(const std::string & word,
            words_in_language.get_mpz_t() );
 
   return true;
+}
+
+bool DfaRanker::WordsInLanguage(mpz_class * words_in_language) {
+  return WordsInLanguage(0,
+                         fixed_slice_,
+                         words_in_language);
 }
 
 bool DfaRanker::WordsInLanguage(uint32_t max_word_length,
