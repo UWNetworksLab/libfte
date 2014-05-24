@@ -7,10 +7,12 @@
 
 namespace ffx {
 
-mpz_class AesCbcMac(const std::string & key,
-                    const mpz_class & plaintext,
-                    uint32_t plaintext_len_in_bits) {
-  mpz_class retval = 0;
+bool AesCbcMac(const std::string & key,
+               const mpz_class & plaintext,
+               uint32_t plaintext_len_in_bits,
+               mpz_class * ciphertext) {
+
+  mpz_class & retval = *ciphertext;
 
   uint32_t byte_string_len = plaintext_len_in_bits / 8;
 
@@ -41,9 +43,9 @@ mpz_class AesCbcMac(const std::string & key,
   Base256ToMpzClass(pOutBuffer, byte_string_len, &retval);
 
   retval = BitMask(retval,
-                             byte_string_len * 8,
-                             byte_string_len * 8 - 128,
-                             byte_string_len * 8 - 1);
+                   byte_string_len * 8,
+                   byte_string_len * 8 - 128,
+                   byte_string_len * 8 - 1);
 
   // cleanup
   delete[] pCtx;
@@ -58,7 +60,7 @@ mpz_class AesCbcMac(const std::string & key,
   pInBuffer = NULL;
   pOutBuffer = NULL;
 
-  return retval;
+  return true;
 }
 
 } // namespace ffx

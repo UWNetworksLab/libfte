@@ -60,13 +60,15 @@ class Fte {
    * the encrypt function outputs a ciphertext that is accepted by output_dfa.
    * The plaintext cannot exceed length input_max_len.
    */
-  std::string Encrypt(const std::string & plaintext);
+  bool Encrypt(const std::string & plaintext,
+               std::string * ciphertext);
 
   /*
    * On input of a string that is accepted by output_dfa (specified in the constructor)
    * the decrypt function recovers a plaintext.
    */
-  std::string Decrypt(const std::string & ciphertext);
+  bool Decrypt(const std::string & ciphertext,
+               std::string * plaintext);
 
 };
 

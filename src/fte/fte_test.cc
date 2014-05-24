@@ -56,8 +56,9 @@ TEST(FteNormalUsage, FpeTest1) {
 
   std::string input_plaintext =
     "aaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -73,8 +74,9 @@ TEST(FteNormalUsage, FpeTest2) {
                   K);
 
   std::string input_plaintext = "a";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -90,8 +92,9 @@ TEST(FteNormalUsage, FpeTest3) {
                   K);
 
   std::string input_plaintext = "a";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -106,10 +109,10 @@ TEST(FteNormalUsage, FpeTest4) {
                   VALID_DFA_5, 512,
                   K);
 
-  std::string input_plaintext =
-    "a";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string input_plaintext = "a";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -124,10 +127,10 @@ TEST(FteNormalUsage, FpeTest5) {
                   VALID_DFA_5, 1024,
                   K);
 
-  std::string input_plaintext =
-    "a";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string input_plaintext = "a";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -142,10 +145,10 @@ TEST(FteNormalUsage, FpeTest6) {
                   VALID_DFA_5, 2048,
                   K);
 
-  std::string input_plaintext =
-    "a";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string input_plaintext = "a";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -161,8 +164,9 @@ TEST(FteNormalUsage, FteTest1) {
                   K);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -178,8 +182,9 @@ TEST(FteNormalUsage, FteTest2) {
                   K);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 

@@ -16,7 +16,7 @@ namespace ranking {
 
 // Helper fuction. Given a string and a token, performs a python .split()
 // Returns a list of string delimnated on the token
-StringVectorT tokenize( std::string & line, char delim ) {
+static StringVectorT tokenize( std::string & line, char delim ) {
   StringVectorT retval;
 
   std::istringstream iss(line);
@@ -137,11 +137,16 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
   words_in_language_inclusive_.resize(fixed_slice_+1);
   words_in_language_exclusive_.resize(fixed_slice_+1);
   for (max_word_len = 0; max_word_len <= fixed_slice_; ++max_word_len) {
-    words_in_language_inclusive_.at(max_word_len) = CalculateNumWordsInLanguage( 0, max_word_len );
-    words_in_language_exclusive_.at(max_word_len) = CalculateNumWordsInLanguage( max_word_len, max_word_len );
+    mpz_class inclusive_dest, exclusive_dest;
+    CalculateNumWordsInLanguage(0, max_word_len, &inclusive_dest);
+    CalculateNumWordsInLanguage(max_word_len, max_word_len, &exclusive_dest);
+    words_in_language_inclusive_.at(max_word_len) = inclusive_dest;
+    words_in_language_exclusive_.at(max_word_len) = exclusive_dest;
   }
 
-  if (1 >= WordsInLanguage(0, fixed_slice_)) {
+  mpz_class total_words_in_language;
+  WordsInLanguage(0, fixed_slice_, &total_words_in_language);
+  if (1 >= total_words_in_language) {
     throw fte::InvalidInputNoAcceptingPaths();
   }
 
@@ -151,7 +156,7 @@ DfaRanker::DfaRanker(const std::string & dfa, uint32_t max_word_length)
 }
 
 
-void DfaRanker::SanityCheck() {
+bool DfaRanker::SanityCheck() {
   // ensure dfa has at least one state
   if (0 == states_.size()) {
     throw fte::InvalidFstFormat();
@@ -184,7 +189,7 @@ void DfaRanker::SanityCheck() {
   }
 }
 
-void DfaRanker::PopulateCachedTable() {
+bool DfaRanker::PopulateCachedTable() {
   uint32_t i;
   uint32_t q;
   uint32_t a;
@@ -215,17 +220,20 @@ void DfaRanker::PopulateCachedTable() {
       }
     }
   }
+
+  return true;
 }
 
 
-std::string DfaRanker::Unrank(const mpz_class & c_in) {
-  std::string retval;
+bool DfaRanker::Unrank(const mpz_class & rank,
+                       std::string * word) {
 
   // walk the dfa subtracting values from c until we have our n symbols
-  mpz_class c = c_in;
+  mpz_class c = rank;
   uint32_t n = 0;
   while (true) {
-    mpz_class words_in_slice = WordsInLanguage( n, n );
+    mpz_class words_in_slice;
+    WordsInLanguage(n, n, &words_in_slice);
     bool c_lt_words_in_slice = (mpz_cmp(c.get_mpz_t(), words_in_slice.get_mpz_t())<0);
     if (c_lt_words_in_slice) {
       break;
@@ -279,7 +287,7 @@ std::string DfaRanker::Unrank(const mpz_class & c_in) {
         state =delta_.at(q).at(char_cursor);
       }
     }
-    retval += sigma_.at(char_cursor);
+    (*word) += sigma_.at(char_cursor);
     q = state;
   }
 
@@ -289,13 +297,11 @@ std::string DfaRanker::Unrank(const mpz_class & c_in) {
   if (!q_in_final_states) {
     throw fte::InvalidInputNoAcceptingPaths();
   }
-
-  return retval;
 }
 
-mpz_class DfaRanker::Rank( const std::string & word ) {
+bool DfaRanker::Rank(const std::string & word,
+                     mpz_class * rank) {
   size_t n = word.size();
-  mpz_class retval = 0;
 
   // walk the dfa, adding values from _T to c
   uint32_t symbol_as_int = 0;
@@ -322,8 +328,8 @@ mpz_class DfaRanker::Rank( const std::string & word ) {
 
       // mpz_add is faster than +=
       //retval += tmp.get_mpz_t();
-      mpz_add( retval.get_mpz_t(),
-               retval.get_mpz_t(),
+      mpz_add( (*rank).get_mpz_t(),
+               (*rank).get_mpz_t(),
                tmp.get_mpz_t() );
     } else {
       // traditional goldberg-sipser ranking
@@ -332,8 +338,8 @@ mpz_class DfaRanker::Rank( const std::string & word ) {
 
         // mpz_add is faster than +=
         //retval += _T.at(state).at(n-i);
-        mpz_add( retval.get_mpz_t(),
-                 retval.get_mpz_t(),
+        mpz_add( (*rank).get_mpz_t(),
+                 (*rank).get_mpz_t(),
                  CachedTable_.at(state).at(n-i).get_mpz_t() );
       }
     }
@@ -347,41 +353,47 @@ mpz_class DfaRanker::Rank( const std::string & word ) {
     throw fte::InvalidInputNoAcceptingPaths();
   }
 
-  mpz_class words_in_language = WordsInLanguage( 0, n-1 );
-  mpz_add( retval.get_mpz_t(), retval.get_mpz_t(),
+  mpz_class words_in_language;
+  WordsInLanguage(0, n-1, &words_in_language);
+  mpz_add( (*rank).get_mpz_t(),
+           (*rank).get_mpz_t(),
            words_in_language.get_mpz_t() );
 
-  return retval;
+  return true;
 }
 
-mpz_class DfaRanker::WordsInLanguage(uint32_t max_word_length) {
-  return WordsInLanguage( 0, max_word_length );
+bool DfaRanker::WordsInLanguage(uint32_t max_word_length,
+                                mpz_class * words_in_language) {
+  return WordsInLanguage(0,
+                         max_word_length,
+                         words_in_language);
 }
 
-mpz_class DfaRanker::WordsInLanguage(uint32_t min_word_length,
-                                     uint32_t max_word_length) {
-  mpz_class retval;
+bool DfaRanker::WordsInLanguage(uint32_t min_word_length,
+                                uint32_t max_word_length,
+                                mpz_class * words_in_language) {
   if (0 == min_word_length) {
-    retval = words_in_language_inclusive_.at(max_word_length);
+    (*words_in_language) = words_in_language_inclusive_.at(max_word_length);
   } else if (min_word_length==max_word_length) {
-    retval = words_in_language_exclusive_.at(max_word_length);
+    (*words_in_language) = words_in_language_exclusive_.at(max_word_length);
   } else {
-    // TODO: throw exception
+    return false;
   }
-  return retval;
+
+  return true;
 }
 
-mpz_class DfaRanker::CalculateNumWordsInLanguage( uint32_t min_word_length,
-                                                  uint32_t max_word_length ) {
+bool DfaRanker::CalculateNumWordsInLanguage( uint32_t min_word_length,
+                                                  uint32_t max_word_length,
+                                                  mpz_class * words_in_language ) {
   // count the number of words in the language of length
   // at least min_word_length and no greater than max_word_length
-  mpz_class num_words = 0;
   for (uint32_t word_length = min_word_length;
        word_length <= max_word_length;
        ++word_length) {
-    num_words += CachedTable_.at(start_state_).at(word_length);
+    (*words_in_language) += CachedTable_.at(start_state_).at(word_length);
   }
-  return num_words;
+  return true;
 }
 
 } // namespace ranking

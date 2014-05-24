@@ -12,15 +12,14 @@
 
 namespace ffx {
 
-static mpz_class RoundFunction(const std::string & K,
+static bool RoundFunction(const std::string & K,
             uint32_t n,
             const mpz_class & tweak,
             uint32_t tweak_len_in_bits,
             uint32_t i,
             const mpz_class & B,
-            uint32_t B_len) {
-
-  mpz_class retval = 0;
+            uint32_t B_len,
+            mpz_class * retval) {
 
   uint32_t vers = 1;
   uint32_t t = ceil(tweak_len_in_bits / 8.0);
@@ -60,13 +59,16 @@ static mpz_class RoundFunction(const std::string & K,
 
   mpz_class Y = 0;
 
-  Y = AesCbcMac(K, (P << Q_len) + Q, P_len + Q_len);
-
+  bool cbc_success = AesCbcMac(K, (P << Q_len) + Q, P_len + Q_len, &Y);
+  if (!cbc_success) {
+    return false;
+  }
   mpz_class Z = Y;
   uint32_t Z_len = 16;
   mpz_class counter = 1;
   while(Z_len < (d + 4)) {
-    mpz_class ctxt = AesEcbEncrypt(K, (Y + counter), 128);
+    mpz_class ctxt;
+    AesEcbEncrypt(K, (Y + counter), 128, &ctxt);
     Z_len += 16;
     Z = Z << 128;
     Z += ctxt;
@@ -79,20 +81,21 @@ static mpz_class RoundFunction(const std::string & K,
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
   Y = Y % modulus;
 
-  retval = Y;
-
-  return retval;
+  *retval = Y;
 }
 
-mpz_class Ffx::Encrypt(const std::string & key ,
-                       const mpz_class & tweak, uint32_t tweak_len_in_bits,
-                       const mpz_class & plaintext, uint32_t plaintext_len_in_bits) {
+bool Ffx::Encrypt(const std::string & key ,
+                  const mpz_class & tweak,
+                  uint32_t tweak_len_in_bits,
+                  const mpz_class & plaintext,
+                  uint32_t plaintext_len_in_bits,
+                  mpz_class * ciphertext) {
 
   if(key.length() != kFfxKeyLengthInNibbles) {
     throw InvalidKeyLength();
   }
 
-  mpz_class retval = 0;
+  mpz_class & retval = *ciphertext;
 
   uint32_t n = plaintext_len_in_bits;
   uint32_t l = floor(plaintext_len_in_bits / 2.0);
@@ -100,9 +103,10 @@ mpz_class Ffx::Encrypt(const std::string & key ,
   mpz_class A = BitMask(plaintext, plaintext_len_in_bits, 0, l - 1);
   mpz_class B = BitMask(plaintext, plaintext_len_in_bits, l, n - 1);
   uint32_t B_len = n - l;
+  mpz_class C = 0;
+  mpz_class D = 0;
   uint32_t m = 0;
   mpz_class modulus = 0;
-  mpz_class C = 0;
   uint32_t i = 0;
   for(i = 0; i <= (r - 1); ++i) {
     if((i % 2) == 0) {
@@ -112,7 +116,8 @@ mpz_class Ffx::Encrypt(const std::string & key ,
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
-    C = A + RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m);
+    RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m, &D);
+    C = A + D;
     C = C % modulus;
     A = B;
     B = C;
@@ -122,19 +127,20 @@ mpz_class Ffx::Encrypt(const std::string & key ,
 
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, plaintext_len_in_bits);
   retval = retval % modulus;
-
-  return retval;
 }
 
-mpz_class Ffx::Decrypt(const std::string & key,
-                       const mpz_class & tweak, uint32_t tweak_len_in_bits,
-                       const mpz_class & cihpertext, uint32_t cihpertext_len_bits) {
+bool Ffx::Decrypt(const std::string & key,
+                       const mpz_class & tweak,
+                       uint32_t tweak_len_in_bits,
+                       const mpz_class & cihpertext,
+                       uint32_t cihpertext_len_bits,
+                       mpz_class * plaintext) {
 
   if(key.length() != kFfxKeyLengthInNibbles) {
     throw InvalidKeyLength();
   }
 
-  mpz_class retval = 0;
+  mpz_class & retval = *plaintext;
 
   uint32_t n = cihpertext_len_bits;
   uint32_t l = floor(cihpertext_len_bits / 2.0);
@@ -142,9 +148,10 @@ mpz_class Ffx::Decrypt(const std::string & key,
   mpz_class A = BitMask(cihpertext, cihpertext_len_bits, 0, l - 1);
   mpz_class B = BitMask(cihpertext, cihpertext_len_bits, l, n - 1);
   uint32_t B_len = n - l;
+  mpz_class C = 0;
+  mpz_class D = 0;
   uint32_t m = 0;
   mpz_class modulus = 0;
-  mpz_class C = 0;
   int32_t i = 0;
   for(i = r - 1; i >= 0; --i) {
     if((i % 2) == 0) {
@@ -156,7 +163,8 @@ mpz_class Ffx::Decrypt(const std::string & key,
 
     C = B;
     B = A;
-    A = C - RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m);
+    RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m, &D);
+    A = C - D;
     while(A < 0) A += modulus;
     A = A % modulus;
   }
@@ -165,20 +173,20 @@ mpz_class Ffx::Decrypt(const std::string & key,
 
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, cihpertext_len_bits);
   retval = retval % modulus;
-
-  return retval;
 }
 
-mpz_class Ffx::Encrypt(const std::string & key,
-                       const mpz_class & plaintext,
-                       uint32_t plaintext_len_in_bits) {
-  return Ffx::Encrypt(key, 0, 0, plaintext, plaintext_len_in_bits);
+bool Ffx::Encrypt(const std::string & key,
+                  const mpz_class & plaintext,
+                  uint32_t plaintext_len_in_bits,
+                  mpz_class * ciphertext) {
+  return Ffx::Encrypt(key, 0, 0, plaintext, plaintext_len_in_bits, ciphertext);
 }
 
-mpz_class Ffx::Decrypt(const std::string & key,
-                       const mpz_class & ciphertext,
-                       uint32_t ciphertext_len_in_bits) {
-  return Ffx::Decrypt(key, 0, 0, ciphertext, ciphertext_len_in_bits);
+bool Ffx::Decrypt(const std::string & key,
+                  const mpz_class & ciphertext,
+                  uint32_t ciphertext_len_in_bits,
+                  mpz_class * plaintext) {
+  return Ffx::Decrypt(key, 0, 0, ciphertext, ciphertext_len_in_bits, plaintext);
 }
 
 

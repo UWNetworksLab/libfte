@@ -7,11 +7,13 @@
 
 namespace ffx {
 
-mpz_class AesEcbEncrypt(const std::string & key,
+bool AesEcbEncrypt(const std::string & key,
                         const mpz_class & plaintext,
-                        uint32_t plaintext_len_in_bits) {
+                        uint32_t plaintext_len_in_bits,
+                        mpz_class * ciphertext) {
 
-  mpz_class retval = 0;
+  mpz_class & retval = *ciphertext;
+
   uint32_t byte_string_len = plaintext_len_in_bits / 8;
   aes_encrypt_ctx * pCtx = new aes_encrypt_ctx[1];
   unsigned char * pKey = new unsigned char[kFfxKeyLengthInBytes];
@@ -48,7 +50,7 @@ mpz_class AesEcbEncrypt(const std::string & key,
   pInBuffer = NULL;
   pOutBuffer = NULL;
 
-  return retval;
+  return true;
 }
 
 } // namespace ffx

@@ -78,18 +78,20 @@ class DfaRanker {
   //   i: an integer
   //   n: the number of words in our language that have a path to a final
   //      state that is exactly length i
-  void PopulateCachedTable();
+  bool PopulateCachedTable();
 
   // Checks the properties of our ranker, to ensure that we meet all constraints.
   // Throws an exception upon failure.
-  void SanityCheck();
+  bool SanityCheck();
 
   // _T is our cached table, the output of buildTable
   // For a state q and integer i, the value _T[q][i] is the number of unique
   // accepting paths of length exactly i from state q.
   MpzClassMatrixT CachedTable_;
 
-  mpz_class CalculateNumWordsInLanguage(uint32_t min_word_len, uint32_t max_word_len);
+  bool CalculateNumWordsInLanguage(uint32_t min_word_len,
+                                   uint32_t max_word_len,
+                                   mpz_class * words_in_language);
   MpzClassVectorT words_in_language_inclusive_;
   MpzClassVectorT words_in_language_exclusive_;
 
@@ -97,20 +99,27 @@ class DfaRanker {
   DfaRanker() {};
 
   // The constructor of our rank/urank ranker class
-  DfaRanker( const std::string & dfa, uint32_t max_word_length );
+  DfaRanker(const std::string & dfa,
+            uint32_t max_word_length);
 
   // our unrank function an int -> str mapping
   // given an integer i, return the ith lexicographically ordered string in
   // the language accepted by the ranker
-  std::string Unrank( const mpz_class & c_in );
+  bool Unrank(const mpz_class & rank,
+              std::string * word);
 
   // our rank function performs the inverse operation of unrank
-  mpz_class Rank( const std::string & word );
+  bool Rank(const std::string & word,
+                 mpz_class * rank);
 
   // given integers [n,m] returns the number of words accepted by the
   // ranker that are at least length n and no greater than length m
-  mpz_class WordsInLanguage( uint32_t max_word_length );
-  mpz_class WordsInLanguage( uint32_t min_word_length, uint32_t max_word_length );
+  bool WordsInLanguage(uint32_t max_word_length,
+                       mpz_class * words_in_language );
+
+  bool WordsInLanguage(uint32_t min_word_length,
+                       uint32_t max_word_length,
+                       mpz_class * words_in_language );
 };
 
 } // namespace ranking
