@@ -13,13 +13,13 @@
 namespace ffx {
 
 static bool RoundFunction(const std::string & K,
-            uint32_t n,
-            const mpz_class & tweak,
-            uint32_t tweak_len_in_bits,
-            uint32_t i,
-            const mpz_class & B,
-            uint32_t B_len,
-            mpz_class * retval) {
+                          uint32_t n,
+                          const mpz_class & tweak,
+                          uint32_t tweak_len_in_bits,
+                          uint32_t i,
+                          const mpz_class & B,
+                          uint32_t B_len,
+                          mpz_class * retval) {
 
   uint32_t vers = 1;
   uint32_t t = ceil(tweak_len_in_bits / 8.0);
@@ -129,11 +129,11 @@ bool Ffx::Encrypt(const std::string & key ,
 }
 
 bool Ffx::Decrypt(const std::string & key,
-                       const mpz_class & tweak,
-                       uint32_t tweak_len_in_bits,
-                       const mpz_class & cihpertext,
-                       uint32_t cihpertext_len_bits,
-                       mpz_class * plaintext) {
+                  const mpz_class & tweak,
+                  uint32_t tweak_len_in_bits,
+                  const mpz_class & cihpertext,
+                  uint32_t cihpertext_len_bits,
+                  mpz_class * plaintext) {
 
   if(key.length() != kFfxKeyLengthInNibbles) {
     return false;

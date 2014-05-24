@@ -8,9 +8,9 @@
 namespace ffx {
 
 bool AesEcbEncrypt(const std::string & key,
-                        const mpz_class & plaintext,
-                        uint32_t plaintext_len_in_bits,
-                        mpz_class * ciphertext) {
+                   const mpz_class & plaintext,
+                   uint32_t plaintext_len_in_bits,
+                   mpz_class * ciphertext) {
 
   mpz_class & retval = *ciphertext;
 

@@ -219,46 +219,46 @@ TEST(RankerNormalUsage, Test17) {
 
 TEST(CauseException, InvalidFstFormatException1) {
 
-    fte::ranking::DfaRanker rankerObj;
-    bool success = rankerObj.SetLanguage(INVALID_DFA_1, 16);
-    EXPECT_FALSE(success);
+  fte::ranking::DfaRanker rankerObj;
+  bool success = rankerObj.SetLanguage(INVALID_DFA_1, 16);
+  EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidFstFormatExceptionAsFteException1) {
-    fte::ranking::DfaRanker rankerObj;
-    bool success = rankerObj.SetLanguage(INVALID_DFA_1, 16);
-    EXPECT_FALSE(success);
+  fte::ranking::DfaRanker rankerObj;
+  bool success = rankerObj.SetLanguage(INVALID_DFA_1, 16);
+  EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidFstFormatException2) {
-    fte::ranking::DfaRanker rankerObj;
-    bool success = rankerObj.SetLanguage(INVALID_DFA_2, 16);
-    EXPECT_FALSE(success);
+  fte::ranking::DfaRanker rankerObj;
+  bool success = rankerObj.SetLanguage(INVALID_DFA_2, 16);
+  EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidFstFormatException3) {
-    fte::ranking::DfaRanker rankerObj;
-    bool success = rankerObj.SetLanguage(INVALID_DFA_3, 16);
-    EXPECT_FALSE(success);
+  fte::ranking::DfaRanker rankerObj;
+  bool success = rankerObj.SetLanguage(INVALID_DFA_3, 16);
+  EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidFstFormatException4) {
-    fte::ranking::DfaRanker rankerObj;
-    bool success = rankerObj.SetLanguage(INVALID_DFA_4, 16);
-    EXPECT_FALSE(success);
+  fte::ranking::DfaRanker rankerObj;
+  bool success = rankerObj.SetLanguage(INVALID_DFA_4, 16);
+  EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidInputNoAcceptingPathsException1) {
-    fte::ranking::DfaRanker rankerObj;
-    bool success = rankerObj.SetLanguage(INVALID_DFA_5, 16);
-    EXPECT_FALSE(success);
+  fte::ranking::DfaRanker rankerObj;
+  bool success = rankerObj.SetLanguage(INVALID_DFA_5, 16);
+  EXPECT_FALSE(success);
 }
 
 TEST(CauseException, InvalidRankInputException) {
-    fte::ranking::DfaRanker rankerObj;
-    bool success = rankerObj.SetLanguage(VALID_DFA_1, 16);
-    mpz_class rank;
-    rankerObj.Rank("xxx", &rank);
-    EXPECT_FALSE(success);
+  fte::ranking::DfaRanker rankerObj;
+  bool success = rankerObj.SetLanguage(VALID_DFA_1, 16);
+  mpz_class rank;
+  rankerObj.Rank("xxx", &rank);
+  EXPECT_FALSE(success);
 }
 

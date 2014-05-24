@@ -38,7 +38,7 @@ void Base256ToMpzClass(unsigned char * in,
 }
 
 void Base16ToBase256(const std::string & in,
-                     uint32_t out_len_in_bytes, 
+                     uint32_t out_len_in_bytes,
                      unsigned char * out) {
   for (uint32_t i = 0; i < out_len_in_bytes; ++i) {
     std::string chunk = in.substr(i * 2, 2);

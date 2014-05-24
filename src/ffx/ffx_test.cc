@@ -142,21 +142,21 @@ TEST(FFX2, TestVector9) {
 
 TEST(FFX2Malicous, ShortKey1) {
 
-    ffx::Ffx ffxObj = ffx::Ffx(FFX_RADIX);
-    std::string K = "00";
-    mpz_class X = 1191613746;
-    uint32_t X_len = 32;
-    mpz_class Y;
-    bool success = ffxObj.Encrypt(K, X, X_len, &Y);
-    EXPECT_FALSE(success);
+  ffx::Ffx ffxObj = ffx::Ffx(FFX_RADIX);
+  std::string K = "00";
+  mpz_class X = 1191613746;
+  uint32_t X_len = 32;
+  mpz_class Y;
+  bool success = ffxObj.Encrypt(K, X, X_len, &Y);
+  EXPECT_FALSE(success);
 }
 
 TEST(FFX2Malicous, LongKey1) {
-    ffx::Ffx ffxObj = ffx::Ffx(FFX_RADIX);
-    std::string K = "0000000000000000000000000000000000000000";
-    mpz_class X = 1191613746;
-    uint32_t X_len = 32;
-    mpz_class Y;
-    bool success = ffxObj.Encrypt(K, X, X_len, &Y);
-    EXPECT_FALSE(success);
+  ffx::Ffx ffxObj = ffx::Ffx(FFX_RADIX);
+  std::string K = "0000000000000000000000000000000000000000";
+  mpz_class X = 1191613746;
+  uint32_t X_len = 32;
+  mpz_class Y;
+  bool success = ffxObj.Encrypt(K, X, X_len, &Y);
+  EXPECT_FALSE(success);
 }

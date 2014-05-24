@@ -55,7 +55,7 @@ void Base256ToMpzClass(unsigned char * in,
  * by in, puts It is the callers job to init. out.
  */
 void Base16ToBase256(const std::string & in,
-                     uint32_t out_len_in_bytes, 
+                     uint32_t out_len_in_bytes,
                      unsigned char * out);
 
 } // namespace ffx

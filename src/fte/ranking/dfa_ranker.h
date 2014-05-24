@@ -96,7 +96,7 @@ class DfaRanker {
  public:
   // ...
   bool SetLanguage(const std::string & dfa,
-            uint32_t max_word_length);
+                   uint32_t max_word_length);
 
   // our unrank function an int -> str mapping
   // given an integer i, return the ith lexicographically ordered string in
@@ -106,7 +106,7 @@ class DfaRanker {
 
   // our rank function performs the inverse operation of unrank
   bool Rank(const std::string & word,
-                 mpz_class * rank);
+            mpz_class * rank);
 
   // given integers [n,m] returns the number of words accepted by the
   // ranker that are at least length n and no greater than length m

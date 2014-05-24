@@ -73,7 +73,7 @@ TEST(FteNormalUsage, FpeTest2) {
   fte::Fte fteObj;
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_5, 128,
-                  VALID_DFA_5, 128);
+                      VALID_DFA_5, 128);
 
   std::string input_plaintext = "a";
   std::string ciphertext, output_plaintext;
@@ -92,7 +92,7 @@ TEST(FteNormalUsage, FpeTest3) {
   fte::Fte fteObj;
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_5, 256,
-                  VALID_DFA_5, 256);
+                      VALID_DFA_5, 256);
 
   std::string input_plaintext = "a";
   std::string ciphertext, output_plaintext;
@@ -111,7 +111,7 @@ TEST(FteNormalUsage, FpeTest4) {
   fte::Fte fteObj;
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_5, 512,
-                  VALID_DFA_5, 512);
+                      VALID_DFA_5, 512);
 
   std::string input_plaintext = "a";
   std::string ciphertext, output_plaintext;
@@ -130,7 +130,7 @@ TEST(FteNormalUsage, FpeTest5) {
   fte::Fte fteObj;
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_5, 1024,
-                  VALID_DFA_5, 1024);
+                      VALID_DFA_5, 1024);
 
   std::string input_plaintext = "a";
   std::string ciphertext, output_plaintext;
@@ -149,7 +149,7 @@ TEST(FteNormalUsage, FpeTest6) {
   fte::Fte fteObj;
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_5, 2048,
-                  VALID_DFA_5, 2048);
+                      VALID_DFA_5, 2048);
 
   std::string input_plaintext = "a";
   std::string ciphertext, output_plaintext;
@@ -168,7 +168,7 @@ TEST(FteNormalUsage, FteTest1) {
   fte::Fte fteObj;
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_1, 32,
-                  VALID_DFA_1, 64);
+                      VALID_DFA_1, 64);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   std::string ciphertext, output_plaintext;
@@ -187,7 +187,7 @@ TEST(FteNormalUsage, FteTest2) {
   fte::Fte fteObj;
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_1, 32,
-                  VALID_DFA_5, 32);
+                      VALID_DFA_5, 32);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   std::string ciphertext, output_plaintext;

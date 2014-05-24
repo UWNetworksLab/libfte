@@ -34,8 +34,8 @@ static StringVectorT tokenize( const std::string & line, const char & delim ) {
  *   max_len: the maxium length to compute DFA::buildTable
  */
 bool DfaRanker::SetLanguage(const std::string & dfa,
-                       uint32_t max_word_length) {
-  
+                            uint32_t max_word_length) {
+
   fixed_slice_ = max_word_length;
   start_state_ = 0;
   num_states_ = 0;
@@ -291,7 +291,7 @@ bool DfaRanker::Unrank(const mpz_class & rank,
 
   // bail if our last state q is not in _final_states
   bool q_in_final_states = std::binary_search(final_states_.begin(),
-                                              final_states_.end(), q);
+                           final_states_.end(), q);
   if (!q_in_final_states) {
     return false;
   }
@@ -346,7 +346,7 @@ bool DfaRanker::Rank(const std::string & word,
 
   // bail if our last state q is not in _final_states
   bool q_in_final_states = std::binary_search(final_states_.begin(),
-                                              final_states_.end(), q);
+                           final_states_.end(), q);
   if (!q_in_final_states) {
     return false;
   }
@@ -388,8 +388,8 @@ bool DfaRanker::WordsInLanguage(uint32_t min_word_length,
 }
 
 bool DfaRanker::CalculateNumWordsInLanguage( uint32_t min_word_length,
-                                                  uint32_t max_word_length,
-                                                  mpz_class * words_in_language ) {
+    uint32_t max_word_length,
+    mpz_class * words_in_language ) {
   // count the number of words in the language of length
   // at least min_word_length and no greater than max_word_length
   for (uint32_t word_length = min_word_length;

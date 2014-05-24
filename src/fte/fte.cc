@@ -18,13 +18,13 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
   plaintext_ranker_.SetLanguage(plaintext_dfa, plaintext_max_len);
   plaintext_ranker_.WordsInLanguage(&words_in_plaintext_language_);
   plaintext_language_capacity_ = mpz_sizeinbase(words_in_plaintext_language_.get_mpz_t(),
-                             kFfxRadix);
+                                 kFfxRadix);
 
   ciphertext_ranker_ = ranking::DfaRanker();
   ciphertext_ranker_.SetLanguage(ciphertext_dfa, ciphertext_max_len);
   ciphertext_ranker_.WordsInLanguage(&words_in_ciphertext_language_);
   ciphertext_language_capacity_ = mpz_sizeinbase(
-                                words_in_ciphertext_language_.get_mpz_t(), kFfxRadix);
+                                    words_in_ciphertext_language_.get_mpz_t(), kFfxRadix);
 
   if(words_in_plaintext_language_ > words_in_ciphertext_language_) {
     return false;
