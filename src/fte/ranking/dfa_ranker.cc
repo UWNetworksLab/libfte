@@ -89,24 +89,23 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
 
   // build up our sigma/sigma_reverse tables which enable mappings between
   // bytes/integers
-  uint32_t j, k;
-  for (j=0; j<num_symbols_; ++j) {
+  for (uint32_t j=0; j<num_symbols_; ++j) {
     sigma_.insert( std::pair<uint32_t,char>( j, (char)(symbols_.at(j))) );
     sigma_reverse_.insert( std::pair<char,uint32_t>((char)(symbols_.at(j)), j) );
   }
 
   // initialize all transitions in our dfa to our dead state
   delta_.resize(num_states_);
-  for (j=0; j<num_states_; ++j) {
+  for (uint32_t j=0; j<num_states_; ++j) {
     delta_.at(j).resize(num_symbols_);
-    for (k=0; k < num_symbols_; ++k) {
+    for (uint32_t k=0; k < num_symbols_; ++k) {
       delta_.at(j).at(k) = num_states_ - 1;
     }
   }
 
   // fill our our transition function delta
   std::istringstream my_str_stream2(dfa);
-  while ( getline (my_str_stream2,line) ) {
+  while (getline (my_str_stream2,line)) {
     StringVectorT split_vec = tokenize( line, '\t' );
     if (4 == split_vec.size()) {
       uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
@@ -120,10 +119,9 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
   }
 
   delta_dense_.resize(num_states_);
-  uint32_t q, a;
-  for (q=0; q < num_states_; ++q ) {
+  for (uint32_t q=0; q < num_states_; ++q ) {
     delta_dense_.at(q) = true;
-    for (a=1; a < num_symbols_; ++a) {
+    for (uint32_t a=1; a < num_symbols_; ++a) {
       if (delta_.at(q).at(a-1) != delta_.at(q).at(a)) {
         delta_dense_.at(q) = false;
         break;
@@ -136,10 +134,9 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
   // perform our precalculation to speed up (un)ranking
   DfaRanker::PopulateCachedTable();
 
-  uint32_t max_word_len;
   words_in_language_inclusive_.resize(fixed_slice_+1);
   words_in_language_exclusive_.resize(fixed_slice_+1);
-  for (max_word_len = 0; max_word_len <= fixed_slice_; ++max_word_len) {
+  for (uint32_t max_word_len = 0; max_word_len <= fixed_slice_; ++max_word_len) {
     mpz_class inclusive_dest, exclusive_dest;
     CalculateNumWordsInLanguage(0, max_word_len, &inclusive_dest);
     CalculateNumWordsInLanguage(max_word_len, max_word_len, &exclusive_dest);
@@ -193,15 +190,12 @@ bool DfaRanker::SanityCheck() {
 }
 
 bool DfaRanker::PopulateCachedTable() {
-  uint32_t i;
-  uint32_t q;
-  uint32_t a;
 
   // ensure our table _T is the correct size
   CachedTable_.resize(num_states_);
-  for (q=0; q<num_states_; ++q) {
+  for (uint32_t q=0; q<num_states_; ++q) {
     CachedTable_.at(q).resize(fixed_slice_+1);
-    for (i=0; i<=fixed_slice_; ++i) {
+    for (uint32_t i=0; i<=fixed_slice_; ++i) {
       CachedTable_.at(q).at(i) = 0;
     }
   }
@@ -215,9 +209,9 @@ bool DfaRanker::PopulateCachedTable() {
   // walk through our table _T
   // we want each entry _T.at(q).at(i) to contain the number of strings that start
   // from state q, terminate in a final state, and are of length i
-  for (i=1; i<=fixed_slice_; ++i) {
-    for (q=0; q<delta_.size(); ++q) {
-      for (a=0; a<delta_.at(0).size(); ++a) {
+  for (uint32_t i=1; i<=fixed_slice_; ++i) {
+    for (uint32_t q=0; q<delta_.size(); ++q) {
+      for (uint32_t a=0; a<delta_.at(0).size(); ++a) {
         uint32_t state = delta_.at(q).at(a);
         CachedTable_.at(q).at(i) += CachedTable_.at(state).at(i-1);
       }
@@ -236,14 +230,15 @@ bool DfaRanker::Unrank(const mpz_class & rank,
   uint32_t n = 0;
   while (true) {
     mpz_class words_in_slice;
-    WordsInLanguage(n, n, &words_in_slice);
-    bool c_lt_words_in_slice = (mpz_cmp(c.get_mpz_t(), words_in_slice.get_mpz_t())<0);
+    WordsInLanguage(0, n, &words_in_slice);
+    bool c_lt_words_in_slice = (mpz_cmp(c.get_mpz_t(), words_in_slice.get_mpz_t()) < 0);
     if (c_lt_words_in_slice) {
+      WordsInLanguage(0, n-1, &words_in_slice);
+      mpz_sub(c.get_mpz_t(),
+              c.get_mpz_t(),
+              words_in_slice.get_mpz_t());
       break;
     }
-    mpz_sub(c.get_mpz_t(),
-            c.get_mpz_t(),
-            words_in_slice.get_mpz_t());
     ++n;
   }
 

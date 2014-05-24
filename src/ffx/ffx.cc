@@ -28,7 +28,7 @@ static bool RoundFunction(const std::string & K,
   uint32_t d = 4 * ceil(b / 4.0);
 
   uint32_t m = 0;
-  if((i % 2) == 0) {
+  if ((i % 2) == 0) {
     m = floor(n / 2.0);
   } else {
     m = ceil(n / 2.0);
@@ -66,7 +66,7 @@ static bool RoundFunction(const std::string & K,
   mpz_class Z = Y;
   uint32_t Z_len = 16;
   mpz_class counter = 1;
-  while(Z_len < (d + 4)) {
+  while (Z_len < (d + 4)) {
     mpz_class ctxt;
     AesEcbEncrypt(K, (Y + counter), 128, &ctxt);
     Z_len += 16;
@@ -107,9 +107,8 @@ bool Ffx::Encrypt(const std::string & key ,
   mpz_class D = 0;
   uint32_t m = 0;
   mpz_class modulus = 0;
-  uint32_t i = 0;
-  for(i = 0; i <= (r - 1); ++i) {
-    if((i % 2) == 0) {
+  for (uint32_t i = 0; i <= (r - 1); ++i) {
+    if ((i % 2) == 0) {
       m = floor(n / 2.0);
     } else {
       m = ceil(n / 2.0);
@@ -153,7 +152,7 @@ bool Ffx::Decrypt(const std::string & key,
   uint32_t m = 0;
   mpz_class modulus = 0;
   int32_t i = 0;
-  for(i = r - 1; i >= 0; --i) {
+  for (i = r - 1; i >= 0; --i) {
     if((i % 2) == 0) {
       m = floor(n / 2.0);
     } else {

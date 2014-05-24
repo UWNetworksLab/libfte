@@ -20,13 +20,12 @@ bool AesEcbEncrypt(const std::string & key,
   unsigned char * pInBuffer = new unsigned char[byte_string_len];
   unsigned char * pOutBuffer = new unsigned char[byte_string_len];
 
-  uint32_t i = 0;
-  for(i = 0; i < byte_string_len; ++i) {
+  for (uint32_t i = 0; i < byte_string_len; ++i) {
     pInBuffer[i] = 0;
     pOutBuffer[i] = 0;
   }
 
-  for(i = 0; i < kFfxKeyLengthInBytes; ++i) {
+  for (uint32_t i = 0; i < kFfxKeyLengthInBytes; ++i) {
     pKey[i] = 0x00;
   }
 
