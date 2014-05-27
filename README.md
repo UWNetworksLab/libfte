@@ -4,7 +4,7 @@ LibFTE
 ### Overview
 
 LibFTE is an encryption library that allows input plaintext and output ciphertext formats to be defined by regular expressions.
-Specifically one can instantiate an FTE scheme FTE[R_in,R_out], where R_in specifies a regular language for the input plaintexts and R_out describes a regular language for the ouput ciphertexts.
+Specifically, one can instantiate an FTE scheme FTE[R_in,R_out], where R_in specifies a regular language for the input plaintexts and R_out describes a regular language for the ouput ciphertexts.
 Then, it's the job of the FTE scheme to encrypt plaintexts in the language L(R_in) into ciphertexts in the language of L(R_out).
 
 Naturally there are limitations on what regular expressions may be used to instantiate an FTE scheme.
@@ -113,17 +113,18 @@ However, in general, it turns out that the validation is not always so simple, h
 * We use FFX [FFX1, FFX2] as our encryption scheme in step 2. This is used a variable-input length blockcipher to encrypt an n-bit string into another n-bit string.
 * We current perform ranking using the DFA representation of a language, as described in [FTE1].
 * We implemnt cycle walking for the step 2/3 loop in our FTE scheme. This is the strategy of iteratively applying encrypt to N (i.e. encrypt(...encrypt(N))) until it is a ciphertext that can be unranked. If one is using a randomized scheme they may use rejction sampling.
+* The Fte SetLanguages method requires four paramters: plaintext_dfa, plaintext_max_len, ciphertext_dfa, and ciphertext_max_len. This is for the sake of efficiency that we don't simply accept two regular expressions.
+    * We use the DFA representaiton because the regular expression to DFA conversion process is something that can be performed offline. For situations where languages are often changing or many languages are required, it may be desirable to have an integrated regex to DFA process.
+    * We require the plaintext_max_len and ciphertext_max_len for the sake of efficiency. We use a dynamic programming algorithm to compute values that speed up ranking for all values less than the max_lens specified. At the cost of severe performance penalties these parameters can be removed
 
-### Challenges
+### Notes
 
 * We require that |L(R_out)| > |L(R_in)|.
 * We must choose an encryption scheme in step 2 that maximizes the probability that we produce a ciphertext that can be unranked into R_out.
 * The encryption scheme used in step 2 should have minimal (or no) ciphertext expansion.
 * The (un)ranking aglorithms presented in [GS] are too slow. When implemented DFA-based ranking, one should use the algorithmic improvements presented in [FTE1, FTE2].
-
-### Other features
-
 * In [FTE2] we also explore NFA-based ranking, deterministic and randomized encryption, and FFX for radicies other than 2. These features, and more, will appear in a future version of LibFTE.
+* We use the [AT&T FST Format](http://www2.research.att.com/~fsmtools/fsm/man4/fsm.5.html) for our DFAs. This is because, at one point, a variant of the LibFTE library used OpenFST for DFA minimization. So, this format is no longer a requirement, however, I like the format and have stuck with it.
 
 References and Acknowledgements
 -------------------------------
@@ -150,3 +151,7 @@ The LibFTE implementation depends upon the following libraries:
 * aes: http://brgladman.org/oldsite/AES/index.php
 * googletest: https://code.google.com/p/googletest
 
+Author
+------
+
+If you have questions about this library, please contact Kevin P. Dyer: kpdyer@gmail.com.
