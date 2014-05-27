@@ -28,8 +28,8 @@ static bool RoundFunction(const std::string & K,
   uint32_t d = 4 * ceil(b / 4.0);
 
   uint32_t m = 0;
-  if ((i % 2) == 0) {
-    m = floor(n / 2.0);
+  if ((i & 1) == 0) {
+    m = n / 2;
   } else {
     m = ceil(n / 2.0);
   }
@@ -41,7 +41,7 @@ static bool RoundFunction(const std::string & K,
   P += mpz_class(1)                << (3 + 1 + 1 + 4 + 4) * 8;
   P += mpz_class(2)                << (1 + 1 + 4 + 4) * 8;
   P += mpz_class(10)               << (1 + 4 + 4) * 8;
-  P += mpz_class(floor(n / 2.0))   << (4 + 4) * 8;
+  P += mpz_class(n / 2)            << (4 + 4) * 8;
   P += mpz_class(n)                << (4) * 8;
   P += t;
 
@@ -63,6 +63,7 @@ static bool RoundFunction(const std::string & K,
   if (!cbc_success) {
     return false;
   }
+
   mpz_class Z = Y;
   uint32_t Z_len = 16;
   mpz_class counter = 1;
@@ -75,7 +76,7 @@ static bool RoundFunction(const std::string & K,
     ++counter;
   }
 
-  Y = BitMask(Z, Z_len * 8, 0, ((d + 4) * 8) - 1);
+  BitMask(Z, Z_len * 8, 0, ((d + 4) * 8) - 1, &Y);
 
   mpz_class modulus = 0;
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
@@ -98,25 +99,30 @@ bool Ffx::Encrypt(const std::string & key ,
   mpz_class & retval = *ciphertext;
 
   uint32_t n = plaintext_len_in_bits;
-  uint32_t l = floor(plaintext_len_in_bits / 2.0);
+  uint32_t l = plaintext_len_in_bits / 2;
   uint32_t r = kDefaultFfxRounds;
-  mpz_class A = BitMask(plaintext, plaintext_len_in_bits, 0, l - 1);
-  mpz_class B = BitMask(plaintext, plaintext_len_in_bits, l, n - 1);
+  mpz_class A, B;
+  BitMask(plaintext, plaintext_len_in_bits, 0, l - 1, &A);
+  BitMask(plaintext, plaintext_len_in_bits, l, n - 1, &B);
   uint32_t B_len = n - l;
   mpz_class C = 0;
   mpz_class D = 0;
   uint32_t m = 0;
   mpz_class modulus = 0;
+
   for (uint32_t i = 0; i <= (r - 1); ++i) {
-    if ((i % 2) == 0) {
-      m = floor(n / 2.0);
+    if ((i & 1) == 0) {
+      m = n / 2;
     } else {
       m = ceil(n / 2.0);
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
     RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m, &D);
-    C = A + D;
+    mpz_add(C.get_mpz_t(),
+            A.get_mpz_t(),
+            D.get_mpz_t());
+
     C = C % modulus;
     A = B;
     B = C;
@@ -142,19 +148,20 @@ bool Ffx::Decrypt(const std::string & key,
   mpz_class & retval = *plaintext;
 
   uint32_t n = cihpertext_len_bits;
-  uint32_t l = floor(cihpertext_len_bits / 2.0);
+  uint32_t l = cihpertext_len_bits / 2;
   uint32_t r = kDefaultFfxRounds;
-  mpz_class A = BitMask(cihpertext, cihpertext_len_bits, 0, l - 1);
-  mpz_class B = BitMask(cihpertext, cihpertext_len_bits, l, n - 1);
+  mpz_class A, B;
+  BitMask(cihpertext, cihpertext_len_bits, 0, l - 1, &A);
+  BitMask(cihpertext, cihpertext_len_bits, l, n - 1, &B);
   uint32_t B_len = n - l;
   mpz_class C = 0;
   mpz_class D = 0;
   uint32_t m = 0;
   mpz_class modulus = 0;
-  int32_t i = 0;
-  for (i = r - 1; i >= 0; --i) {
-    if((i % 2) == 0) {
-      m = floor(n / 2.0);
+
+  for (int32_t i = r - 1; i >= 0; --i) {
+    if ((i & 1) == 0) {
+      m = n / 2;
     } else {
       m = ceil(n / 2.0);
     }
@@ -163,7 +170,10 @@ bool Ffx::Decrypt(const std::string & key,
     C = B;
     B = A;
     RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m, &D);
-    A = C - D;
+    mpz_sub(A.get_mpz_t(),
+            C.get_mpz_t(),
+            D.get_mpz_t());
+
     while(A < 0) A += modulus;
     A = A % modulus;
   }

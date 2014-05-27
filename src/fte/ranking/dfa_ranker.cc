@@ -16,7 +16,8 @@ namespace ranking {
 
 // Helper fuction. Given a string and a token, performs a python .split()
 // Returns a list of string delimnated on the token
-static StringVectorT tokenize( const std::string & line, const char & delim ) {
+static StringVectorT tokenize( const std::string & line,
+                               const char & delim ) {
   StringVectorT retval;
 
   std::istringstream iss(line);

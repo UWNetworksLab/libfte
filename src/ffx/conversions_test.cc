@@ -8,7 +8,8 @@ TEST(FFX2, ExtractBits1) {
   uint8_t X_len = 4;
 
   // should return exactly 1000b (bits in index 0 to 3)
-  mpz_class retval = ffx::BitMask(X, X_len, 0, 3);
+  mpz_class retval;
+  ffx::BitMask(X, X_len, 0, 3, &retval);
 
   EXPECT_EQ(retval.get_ui(), 0x8);
 }
@@ -19,8 +20,9 @@ TEST(FFX2, ExtractBits2) {
   uint8_t X_len = 8;
 
   // should return exactly 1000b for left/right
-  mpz_class retval_left = ffx::BitMask(X, X_len, 0, 3);
-  mpz_class retval_right = ffx::BitMask(X, X_len, 4, 7);
+  mpz_class retval_left, retval_right;
+  ffx::BitMask(X, X_len, 0, 3, &retval_left);
+  ffx::BitMask(X, X_len, 4, 7, &retval_right);
 
   EXPECT_EQ(retval_left.get_ui(), 0x8);
   EXPECT_EQ(retval_right.get_ui(), 0x8);
@@ -32,7 +34,8 @@ TEST(FFX2, ExtractBits3) {
   uint8_t X_len = 8;
 
   // should return exactly 1111b for left/right
-  mpz_class retval = ffx::BitMask(X, X_len, 0, 7);
+  mpz_class retval;
+  ffx::BitMask(X, X_len, 0, 7, &retval);
 
   EXPECT_EQ(retval.get_ui(), 0xFF);
 }
@@ -43,8 +46,9 @@ TEST(FFX2, ExtractBits4) {
   uint8_t X_len = 8;
 
   // should return exactly 1111b for left/right
-  mpz_class retval_left = ffx::BitMask(X, X_len, 0, 3);
-  mpz_class retval_right = ffx::BitMask(X, X_len, 4, 7);
+  mpz_class retval_left, retval_right;
+  ffx::BitMask(X, X_len, 0, 3, &retval_left);
+  ffx::BitMask(X, X_len, 4, 7, &retval_right);
 
   EXPECT_EQ(retval_left.get_ui(), 0xF);
   EXPECT_EQ(retval_right.get_ui(), 0xF);
@@ -55,8 +59,9 @@ TEST(FFX2, ExtractBits5) {
   mpz_class X = 0xF0;
   uint8_t X_len = 8;
 
-  mpz_class retval_left = ffx::BitMask(X, X_len, 0, 3);
-  mpz_class retval_right = ffx::BitMask(X, X_len, 4, 7);
+  mpz_class retval_left, retval_right;
+  ffx::BitMask(X, X_len, 0, 3, &retval_left);
+  ffx::BitMask(X, X_len, 4, 7, &retval_right);
 
   EXPECT_EQ(retval_left.get_ui(), 0xF);
   EXPECT_EQ(retval_right.get_ui(), 0x0);
@@ -67,8 +72,9 @@ TEST(FFX2, ExtractBits6) {
   mpz_class X = 0xFFFF0000;
   uint8_t X_len = 32;
 
-  mpz_class retval_left = ffx::BitMask(X, X_len, 0, 15);
-  mpz_class retval_right = ffx::BitMask(X, X_len, 16, 31);
+  mpz_class retval_left, retval_right;
+  ffx::BitMask(X, X_len, 0, 15, &retval_left);
+  ffx::BitMask(X, X_len, 16, 31, &retval_right);
 
   EXPECT_EQ(retval_left.get_ui(), 0xFFFF);
   EXPECT_EQ(retval_right.get_ui(), 0x0000);

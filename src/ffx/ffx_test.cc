@@ -140,6 +140,17 @@ TEST(FFX2, TestVector9) {
   EXPECT_EQ(X.get_str(), Z.get_str());
 }
 
+TEST(FFX2, TestBig1) {
+  ffx::Ffx ffxObj = ffx::Ffx(FFX_RADIX);
+  std::string K = "00000000000000000000000000000000";
+  mpz_class X = 0;
+  uint32_t X_len = 1024 * 8;
+  mpz_class Y, Z;
+  ffxObj.Encrypt(K, X, X_len, &Y);
+  ffxObj.Decrypt(K, Y, X_len, &Z);
+  EXPECT_EQ(X.get_str(), Z.get_str());
+}
+
 TEST(FFX2Malicous, ShortKey1) {
 
   ffx::Ffx ffxObj = ffx::Ffx(FFX_RADIX);
