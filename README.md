@@ -3,18 +3,20 @@ LibFTE
 
 LibFTE is an encryption library that allows input plaintext and output ciphertext formats to be controlled by DFAs.
 
+Under the hood, LibFTE implements the rank-encipher-unrank approach to Format-Transforming Encryption.
+
+![LibFTE rank-encipher-urank construction](images/fte-workflow.pdf "The rank-encipher-unrank approach to Format-Transforming Encryption.")
+
+[explain rTe]
+
+
 Dependencies
 ------------
 
 ### For building/testing
 
 * make, m4, gcc, g++, etc.
-
-### Third Party Libraries (Included)
-
-* GMP: https://gmplib.org/ (included: third\_party/gmp-6.0.0)
-* aes: http://brgladman.org/oldsite/AES/index.php (included: third\_party/aes)
-* googletest: https://code.google.com/p/googletest/ (included: third\_party/gtest-1.7.0)
+* GMP: https://gmplib.org/
 
 Tested on
 ---------
@@ -27,18 +29,16 @@ Build
 
 ```
 $ ./configure
-$ make [bin/test|bin/test.js]
+$ make
 ```
 
-Running ```make``` will produce ```.libs/libfte.a``` and ```bin/test``` or ```bin/test.js```.
-
-There is currently no ```make install``` target.
+Running ```make``` will produce ```.libs/libfte.a``` and ```bin/test```.
 
 Test
 ----
 
 ```
-$ ./bin/test (or nodejs ./bin/test.js)
+$ ./bin/test
 [==========] Running 43 tests from 6 test cases.
 [----------] Global test environment set-up.
 [----------] 7 tests from CauseException
@@ -84,3 +84,27 @@ input_plaintext: Hello, Word!
 ciphertext: babbbaababababbbbabbbbaabbaabaaaaabbabaabaaabbaaaabbabaabaababaaabbbabbbaabababaaabbaabababbbbbbaabbbaaaaaaabbbbbabaabbbaaaabab
 output_plaintext: Hello, Word!
 ```
+
+
+References and Acknowledgements
+-------------------------------
+
+LibFTE is based on concepts and algorithms from the following papers.
+
+* [Protocol Misidentification Made Easy with Format-Transforming Encryption](http://eprint.iacr.org/2012/494.pdf)
+Kevin P. Dyer, Scott E. Coull, Thomas Ristenpart and Thomas Shrimpton.
+In proceedings of the ACM Conference on Computer and Communications Security (CCS), 2013. 
+* [LibFTE: A User-Friendly Toolkit for Constructing Practical Format-Abiding Encryption Schemes](https://kpdyer.com/publications/usenix2014-libfte-preprint.pdf)
+Daniel Luchaup, Kevin P. Dyer, Somesh Jha, Thomas Ristenpart and Thomas Shrimpton.
+To appear in the proceedings of USENIX Security 2014
+* [The FFX Mode of Operation for Format Preserving Encryption](http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf)
+Mihir Bellare, Phillip Rogaway, and Terence Spies. Unpublished manuscript, submitted to NIST for possible standardization. February 20, 2010.
+* [Addendum to “The FFX Mode of Operation for Format Preserving Encryption”](http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf)
+Mihir Bellare, Phillip Rogaway, and Terence Spies. Unpublished manuscripts, submitted to NIST for possible standardization. September 3, 2010.
+
+LibFTE depends upon the following libraries:
+
+* GMP: http://gmplib.org/
+* aes: http://brgladman.org/oldsite/AES/index.php
+* googletest: https://code.google.com/p/googletest
+
