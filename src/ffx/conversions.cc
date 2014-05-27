@@ -3,10 +3,10 @@
 namespace ffx {
 
 bool BitMask(const mpz_class & in,
-                  uint32_t in_len_in_bits,
-                  uint32_t start_bit,
-                  uint32_t end_bit,
-                  mpz_class * out) {
+             uint32_t in_len_in_bits,
+             uint32_t start_bit,
+             uint32_t end_bit,
+             mpz_class * out) {
   (*out) = in;
   (*out) = (*out) >> (in_len_in_bits - end_bit - 1);
   mpz_class modulus;

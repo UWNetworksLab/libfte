@@ -76,7 +76,7 @@ class DfaRanker {
   // accepting paths of length exactly i from state q.
   MpzClassMatrixT CachedTable_;
 
-  // The following are used for caching results for calls to WordsInLanguage. 
+  // The following are used for caching results for calls to WordsInLanguage.
   MpzClassVectorT words_in_language_inclusive_;
   MpzClassVectorT words_in_language_exclusive_;
 

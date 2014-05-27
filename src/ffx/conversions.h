@@ -31,10 +31,10 @@ namespace ffx {
  *
  */
 bool BitMask(const mpz_class & in,
-                  uint32_t in_len_in_bits,
-                  uint32_t start_bit,
-                  uint32_t end_bit,
-                  mpz_class * out);
+             uint32_t in_len_in_bits,
+             uint32_t start_bit,
+             uint32_t end_bit,
+             mpz_class * out);
 
 /*
  * MpzClassToBase256: Given an mpz_class returns a pointer to a string out

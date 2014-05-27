@@ -1,8 +1,8 @@
 /*
- * See ffx.h for details. 
- *  
- * References: 
- *   [FFX2] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf  
+ * See ffx.h for details.
+ *
+ * References:
+ *   [FFX2] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf
  */
 
 #include "ffx/ffx.h"
@@ -26,12 +26,12 @@ static bool ValidateKey(const std::string & key) {
       return false;
     }
   }
-  return true; 
+  return true;
 }
 
 /*
- * This function has an unfortunate number of input parameters. 
- * However, this is a direct implementation of the round-function algorithm 
+ * This function has an unfortunate number of input parameters.
+ * However, this is a direct implementation of the round-function algorithm
  * F_K(n,T,i,B) defined in [FFX2].
  */
 static bool RoundFunction(const std::string & K,

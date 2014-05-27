@@ -1,7 +1,7 @@
 /*
- * References: 
- *   [FTE1] http://eprint.iacr.org/2012/494.pdf 
- *   [FTE2] https://kpdyer.com/publications/usenix2014-libfte-preprint.pdf 
+ * References:
+ *   [FTE1] http://eprint.iacr.org/2012/494.pdf
+ *   [FTE2] https://kpdyer.com/publications/usenix2014-libfte-preprint.pdf
  */
 
 #include <math.h>
@@ -22,7 +22,7 @@ static bool ValidateKey(const std::string & key) {
       return false;
     }
   }
-  return true; 
+  return true;
 }
 
 Fte::Fte() {
@@ -32,8 +32,8 @@ Fte::Fte() {
 }
 
 /*
- * Here we set our input/output langauges and verify that the output langauge has 
- * capacity at least as large as the input language. 
+ * Here we set our input/output langauges and verify that the output langauge has
+ * capacity at least as large as the input language.
  */
 bool Fte::SetLanguages(const std::string & plaintext_dfa,
                        uint32_t plaintext_max_len,
@@ -44,19 +44,19 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
   plaintext_ranker_.SetLanguage(plaintext_dfa, plaintext_max_len);
   plaintext_ranker_.WordsInLanguage(&words_in_plaintext_language_);
   plaintext_language_capacity_in_bits_ = mpz_sizeinbase(words_in_plaintext_language_.get_mpz_t(),
-                                 kFfxRadix);
+                                         kFfxRadix);
 
   bool languages_are_the_same = (plaintext_dfa == ciphertext_dfa) && (plaintext_max_len == ciphertext_max_len);
   if (languages_are_the_same) {
     ciphertext_ranker_ = plaintext_ranker_;
   } else {
-    ciphertext_ranker_ = ranking::DfaRanker(); 
+    ciphertext_ranker_ = ranking::DfaRanker();
     ciphertext_ranker_.SetLanguage(ciphertext_dfa, ciphertext_max_len);
   }
 
   ciphertext_ranker_.WordsInLanguage(&words_in_ciphertext_language_);
   ciphertext_language_capacity_in_bits_ = mpz_sizeinbase(
-                                    words_in_ciphertext_language_.get_mpz_t(), kFfxRadix);
+      words_in_ciphertext_language_.get_mpz_t(), kFfxRadix);
 
   if(words_in_plaintext_language_ > words_in_ciphertext_language_) {
     return false;
@@ -74,13 +74,13 @@ bool Fte::set_key(const std::string & key) {
   } else {
     return false;
   }
-  return true; 
+  return true;
 }
 
 /*
- * This is an implementation of rank-encipher-unrank, as described in [FTE2]. 
- * We perform cycle walking to ensure that we have a ciphertext in the input 
- * domain of the ciphertext ranker. 
+ * This is an implementation of rank-encipher-unrank, as described in [FTE2].
+ * We perform cycle walking to ensure that we have a ciphertext in the input
+ * domain of the ciphertext ranker.
  */
 bool Fte::Encrypt(const std::string & plaintext,
                   std::string * ciphertext) {
@@ -93,7 +93,7 @@ bool Fte::Encrypt(const std::string & plaintext,
     return false;
   }
 
-  mpz_class plaintext_rank; 
+  mpz_class plaintext_rank;
   plaintext_ranker_.Rank(plaintext, &plaintext_rank);
   mpz_class C = 0;
   ffx_.Encrypt(key_, plaintext_rank, ciphertext_language_capacity_in_bits_, &C);
@@ -104,8 +104,8 @@ bool Fte::Encrypt(const std::string & plaintext,
 }
 
 /*
- * Here we recover a plaintext using rank-decipher-unrank. 
- * See [FTE2] for more details. 
+ * Here we recover a plaintext using rank-decipher-unrank.
+ * See [FTE2] for more details.
  */
 bool Fte::Decrypt(const std::string & ciphertext,
                   std::string * plaintext) {
