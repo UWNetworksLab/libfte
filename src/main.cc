@@ -4,17 +4,20 @@
 
 #include "fte/fte.h"
 #include "ffx/ffx.h"
-#include "fte/ranking/dfa.h"
+#include "fte/ranking/dfa_ranker.h"
+#include "fte/ranking/sample_dfas.h"
 
 void FteExample() {
   // fte example
-  fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
-  fte::FTE fteObj = fte::FTE(VALID_DFA_5, 16,
-                             VALID_DFA_1, 128,
-                             K);
+  std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
+  fte::Fte fteObj = fte::Fte();
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_5, 16,
+                      VALID_DFA_1, 128);
   std::string input_plaintext = "Hello, Word!";
-  std::string ciphertext = fteObj.Encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.Decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   std::cout << "fte:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext << std::endl;
@@ -28,11 +31,12 @@ void FfxExample() {
   // ffx example
   uint32_t radix = 2;
   ffx::Ffx ffxObj = ffx::Ffx(radix);
-  ffx::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
+  std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
   mpz_class input_plaintext = 65535;
   uint32_t input_plaintext_len = 16; // in bits
-  mpz_class ciphertext = ffxObj.Encrypt(K, input_plaintext, input_plaintext_len);
-  mpz_class output_plaintext = ffxObj.Decrypt(K, ciphertext, input_plaintext_len);
+  mpz_class ciphertext, output_plaintext;
+  ffxObj.Encrypt(K, input_plaintext, input_plaintext_len, &ciphertext);
+  ffxObj.Decrypt(K, ciphertext, input_plaintext_len, &output_plaintext);
 
   std::cout << "ffx:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext.get_str() << std::endl;
@@ -46,10 +50,13 @@ void RankingExample() {
 
   // ranking example
   uint32_t N  = 8;
-  fte::ranking::DfaRanker rankerObj(VALID_DFA_1, N);
+  fte::ranking::DfaRanker rankerObj = fte::ranking::DfaRanker();
+  rankerObj.SetLanguage(VALID_DFA_1, N);
   std::string input_plaintext = "bbbbbbbb";
-  mpz_class ciphertext   = rankerObj.Rank(input_plaintext);
-  std::string output_plaintext = rankerObj.Unrank(ciphertext);
+  mpz_class ciphertext;
+  std::string output_plaintext;
+  rankerObj.Rank(input_plaintext, &ciphertext);
+  rankerObj.Unrank(ciphertext, &output_plaintext);
 
   std::cout << "ranking:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext << std::endl;

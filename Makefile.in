@@ -22,6 +22,10 @@ CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
 CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -I. -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
 LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte
 
+TARGET_MAIN = bin/main
+TARGET_MAINJS = bin/main.js
+OBJ_MAIN = src/main.o
+
 # the build target executable:
 TARGET_TEST = bin/test
 TARGET_TESTJS = bin/test.js
@@ -48,13 +52,19 @@ OBJ_LIBFTE = src/ffx/conversions.o \
 
 TARGET_LIBGTEST = $(GTEST_LIB_DIR)/libgtest.a
 
-default: $(TARGET_TEST)
+default: $(TARGET_TEST) $(TARGET_MAIN)
 
 %.o: %.c
 	$(CC) $(CFLAGS_) -c -o $@ $<
 
 %.o: %.cc
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
+
+$(TARGET_MAIN): $(TARGET_LIBFTE) $(OBJ_MAIN)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_MAIN) -o $@
+
+$(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_MAIN) -o $@
 
 $(TARGET_LIBGTEST):
 	cd $(GTEST_DIR) && $(MAKE)
