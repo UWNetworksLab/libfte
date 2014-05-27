@@ -19,29 +19,32 @@ INSTALL_LIB_DIR = @prefix@/lib
 
 OPTIMIZATION_FLAGS = -O3
 CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
-CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
+CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -I. -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
 LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte
+
+TARGET_MAIN = bin/main
+TARGET_MAINJS = bin/main.js
+OBJ_MAIN = src/main.o
 
 # the build target executable:
 TARGET_TEST = bin/test
 TARGET_TESTJS = bin/test.js
 OBJ_TEST = src/tests.o \
-           src/fte/test_fte.o \
-           src/ffx/test_ffx.o \
-           src/ffx/test_aes_ecb.o \
-           src/ffx/test_aes_cbc_mac.o \
-           src/ffx/test_conversions.o \
-           src/fte/ranking/test_dfa.o
+           src/fte/fte_test.o \
+           src/ffx/ffx_test.o \
+           src/ffx/aes_ecb_test.o \
+           src/ffx/aes_cbc_mac_test.o \
+           src/ffx/conversions_test.o \
+           src/fte/ranking/dfa_ranker_test.o
 
 TARGET_LIBFTE = .libs/libfte.a
 OBJ_LIBFTE = src/ffx/conversions.o \
-             src/ffx/key.o \
              src/ffx/aes_cbc_mac.o \
              src/ffx/aes_ecb.o \
              src/ffx/ffx.o \
              src/fte/fte.o \
              src/fte/ranking/sample_dfas.o \
-             src/fte/ranking/dfa.o \
+             src/fte/ranking/dfa_ranker.o \
              $(THIRDPARTY_DIR)/aes/aes_modes.o \
              $(THIRDPARTY_DIR)/aes/aescrypt.o \
              $(THIRDPARTY_DIR)/aes/aeskey.o \
@@ -49,13 +52,19 @@ OBJ_LIBFTE = src/ffx/conversions.o \
 
 TARGET_LIBGTEST = $(GTEST_LIB_DIR)/libgtest.a
 
-default: $(TARGET_TEST)
+default: $(TARGET_TEST) $(TARGET_MAIN)
 
 %.o: %.c
 	$(CC) $(CFLAGS_) -c -o $@ $<
 
 %.o: %.cc
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
+
+$(TARGET_MAIN): $(TARGET_LIBFTE) $(OBJ_MAIN)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_MAIN) -o $@
+
+$(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
+	$(CXX) $(CXXFLAGS_) $(LDFLAGS_) $(OBJ_MAIN) -o $@
 
 $(TARGET_LIBGTEST):
 	cd $(GTEST_DIR) && $(MAKE)
@@ -84,15 +93,16 @@ install: $(INSTALL_LIB_DIR) $(INSTALL_INC_DIR)
 	cp -f src/fte/*.h $(INSTALL_INC_DIR)/fte
 	cp -f src/fte/ranking/*.h $(INSTALL_INC_DIR)/fte/ranking
 
-clean:
-	$(RM) $(TARGET_MAINJS)
-	$(RM) $(TARGET_MAIN)
+clean: cleanlibfte cleanlibgtest
+
+cleanlibfte:
 	$(RM) $(TARGET_TESTJS)
 	$(RM) $(TARGET_TEST)
 	$(RM) $(TARGET_LIBFTE)
 	$(RM) $(OBJ_LIBFTE)
-	$(RM) $(OBJ_MAIN)
 	$(RM) $(OBJ_TEST)
+
+cleanlibgtest:
 	cd $(GTEST_DIR) && $(MAKE) clean
 
 distclean:

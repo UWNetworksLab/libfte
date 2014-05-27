@@ -49,15 +49,17 @@ TEST(SanityCheckNoMatch, Test4) {
 }
 
 TEST(FteNormalUsage, FpeTest1) {
-  fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_1, 64,
-                  VALID_DFA_1, 64,
-                  K);
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_1, 64,
+                      VALID_DFA_1, 64);
 
   std::string input_plaintext =
     "aaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbbaaaabbbb";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -67,14 +69,16 @@ TEST(FteNormalUsage, FpeTest1) {
 }
 
 TEST(FteNormalUsage, FpeTest2) {
-  fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 128,
-                  VALID_DFA_5, 128,
-                  K);
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_5, 128,
+                      VALID_DFA_5, 128);
 
   std::string input_plaintext = "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -84,32 +88,35 @@ TEST(FteNormalUsage, FpeTest2) {
 }
 
 TEST(FteNormalUsage, FpeTest3) {
-  fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 256,
-                  VALID_DFA_5, 256,
-                  K);
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_5, 256,
+                      VALID_DFA_5, 256);
 
   std::string input_plaintext = "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
-  
+
   std::regex rx("^[\\x00-\\xFF]{1,256}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
 }
 
 TEST(FteNormalUsage, FpeTest4) {
-  fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 512,
-                  VALID_DFA_5, 512,
-                  K);
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_5, 512,
+                      VALID_DFA_5, 512);
 
-  std::string input_plaintext =
-    "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string input_plaintext = "a";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -119,15 +126,16 @@ TEST(FteNormalUsage, FpeTest4) {
 }
 
 TEST(FteNormalUsage, FpeTest5) {
-  fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 1024,
-                  VALID_DFA_5, 1024,
-                  K);
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_5, 1024,
+                      VALID_DFA_5, 1024);
 
-  std::string input_plaintext =
-    "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string input_plaintext = "a";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -137,15 +145,16 @@ TEST(FteNormalUsage, FpeTest5) {
 }
 
 TEST(FteNormalUsage, FpeTest6) {
-  fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_5, 2048,
-                  VALID_DFA_5, 2048,
-                  K);
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_5, 2048,
+                      VALID_DFA_5, 2048);
 
-  std::string input_plaintext =
-    "a";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string input_plaintext = "a";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -155,14 +164,16 @@ TEST(FteNormalUsage, FpeTest6) {
 }
 
 TEST(FteNormalUsage, FteTest1) {
-  fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_1, 32,
-                  VALID_DFA_1, 64,
-                  K);
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_1, 32,
+                      VALID_DFA_1, 64);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
@@ -172,14 +183,16 @@ TEST(FteNormalUsage, FteTest1) {
 }
 
 TEST(FteNormalUsage, FteTest2) {
-  fte::Key K = "00000000000000000000000000000000";
-  fte::FTE fteObj(VALID_DFA_1, 32,
-                  VALID_DFA_5, 32,
-                  K);
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_1, 32,
+                      VALID_DFA_5, 32);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 

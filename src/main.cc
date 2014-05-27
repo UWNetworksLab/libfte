@@ -1,25 +1,23 @@
 #include <assert.h>
+
 #include <iostream>
 
-// fte includes
 #include "fte/fte.h"
+#include "ffx/ffx.h"
+#include "fte/ranking/dfa_ranker.h"
 #include "fte/ranking/sample_dfas.h"
 
-// ffx includes
-#include "ffx/ffx.h"
-
-// ranking includes
-#include "fte/ranking/dfa.h"
-
-void fte_example() {
+void FteExample() {
   // fte example
-  fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
-  fte::FTE fteObj = fte::FTE(VALID_DFA_5, 16,
-                             VALID_DFA_1, 128,
-                             K);
+  std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
+  fte::Fte fteObj = fte::Fte();
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_5, 16,
+                      VALID_DFA_1, 128);
   std::string input_plaintext = "Hello, Word!";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   std::cout << "fte:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext << std::endl;
@@ -29,15 +27,16 @@ void fte_example() {
   assert(input_plaintext == output_plaintext);
 }
 
-void ffx_example() {
+void FfxExample() {
   // ffx example
   uint32_t radix = 2;
-  ffx::FFX ffxObj = ffx::FFX(radix);
-  ffx::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
+  ffx::Ffx ffxObj = ffx::Ffx(radix);
+  std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
   mpz_class input_plaintext = 65535;
   uint32_t input_plaintext_len = 16; // in bits
-  mpz_class ciphertext = ffxObj.encrypt(K, input_plaintext, input_plaintext_len);
-  mpz_class output_plaintext = ffxObj.decrypt(K, ciphertext, input_plaintext_len);
+  mpz_class ciphertext, output_plaintext;
+  ffxObj.Encrypt(K, input_plaintext, input_plaintext_len, &ciphertext);
+  ffxObj.Decrypt(K, ciphertext, input_plaintext_len, &output_plaintext);
 
   std::cout << "ffx:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext.get_str() << std::endl;
@@ -47,14 +46,17 @@ void ffx_example() {
   assert(input_plaintext == output_plaintext);
 }
 
-void ranking_example() {
+void RankingExample() {
 
   // ranking example
   uint32_t N  = 8;
-  fte::ranking::DFA rankerObj(VALID_DFA_1, N);
+  fte::ranking::DfaRanker rankerObj = fte::ranking::DfaRanker();
+  rankerObj.SetLanguage(VALID_DFA_1, N);
   std::string input_plaintext = "bbbbbbbb";
-  mpz_class ciphertext   = rankerObj.rank(input_plaintext);
-  std::string output_plaintext = rankerObj.unrank(ciphertext);
+  mpz_class ciphertext;
+  std::string output_plaintext;
+  rankerObj.Rank(input_plaintext, &ciphertext);
+  rankerObj.Unrank(ciphertext, &output_plaintext);
 
   std::cout << "ranking:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext << std::endl;
@@ -66,8 +68,8 @@ void ranking_example() {
 }
 
 int main(int argc, char **argv) {
-  fte_example();
-  ffx_example();
-  ranking_example();
+  FteExample();
+  FfxExample();
+  RankingExample();
   return 0;
 }

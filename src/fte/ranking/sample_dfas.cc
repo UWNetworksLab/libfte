@@ -1,5 +1,6 @@
 #include <string.h>
-#include "sample_dfas.h"
+
+#include "fte/ranking/sample_dfas.h"
 
 // completely invalid format
 std::string INVALID_DFA_1 = "";
