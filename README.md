@@ -5,7 +5,7 @@ LibFTE is an encryption library that allows input plaintext and output ciphertex
 
 Under the hood, LibFTE implements the rank-encipher-unrank approach to Format-Transforming Encryption.
 
-![LibFTE rank-encipher-urank construction](images/fte-workflow.pdf "The rank-encipher-unrank approach to Format-Transforming Encryption.")
+![LibFTE rank-encipher-urank construction](images/fte-workflow.png "The rank-encipher-unrank approach to Format-Transforming Encryption.")
 
 [explain rTe]
 
