@@ -26,33 +26,42 @@
 namespace fte {
 
 const uint32_t kFfxRadix = 2;
-const uint32_t kFteKeyLengthInNibbles = 32;
 
 class Fte {
  private:
+  // our rankers
   ranking::DfaRanker plaintext_ranker_;
   ranking::DfaRanker ciphertext_ranker_;
 
+  // the key and ffx encrypter
   std::string key_;
   ffx::Ffx ffx_;
 
-  uint32_t plaintext_language_capacity_;
-  uint32_t ciphertext_language_capacity_;
+  // the capacity of our plaintext|ciphertext language
+  uint32_t plaintext_language_capacity_in_bits_;
+  uint32_t ciphertext_language_capacity_in_bits_;
 
+  // the number of actual words in our plaintext|ciphertext langauge
   mpz_class words_in_plaintext_language_;
   mpz_class words_in_ciphertext_language_;
 
- public:
+  bool key_is_set_;
+  bool languages_are_set_;
 
-  /*
-   * input_dfa and input_max_len specify the input plaintext language
-   * ouput_dfa and out_max_len specificy the output ciphertext language
-   * the key is a 32-character hex string string
-   */
+ public:
+  // default constructor
   Fte();
 
+  /*
+   * Specify the input key.
+   */
   bool set_key(const std::string & key);
 
+  /*
+   * plaintext_dfa and plaintext_max_len specify the input plaintext language
+   * ciphertext_dfa and ciphertext_max_len specificy the output ciphertext language
+   * the key is a 32-character hex string string
+   */
   bool SetLanguages(const std::string & plaintext_dfa,
                     uint32_t plaintext_max_len,
                     const std::string & ciphertext_dfa,

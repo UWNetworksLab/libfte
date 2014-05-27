@@ -8,7 +8,7 @@
  * Unfortunately, test vectors for FFX[2] do not exist. In this directory I've
  * included aes-ffx-vectors.txt, which has test vectors for radix=10,36. I've
  * used these test vectors to implement an FFX implementation in Python [1].
- * In turn I used the Python implementation to generate FFX[2] vectors.
+ * In turn, I used the Python implementation to generate FFX[2] vectors.
  *
  * TODO: This implementation only supports radix=2.
  * TODO: This implementation does not support tweaks.
@@ -58,7 +58,7 @@ class Ffx {
   }
 
   /*
-   * On input of plaintext, plaintext_len, performs FFX.Encrypt[radix]
+   * On input of plaintext, plaintext_len_in_bits, performs FFX.Encrypt[radix]
    * w.r.t. to the key.
    *
    * This encrypt function preserves the length of the input plaintext. That is,
@@ -69,14 +69,12 @@ class Ffx {
                uint32_t plaintext_len_in_bits,
                mpz_class * ciphertext);
 
-  // tweak can be specified, but will be ignored
   bool Encrypt(const std::string & key,
                const mpz_class & tweak,
                uint32_t tweak_len_in_bits,
                const mpz_class & plaintext,
                uint32_t plaintext_len_in_bits,
                mpz_class * ciphertext);
-
 
   /*
    * Given a ciphertext output from FFX.Encrypt[radix], a ciphertext_len and
@@ -87,7 +85,6 @@ class Ffx {
                uint32_t ciphertext_len_in_bits,
                mpz_class * plaintext);
 
-  // tweak can be specified, but will be ignored
   bool Decrypt(const std::string & key,
                const mpz_class & tweak,
                uint32_t tweak_len_in_bits,

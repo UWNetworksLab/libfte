@@ -6,7 +6,7 @@
 namespace ffx {
 
 /*
- * On input of plaintext bitstring of length plaintext_len_in_bits, returns the
+ * On input of plaintext bitstring of length plaintext_len_in_bits, populates ciphertext with the
  * 128-bit aes_ecb ciphertext under the provided key.
  */
 bool AesEcbEncrypt(const std::string & key,

@@ -6,7 +6,7 @@
 namespace ffx {
 
 /*
- * On input of plaintext bitstring of length plaintext_len_in_bits, returns the
+ * On input of plaintext bitstring of length plaintext_len_in_bits, populates ciphertext with the
  * 128-bit aes_cbc_mac ciphertext under the provided key.
  */
 bool AesCbcMac(const std::string & key,

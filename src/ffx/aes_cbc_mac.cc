@@ -12,17 +12,18 @@ bool AesCbcMac(const std::string & key,
                uint32_t plaintext_len_in_bits,
                mpz_class * ciphertext) {
 
-  uint32_t byte_string_len = plaintext_len_in_bits / 8;
+  uint32_t plaintext_len_in_bytes = (plaintext_len_in_bits + 7) / 8;
+  uint32_t key_length_in_bytes = (key.length() + 1) / 2;
 
   aes_encrypt_ctx * pCtx = new aes_encrypt_ctx[1];
-  unsigned char * pIv = new unsigned char[kFfxKeyLengthInBytes];
-  unsigned char * pKey = new unsigned char[kFfxKeyLengthInBytes];
-  unsigned char * pInBuffer = new unsigned char[byte_string_len];
-  unsigned char * pOutBuffer = new unsigned char[byte_string_len];
+  unsigned char * pIv = new unsigned char[key_length_in_bytes];
+  unsigned char * pKey = new unsigned char[key_length_in_bytes];
+  unsigned char * pInBuffer = new unsigned char[plaintext_len_in_bytes];
+  unsigned char * pOutBuffer = new unsigned char[plaintext_len_in_bytes];
 
-  for (uint32_t i = 0; i < byte_string_len; ++i) {
-    pInBuffer[i] = 0;
-    pOutBuffer[i] = 0;
+  for (uint32_t i = 0; i < plaintext_len_in_bytes; ++i) {
+    pInBuffer[i] = 0x00;
+    pOutBuffer[i] = 0x00;
   }
 
   for (uint32_t i = 0; i < kFfxKeyLengthInBytes; ++i) {
@@ -30,20 +31,19 @@ bool AesCbcMac(const std::string & key,
     pKey[i] = 0x00;
   }
 
-  MpzClassToBase256(plaintext, byte_string_len, pInBuffer);
-  Base16ToBase256(key, kFfxKeyLengthInBytes, pKey);
+  MpzClassToBase256(plaintext, plaintext_len_in_bytes, pInBuffer);
+  Base16ToBase256(key, key_length_in_bytes, pKey);
 
-  aes_init();
   aes_encrypt_key128(pKey, pCtx);
-  aes_cbc_encrypt(pInBuffer, pOutBuffer, byte_string_len, pIv, pCtx);
+  aes_cbc_encrypt(pInBuffer, pOutBuffer, plaintext_len_in_bytes, pIv, pCtx);
 
-  Base256ToMpzClass(pOutBuffer, byte_string_len, ciphertext);
+  Base256ToMpzClass(pOutBuffer, plaintext_len_in_bytes, ciphertext);
 
   BitMask((*ciphertext),
-                          byte_string_len * 8,
-                          byte_string_len * 8 - 128,
-                          byte_string_len * 8 - 1,
-                          ciphertext);
+          plaintext_len_in_bytes * 8,
+          plaintext_len_in_bytes * 8 - 128,
+          plaintext_len_in_bytes * 8 - 1,
+          ciphertext);
 
   // cleanup
   delete[] pCtx;

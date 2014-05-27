@@ -1,6 +1,6 @@
 /*
  * Please see Appendix A of "Protocol Misidentification Made Easy with Format-Transforming Encryption"
- * url: http://dl.acm.org/citation.cfm?id=2516657
+ * url: http://eprint.iacr.org/2012/494.pdf
  *
  * and
  *
@@ -71,6 +71,15 @@ class DfaRanker {
   // the set of final states in our ranker
   Uint32VectorT final_states_;
 
+  // CachedTable_ is our cached table, the output of buildTable
+  // For a state q and integer i, the value CachedTable_[q][i] is the number of unique
+  // accepting paths of length exactly i from state q.
+  MpzClassMatrixT CachedTable_;
+
+  // The following are used for caching results for calls to WordsInLanguage. 
+  MpzClassVectorT words_in_language_inclusive_;
+  MpzClassVectorT words_in_language_exclusive_;
+
   // buildTable builds a mapping from [q, i] -> n
   //   q: a state in our ranker
   //   i: an integer
@@ -82,19 +91,15 @@ class DfaRanker {
   // Throws an exception upon failure.
   bool SanityCheck();
 
-  // _T is our cached table, the output of buildTable
-  // For a state q and integer i, the value _T[q][i] is the number of unique
-  // accepting paths of length exactly i from state q.
-  MpzClassMatrixT CachedTable_;
-
+  // Given min_word_len and max_word_len returns the number of strings S in the language
+  // s.t. min_word_len <= |S| <= max_word_len.
   bool CalculateNumWordsInLanguage(uint32_t min_word_len,
                                    uint32_t max_word_len,
                                    mpz_class * words_in_language);
-  MpzClassVectorT words_in_language_inclusive_;
-  MpzClassVectorT words_in_language_exclusive_;
+
 
  public:
-  // ...
+  // Speicify the DFA of the language and the maximum word length that we'll be (un)ranking.
   bool SetLanguage(const std::string & dfa,
                    uint32_t max_word_length);
 
@@ -111,10 +116,8 @@ class DfaRanker {
   // given integers [n,m] returns the number of words accepted by the
   // ranker that are at least length n and no greater than length m
   bool WordsInLanguage(mpz_class * words_in_language );
-
   bool WordsInLanguage(uint32_t max_word_length,
                        mpz_class * words_in_language );
-
   bool WordsInLanguage(uint32_t min_word_length,
                        uint32_t max_word_length,
                        mpz_class * words_in_language );
