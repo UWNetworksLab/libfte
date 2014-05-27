@@ -99,10 +99,10 @@ Also, let the function rank_R be a bijective mapping between the elements of lan
 Let unrank_R be the inverse of rank_R.
 Then, the construction is realized as follows:
 
-1. On input of ```a``` plaintext ```M``` in L(R_in), calculate ```a``` = rank_{R_in} of X.
-2. Using some encryption scheme, encrypt ```a``` to ciphertext ```b```.
-3. Interpret ```b``` as an integer, if ```b``` is in {0,1,...,|L(R_out)|-1}, then goto 4, else go back to step 2 and reencrypt ```b```.
-4. Calculate unrank_{R_out} of ```b``` as our output ```C```.
+1. On input of a plaintext M in L(R_in), calculate a = rank_{R_in} of X.
+2. Using some encryption scheme, encrypt a to ciphertext b.
+3. Interpret b as an integer, if b is in {0,1,...,|L(R_out)|-1}, then goto 4, else go back to step 2 and reencrypt b.
+4. Calculate unrank_{R_out} of b as our output C.
 
 We may visualize this as follows:
 
