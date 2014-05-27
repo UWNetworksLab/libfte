@@ -1,57 +1,59 @@
 LibFTE
 ======
 
-LibFTE is an encryption library that allows input plaintext and output ciphertext formats to be controlled by DFAs.
+### Overview
 
-Under the hood, LibFTE implements the rank-encipher-unrank approach to Format-Transforming Encryption.
+LibFTE is an encryption library that allows input plaintext and output ciphertext formats to be defined by regular expressions.
+Specifically one can instantiate an FTE scheme FTE[R_in,R_out], where R_in specifies a regular language for the input plaintexts and R_out describes a regular language for the ouput ciphertexts.
+Then, it's the job of the FTE scheme to encrypt plaintexts in the language L(R_in) into ciphertexts in the language of L(R_out).
 
-![LibFTE rank-encipher-urank construction](images/fte-workflow.png "The rank-encipher-unrank approach to Format-Transforming Encryption.")
+Naturally there are limitations on what regular expressions may be used to instantiate an FTE scheme.
+As one example we can't have |L(R_in)| > |L(R_out)|, otherwise encryption is not injective.
+Checks are performed within LibFTE to ensure impossible schemes result in an error.
 
-[explain rTe]
+See "LibFTE details" below, for more information.
 
+Quickstart
+----------
 
-Dependencies
-------------
-
-### For building/testing
-
-* make, m4, gcc, g++, etc.
-* GMP: https://gmplib.org/
-
-Tested on
----------
+### Tested on
 
 * OSX 10.9.2, 64-bit, Xcode 5.1.1, Apple LLVM version 5.1
 * Ubuntu 14.04, 32-bit, emscripten 1.18.0 compiled from source, build-essential
 
-Build
------
+### Building
 
-```
+Ensure you have the following tools
+
+* make, m4, gcc, g++, etc.
+* GMP: https://gmplib.org/
+
+then
+
+```shell
 $ ./configure
 $ make
 ```
 
 Running ```make``` will produce ```.libs/libfte.a``` and ```bin/test```.
 
-Test
-----
+### Test
 
-```
-$ ./bin/test
-[==========] Running 43 tests from 6 test cases.
+```shell
+$ make test
+[==========] Running 64 tests from 9 test cases.
 [----------] Global test environment set-up.
-[----------] 7 tests from CauseException
-[ RUN      ] CauseException.InvalidFstFormatException1
-[       OK ] CauseException.InvalidFstFormatException1 (1 ms)
+[----------] 2 tests from SanityCheckMatch
+[ RUN      ] SanityCheckMatch.Test1
+[       OK ] SanityCheckMatch.Test1 (0 ms)
 ...
-[ RUN      ] RankerNormalUsage.Test10
-[       OK ] RankerNormalUsage.Test10 (1 ms)
-[----------] 10 tests from RankerNormalUsage (6 ms total)
+[ RUN      ] ErrorTest.NoLanguageSet
+[       OK ] ErrorTest.NoLanguageSet (0 ms)
+[----------] 8 tests from ErrorTest (1 ms total)
 
 [----------] Global test environment tear-down
-[==========] 43 tests from 6 test cases ran. (20 ms total)
-[  PASSED  ] 43 tests.
+[==========] 64 tests from 9 test cases ran. (1884 ms total)
+[  PASSED  ] 64 tests.
 ```
 
 FTE encryption example
@@ -60,16 +62,16 @@ FTE encryption example
 ```c++
 #include "fte/fte.h"
 
-int main() {
-  // setup
-  fte::Key K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
-  fte::FTE fteObj = fte::FTE(VALID_DFA_5, 16, // regex="^\C{1,16}$"
-                             VALID_DFA_1, 128, // regex="^(a|b){1,128}$"
-                             K);
-  // encrypt-then-decrypt
+void main() {
+  std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
+  fte::Fte fteObj = fte::Fte();
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_5, 16,   // ^\C{,16}$
+                      VALID_DFA_1, 128); // ^(a|b){,129}$
   std::string input_plaintext = "Hello, Word!";
-  std::string ciphertext = fteObj.encrypt(input_plaintext);
-  std::string output_plaintext = fteObj.decrypt(ciphertext);
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
 
   std::cout << "input_plaintext: " << input_plaintext << std::endl;
   std::cout << "ciphertext: " << ciphertext << std::endl;
@@ -79,30 +81,61 @@ int main() {
 
 will output
 
-```
+```shell
 input_plaintext: Hello, Word!
 ciphertext: babbbaababababbbbabbbbaabbaabaaaaabbabaabaaabbaaaabbabaabaababaaabbbabbbaabababaaabbaabababbbbbbaabbbaaaaaaabbbbbabaabbbaaaabab
 output_plaintext: Hello, Word!
 ```
 
+LibFTE details
+--------------
+
+The LibFTE library is based on the rank-encipher-unrank constuction presented in [FPE1] and revisited in [FTE2].
+Let FTE[R_in, R_out] be an FTE scheme where R_in is a regular expression describing the set of possible plaintexts, and R_out is a regular expression describing the set of possible ciphertexts.
+Also, let the function rank_R be a bijective mapping between the elements of language L(R) and the integers {0,1,...,|L(R)|-1}.
+Then, the construction is realized as follows:
+
+1. On input of a plaintext X in L(R_in), calculate N = rank(X).
+2. Using some encryption scheme, encrypt N to ciphertext C.
+3. Interpret C as an integer, if C is in {0,1,...,|L(R_out)|-1}, then goto 4, else go back to 2.
+4. Calculate unrank(C) as our output ciphertext.
+
+We may visualize this as follows:
+
+![LibFTE rank-encipher-urank construction](images/fte-workflow.png "The rank-encipher-unrank approach to Format-Transforming Encryption.")
+
+### Our implementation
+
+* We use FFX [FFX1, FFX2] as our encryption scheme in step 2. This is used a variable-input length blockcipher to encrypt an n-bit string into another n-bit string.
+* We current perform ranking using the DFA representation of a language, as described in [FTE1].
+
+### Challenges
+
+* We require that |L(R_out)| > |L(R_in)|.
+* We must choose an encryption scheme in step 2 that maximizes the probability that we produce a ciphertext that can be unranked into R_out.
+* The encryption scheme used in step 2 should have minimal (or no) ciphertext expansion.
+* The (un)ranking aglorithms presented in [GS] are too slow. One should use the algorithmic improvements presented in [FTE1, FTE2].
 
 References and Acknowledgements
 -------------------------------
 
 LibFTE is based on concepts and algorithms from the following papers.
 
-* [Protocol Misidentification Made Easy with Format-Transforming Encryption](http://eprint.iacr.org/2012/494.pdf)
+* [FTE1] [Protocol Misidentification Made Easy with Format-Transforming Encryption](http://eprint.iacr.org/2012/494.pdf)
 Kevin P. Dyer, Scott E. Coull, Thomas Ristenpart and Thomas Shrimpton.
 In proceedings of the ACM Conference on Computer and Communications Security (CCS), 2013. 
-* [LibFTE: A User-Friendly Toolkit for Constructing Practical Format-Abiding Encryption Schemes](https://kpdyer.com/publications/usenix2014-libfte-preprint.pdf)
+* [FTE2] [LibFTE: A User-Friendly Toolkit for Constructing Practical Format-Abiding Encryption Schemes](https://kpdyer.com/publications/usenix2014-libfte-preprint.pdf)
 Daniel Luchaup, Kevin P. Dyer, Somesh Jha, Thomas Ristenpart and Thomas Shrimpton.
 To appear in the proceedings of USENIX Security 2014
-* [The FFX Mode of Operation for Format Preserving Encryption](http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf)
+* [FPE1] [Format Preserving Encryption](http://eprint.iacr.org/2009/251.pdf)
+Mihir Bellare, Tom Ristenpart, Phillip Rogaway, and Till Stegers. SAC 2009. LNCS 5867, Springer, pp. 295-312, 2009.
+* [FFX1] [The FFX Mode of Operation for Format Preserving Encryption](http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec.pdf)
 Mihir Bellare, Phillip Rogaway, and Terence Spies. Unpublished manuscript, submitted to NIST for possible standardization. February 20, 2010.
-* [Addendum to “The FFX Mode of Operation for Format Preserving Encryption”](http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf)
+* [FFX2] [Addendum to “The FFX Mode of Operation for Format Preserving Encryption”](http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf)
 Mihir Bellare, Phillip Rogaway, and Terence Spies. Unpublished manuscripts, submitted to NIST for possible standardization. September 3, 2010.
+* [GS] A. Goldberg and M. Sipser. Compression and ranking. In Proceedings of the 17th Annual ACM symposium on Theory of computing, STOC ’85, 1985
 
-LibFTE depends upon the following libraries:
+The LibFTE implementation depends upon the following libraries:
 
 * GMP: http://gmplib.org/
 * aes: http://brgladman.org/oldsite/AES/index.php
