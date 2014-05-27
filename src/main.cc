@@ -52,18 +52,18 @@ void RankingExample() {
   uint32_t N  = 8;
   fte::ranking::DfaRanker rankerObj = fte::ranking::DfaRanker();
   rankerObj.SetLanguage(VALID_DFA_1, N);
-  std::string input_plaintext = "bbbbbbbb";
-  mpz_class ciphertext;
-  std::string output_plaintext;
-  rankerObj.Rank(input_plaintext, &ciphertext);
-  rankerObj.Unrank(ciphertext, &output_plaintext);
+  std::string input_string = "bbbbbbbb";
+  mpz_class output_rank;
+  std::string output_string;
+  rankerObj.Rank(input_string, &output_rank);
+  rankerObj.Unrank(output_rank, &output_string);
 
   std::cout << "ranking:" << std::endl;
-  std::cout << "- input_plaintext: " << input_plaintext << std::endl;
-  std::cout << "- ciphertext: " << ciphertext.get_str() << std::endl;
-  std::cout << "- output_plaintext: " << output_plaintext << std::endl;
+  std::cout << "- input_string: " << input_string << std::endl;
+  std::cout << "- rank: " << output_rank.get_str() << std::endl;
+  std::cout << "- output_string: " << output_string << std::endl;
 
-  assert(input_plaintext == output_plaintext);
+  assert(input_string == output_string);
 
 }
 
