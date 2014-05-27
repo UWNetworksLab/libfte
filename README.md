@@ -11,15 +11,18 @@ Naturally there are limitations on what regular expressions may be used to insta
 As one example we can't have |L(R_in)| > |L(R_out)|, otherwise encryption is not injective.
 Checks are performed within LibFTE to ensure impossible schemes result in an error.
 
-See "LibFTE details" below, for more information.
-
 Quickstart
 ----------
 
 ### Platforms
 
-* OSX 10.9.2, 64-bit, Xcode 5.1.1, Apple LLVM version 5.1
-* Ubuntu 14.04, 32-bit, emscripten 1.18.0 compiled from source, build-essential
+* OSX 10.9.2 64-bit
+    * Xcode 5.1.1, Apple LLVM version 5.1
+    * GMP installed from homebrew
+* Ubuntu 14.04 32-bit
+    * compiler: emscripten 1.18.0 compiled from source
+    * packages: ```build-essential```
+    * GMP compiled from source
 
 ### Building
 
@@ -90,15 +93,16 @@ output_plaintext: Hello, Word!
 LibFTE details
 --------------
 
-The LibFTE library is based on the rank-encipher-unrank constuction presented in [FPE1] and revisited in [FTE2].
+The LibFTE library is based on the rank-encipher-unrank construction presented in [FPE1] and revisited in [FTE2].
 Let FTE[R_in, R_out] be an FTE scheme where R_in is a regular expression describing the set of possible plaintexts, and R_out is a regular expression describing the set of possible ciphertexts.
 Also, let the function rank_R be a bijective mapping between the elements of language L(R) and the integers {0,1,...,|L(R)|-1}.
+Let unrank_R be the inverse of rank_R.
 Then, the construction is realized as follows:
 
-1. On input of a plaintext M in L(R_in), calculate a = rank(X).
-2. Using some encryption scheme, encrypt a to ciphertext b.
-3. Interpret b as an integer, if b is in {0,1,...,|L(R_out)|-1}, then goto 4, else go back to step 2 and reencrypt b.
-4. Calculate unrank(b) as our output ciphertext.
+1. On input of ```a``` plaintext ```M``` in L(R_in), calculate ```a``` = rank_{R_in} of X.
+2. Using some encryption scheme, encrypt ```a``` to ciphertext ```b```.
+3. Interpret ```b``` as an integer, if ```b``` is in {0,1,...,|L(R_out)|-1}, then goto 4, else go back to step 2 and reencrypt ```b```.
+4. Calculate unrank_{R_out} of ```b``` as our output ```C```.
 
 We may visualize this as follows:
 
