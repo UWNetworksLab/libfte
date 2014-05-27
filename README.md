@@ -16,16 +16,16 @@ See "LibFTE details" below, for more information.
 Quickstart
 ----------
 
-### Tested on
+### Platforms
 
 * OSX 10.9.2, 64-bit, Xcode 5.1.1, Apple LLVM version 5.1
 * Ubuntu 14.04, 32-bit, emscripten 1.18.0 compiled from source, build-essential
 
 ### Building
 
-Ensure you have the following tools
+Ensure you have the following installed
 
-* make, m4, gcc, g++, etc.
+* Standard build tools: make, m4, gcc, g++, etc.
 * GMP: https://gmplib.org/
 
 then
@@ -37,7 +37,7 @@ $ make
 
 Running ```make``` will produce ```.libs/libfte.a``` and ```bin/test```.
 
-### Test
+### Testing
 
 ```shell
 $ make test
@@ -95,26 +95,35 @@ Let FTE[R_in, R_out] be an FTE scheme where R_in is a regular expression describ
 Also, let the function rank_R be a bijective mapping between the elements of language L(R) and the integers {0,1,...,|L(R)|-1}.
 Then, the construction is realized as follows:
 
-1. On input of a plaintext X in L(R_in), calculate N = rank(X).
-2. Using some encryption scheme, encrypt N to ciphertext C.
-3. Interpret C as an integer, if C is in {0,1,...,|L(R_out)|-1}, then goto 4, else go back to 2.
-4. Calculate unrank(C) as our output ciphertext.
+1. On input of a plaintext M in L(R_in), calculate a = rank(X).
+2. Using some encryption scheme, encrypt a to ciphertext b.
+3. Interpret b as an integer, if b is in {0,1,...,|L(R_out)|-1}, then goto 4, else go back to step 2 and reencrypt b.
+4. Calculate unrank(b) as our output ciphertext.
 
 We may visualize this as follows:
 
 ![LibFTE rank-encipher-urank construction](images/fte-workflow.png "The rank-encipher-unrank approach to Format-Transforming Encryption.")
 
+In our diagram the "valid?" check is the process of determining if b can be unranked into language L(R_out).
+For DFA-based ranking this is an inequality.
+However, in general, it turns out that the validation is not always so simple, hence the generalization.
+
 ### Our implementation
 
 * We use FFX [FFX1, FFX2] as our encryption scheme in step 2. This is used a variable-input length blockcipher to encrypt an n-bit string into another n-bit string.
 * We current perform ranking using the DFA representation of a language, as described in [FTE1].
+* We implemnt cycle walking for the step 2/3 loop in our FTE scheme. This is the strategy of iteratively applying encrypt to N (i.e. encrypt(...encrypt(N))) until it is a ciphertext that can be unranked. If one is using a randomized scheme they may use rejction sampling.
 
 ### Challenges
 
 * We require that |L(R_out)| > |L(R_in)|.
 * We must choose an encryption scheme in step 2 that maximizes the probability that we produce a ciphertext that can be unranked into R_out.
 * The encryption scheme used in step 2 should have minimal (or no) ciphertext expansion.
-* The (un)ranking aglorithms presented in [GS] are too slow. One should use the algorithmic improvements presented in [FTE1, FTE2].
+* The (un)ranking aglorithms presented in [GS] are too slow. When implemented DFA-based ranking, one should use the algorithmic improvements presented in [FTE1, FTE2].
+
+### Other features
+
+* In [FTE2] we also explore NFA-based ranking, deterministic and randomized encryption, and FFX for radicies other than 2. These features, and more, will appear in a future version of LibFTE.
 
 References and Acknowledgements
 -------------------------------
@@ -124,7 +133,7 @@ LibFTE is based on concepts and algorithms from the following papers.
 * [FTE1] [Protocol Misidentification Made Easy with Format-Transforming Encryption](http://eprint.iacr.org/2012/494.pdf)
 Kevin P. Dyer, Scott E. Coull, Thomas Ristenpart and Thomas Shrimpton.
 In proceedings of the ACM Conference on Computer and Communications Security (CCS), 2013. 
-* [FTE2] [LibFTE: A User-Friendly Toolkit for Constructing Practical Format-Abiding Encryption Schemes](https://kpdyer.com/publications/usenix2014-libfte-preprint.pdf)
+* [FTE2] LibFTE: A User-Friendly Toolkit for Constructing Practical Format-Abiding Encryption Schemes
 Daniel Luchaup, Kevin P. Dyer, Somesh Jha, Thomas Ristenpart and Thomas Shrimpton.
 To appear in the proceedings of USENIX Security 2014
 * [FPE1] [Format Preserving Encryption](http://eprint.iacr.org/2009/251.pdf)

@@ -1,7 +1,7 @@
 /*
  * References:
  *   [FTE1] http://eprint.iacr.org/2012/494.pdf
- *   [FTE2] https://kpdyer.com/publications/usenix2014-libfte-preprint.pdf
+ *   [FTE2] (to appear summer 2014)
  */
 
 #include <math.h>
