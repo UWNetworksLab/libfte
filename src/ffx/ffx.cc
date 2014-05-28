@@ -115,6 +115,8 @@ static bool RoundFunction(const std::string & K,
 
   // [FFX2] pg 3., line 39
   *retval = Y;
+
+  return true;
 }
 
 bool Ffx::Encrypt(const std::string & key ,
@@ -168,6 +170,8 @@ bool Ffx::Encrypt(const std::string & key ,
 
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, plaintext_len_in_bits);
   retval = retval % modulus;
+
+  return true;
 }
 
 bool Ffx::Decrypt(const std::string & key,
@@ -222,6 +226,8 @@ bool Ffx::Decrypt(const std::string & key,
 
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, cihpertext_len_bits);
   retval = retval % modulus;
+
+  return true;
 }
 
 /*
