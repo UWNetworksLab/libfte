@@ -154,6 +154,8 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
   std::sort(symbols_.begin(),symbols_.end());
   std::sort(states_.begin(),states_.end());
   std::sort(final_states_.begin(),final_states_.end());
+
+  return true;
 }
 
 
@@ -188,6 +190,8 @@ bool DfaRanker::SanityCheck() {
       return false;
     }
   }
+
+  return true;
 }
 
 bool DfaRanker::PopulateCachedTable() {
@@ -296,6 +300,8 @@ bool DfaRanker::Unrank(const mpz_class & rank,
   if (!q_in_final_states) {
     return false;
   }
+
+  return true;
 }
 
 bool DfaRanker::Rank(const std::string & word,
