@@ -12,6 +12,8 @@ bool BitMask(const mpz_class & in,
   mpz_class modulus;
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, (end_bit - start_bit + 1));
   (*out) = (*out) % modulus;
+
+  return true;
 }
 
 bool MpzClassToBase256(const mpz_class & in,
@@ -23,6 +25,8 @@ bool MpzClassToBase256(const mpz_class & in,
     out[i] = mpz_get_ui(chunk.get_mpz_t());
     tmp = tmp >> 8;
   }
+
+  return true;
 }
 
 bool Base256ToMpzClass(unsigned char * in,
@@ -33,6 +37,8 @@ bool Base256ToMpzClass(unsigned char * in,
     mpz_class chunk = static_cast<uint32_t>(in[i]);
     *out += chunk << (8 * (in_len_in_bytes - 1 - i));
   }
+
+  return true;
 }
 
 bool Base16ToBase256(const std::string & in,
@@ -43,6 +49,8 @@ bool Base16ToBase256(const std::string & in,
     mpz_class chunk = mpz_class(byte_str, 16);
     out[i] = static_cast<unsigned char>(chunk.get_ui());
   }
+
+  return true;
 }
 
 } // namespace ffx
