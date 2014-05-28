@@ -56,7 +56,7 @@ void main() {
   fte::Fte fteObj = fte::Fte();
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_5, 16,   // R_in  = ^.{,16}$
-                      VALID_DFA_1, 128); // R_out =^(a|b){,129}$
+                      VALID_DFA_1, 128); // R_out =^(a|b){,128}$
   std::string input_plaintext = "Hello, Word!";
   std::string ciphertext, output_plaintext;
   fteObj.Encrypt(input_plaintext, &ciphertext);
