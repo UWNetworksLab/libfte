@@ -101,6 +101,8 @@ bool Fte::Encrypt(const std::string & plaintext,
     ffx_.Encrypt(key_, C, ciphertext_language_capacity_in_bits_, &C);
   }
   ciphertext_ranker_.Unrank(C, ciphertext);
+
+  return true;
 }
 
 /*
@@ -126,6 +128,8 @@ bool Fte::Decrypt(const std::string & ciphertext,
     ffx_.Decrypt(key_, plaintext_rank, ciphertext_language_capacity_in_bits_, &plaintext_rank);
   }
   plaintext_ranker_.Unrank(plaintext_rank, plaintext);
+
+  return true;
 }
 
 } // namespace fte
