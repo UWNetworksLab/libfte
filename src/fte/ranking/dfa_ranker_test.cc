@@ -256,9 +256,9 @@ TEST(ErrorTest, InvalidInputNoAcceptingPaths1) {
 
 TEST(ErrorTest, InvalidRankInput) {
   fte::ranking::DfaRanker rankerObj;
-  bool success = rankerObj.SetLanguage(VALID_DFA_1, 16);
+  rankerObj.SetLanguage(VALID_DFA_1, 16);
   mpz_class rank;
-  rankerObj.Rank("xxx", &rank);
+  bool success = rankerObj.Rank("xxx", &rank);
   EXPECT_FALSE(success);
 }
 
