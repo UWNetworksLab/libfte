@@ -99,7 +99,7 @@ class DfaRanker {
 
 
  public:
-  // Speicify the DFA of the language and the maximum word length that we'll be (un)ranking.
+  // Specify the DFA of the language and the maximum word length that we'll be (un)ranking.
   bool SetLanguage(const std::string & dfa,
                    uint32_t max_word_length);
 
