@@ -1,4 +1,6 @@
+#if HAVE_CXX11
 #include <regex>
+#endif
 
 #include "gtest/gtest.h"
 
@@ -6,6 +8,7 @@
 #include "fte/ranking/sample_dfas.h"
 
 
+#if HAVE_CXX11
 TEST(SanityCheckMatch, Test1) {
   std::string str = "aaaaaaaaaaaaaaaa";
   std::regex rx("^(a|b){16}$");
@@ -47,6 +50,7 @@ TEST(SanityCheckNoMatch, Test4) {
   bool match = regex_match(str.begin(), str.end(), rx);
   EXPECT_EQ(false, match);
 }
+#endif
 
 TEST(FteNormalUsage, FpeTest1) {
   std::string K = "00000000000000000000000000000000";
@@ -63,9 +67,11 @@ TEST(FteNormalUsage, FpeTest1) {
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
+#if HAVE_CXX11
   std::regex rx("^(a|b){1,64}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
+#endif
 }
 
 TEST(FteNormalUsage, FpeTest2) {
@@ -82,9 +88,11 @@ TEST(FteNormalUsage, FpeTest2) {
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
+#if HAVE_CXX11
   std::regex rx("^[\\x00-\\xFF]{1,128}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
+#endif
 }
 
 TEST(FteNormalUsage, FpeTest3) {
@@ -101,9 +109,11 @@ TEST(FteNormalUsage, FpeTest3) {
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
+#if HAVE_CXX11
   std::regex rx("^[\\x00-\\xFF]{1,256}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
+#endif
 }
 
 TEST(FteNormalUsage, FpeTest4) {
@@ -120,9 +130,11 @@ TEST(FteNormalUsage, FpeTest4) {
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
+#if HAVE_CXX11
   std::regex rx("^[\\x00-\\xFF]{1,512}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
+#endif
 }
 
 TEST(FteNormalUsage, FpeTest5) {
@@ -139,9 +151,11 @@ TEST(FteNormalUsage, FpeTest5) {
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
+#if HAVE_CXX11
   std::regex rx("^[\\x00-\\xFF]{1,1024}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
+#endif
 }
 
 TEST(FteNormalUsage, FpeTest6) {
@@ -158,9 +172,11 @@ TEST(FteNormalUsage, FpeTest6) {
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
+#if HAVE_CXX11
   std::regex rx("^[\\x00-\\xFF]{1,2048}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
+#endif
 }
 
 TEST(FteNormalUsage, FteTest1) {
@@ -177,9 +193,11 @@ TEST(FteNormalUsage, FteTest1) {
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
+#if HAVE_CXX11
   std::regex rx("^(a|b){1,64}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
+#endif
 }
 
 TEST(FteNormalUsage, FteTest2) {
@@ -196,7 +214,9 @@ TEST(FteNormalUsage, FteTest2) {
 
   EXPECT_EQ(input_plaintext, output_plaintext);
 
+#if HAVE_CXX11
   std::regex rx("^[\\x00-\\xFF]{1,32}$");
   bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
   EXPECT_EQ(true, match);
+#endif
 }

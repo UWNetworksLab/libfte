@@ -1,5 +1,7 @@
 AC_INIT([libfte],[0.0.1])
 
+AC_CONFIG_MACRO_DIR([m4])
+
 AC_SUBST(gmpdir)
 AC_ARG_WITH(gmp, 
             AS_HELP_STRING([--with-gmp=DIR],
@@ -13,6 +15,11 @@ AC_PROG_CXX
 AC_DEFUN([AC_PROG_AR], [AC_CHECK_TOOL(AR, ar, :)])
 AC_PROG_AR
 AC_LANG([C++])
+
+AX_CXX_COMPILE_STDCXX_11
+if [test "x$HAVE_CXX11" = "x1"]; then
+  CXXFLAGS="$CXXFLAGS -DHAVE_CXX11"
+fi
 
 AC_CHECK_FILE(third_party/gtest/Makefile,
               [],
