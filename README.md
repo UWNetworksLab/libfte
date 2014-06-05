@@ -1,6 +1,8 @@
 LibFTE
 ======
 
+[![Build Status](https://travis-ci.org/uProxy/libfte.svg?branch=master)](https://travis-ci.org/uProxy/libfte)
+
 ### Overview
 
 LibFTE is an encryption library that allows input plaintext and output ciphertext formats to be defined by regular expressions.
