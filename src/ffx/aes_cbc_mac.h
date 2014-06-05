@@ -1,6 +1,8 @@
 #ifndef _FFX_AES_CBC_MAC_H
 #define _FFX_AES_CBC_MAC_H
 
+#include <stdint.h>
+
 #include <gmpxx.h>
 
 namespace ffx {
