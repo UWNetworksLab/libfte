@@ -20,7 +20,7 @@ INSTALL_LIB_DIR = @prefix@/lib
 OPTIMIZATION_FLAGS = -O3
 CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
 CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -Wall -I. -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
-LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte
+LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -std=c++11 -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte -pthread
 
 TARGET_MAIN = bin/main
 TARGET_MAINJS = bin/main.js
