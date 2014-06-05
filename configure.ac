@@ -16,7 +16,7 @@ AC_DEFUN([AC_PROG_AR], [AC_CHECK_TOOL(AR, ar, :)])
 AC_PROG_AR
 AC_LANG([C++])
 
-AX_CXX_COMPILE_STDCXX_11
+AX_CXX_COMPILE_STDCXX_11([noext],[optional])
 if [test "x$HAVE_CXX11" = "x1"]; then
   CXXFLAGS="$CXXFLAGS -DHAVE_CXX11"
 fi
