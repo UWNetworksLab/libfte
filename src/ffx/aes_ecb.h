@@ -1,6 +1,8 @@
 #ifndef _FFX_AES_ECB_H
 #define _FFX_AES_ECB_H
 
+#include <stdint.h>
+
 #include <gmpxx.h>
 
 namespace ffx {
