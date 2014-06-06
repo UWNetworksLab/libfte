@@ -17,9 +17,10 @@ AC_PROG_AR
 AC_LANG([C++])
 
 AX_CXX_COMPILE_STDCXX_11([noext],[optional])
-if [test "x$HAVE_CXX11" = "x1"]; then
-  CXXFLAGS="$CXXFLAGS -DHAVE_CXX11"
-fi
+#don't use C++11 features, for now
+#if [test "x$HAVE_CXX11" = "x1"]; then
+#  CXXFLAGS="$CXXFLAGS -DHAVE_CXX11"
+#fi
 
 AC_CHECK_FILE(third_party/gtest/Makefile,
               [],

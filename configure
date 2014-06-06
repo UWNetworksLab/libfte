@@ -3316,9 +3316,10 @@ $as_echo "#define HAVE_CXX11 1" >>confdefs.h
 
   fi
 
-if test "x$HAVE_CXX11" = "x1"; then
-  CXXFLAGS="$CXXFLAGS -DHAVE_CXX11"
-fi
+#don't use C++11 features, for now
+#if [test "x$HAVE_CXX11" = "x1"]; then
+#  CXXFLAGS="$CXXFLAGS -DHAVE_CXX11"
+#fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for third_party/gtest/Makefile" >&5
 $as_echo_n "checking for third_party/gtest/Makefile... " >&6; }
