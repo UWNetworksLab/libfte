@@ -29,8 +29,7 @@ TARGET_MAINJS = bin/main.js
 OBJ_MAIN = src/main.o
 
 TARGET_FFX_PERF_TEST = bin/ffx_perf_test
-TARGET_FFX_PERF_TESTJS = bin/perf.js
-OBJ_PERF = src/perf.o
+OBJ_PERF = src/ffx_perf_test.o
 
 # the build target executable:
 TARGET_TEST = bin/test
