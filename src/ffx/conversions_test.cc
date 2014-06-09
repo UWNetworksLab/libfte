@@ -86,7 +86,67 @@ TEST(FFX2, MpzCharConversion2) {
   delete[] Y;
 }
 
-TEST(FFX2, 16to256) {
+TEST(FFX2, MpzCharConversion3) {
+  mpz_class X = mpz_class("c34c052cc0da8d73451afe5f03be297f",16);
+  uint32_t base = 256;
+  uint32_t Y_len_in_bytes = mpz_sizeinbase(X.get_mpz_t(), base);
+  unsigned char * Y = new unsigned char[Y_len_in_bytes];
+  mpz_class Z = 0;
+
+  ffx::MpzClassToBase256(X, Y_len_in_bytes, Y);
+  ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
+
+  EXPECT_EQ(X.get_str(), Z.get_str());
+
+  delete[] Y;
+}
+
+TEST(FFX2, MpzCharConversion4) {
+  mpz_class X = mpz_class("c34c052cc0da8d73451afe5f03be297fc34c052cc0da8d73451afe5f03be297f",16);
+  uint32_t base = 256;
+  uint32_t Y_len_in_bytes = mpz_sizeinbase(X.get_mpz_t(), base);
+  unsigned char * Y = new unsigned char[Y_len_in_bytes];
+  mpz_class Z = 0;
+
+  ffx::MpzClassToBase256(X, Y_len_in_bytes, Y);
+  ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
+
+  EXPECT_EQ(X.get_str(), Z.get_str());
+
+  delete[] Y;
+}
+
+TEST(FFX2, MpzCharConversion5) {
+  mpz_class X = mpz_class("00112233445566778899AABBCCDDEEFF",16);
+  uint32_t Y_len_in_bytes = 16;
+  unsigned char * Y = new unsigned char[Y_len_in_bytes];
+  mpz_class Z = 0;
+
+  ffx::MpzClassToBase256(X, Y_len_in_bytes, Y);
+  EXPECT_EQ((uint32_t)Y[0], 0x00);
+  EXPECT_EQ((uint32_t)Y[1], 0x11);
+  EXPECT_EQ((uint32_t)Y[2], 0x22);
+  EXPECT_EQ((uint32_t)Y[3], 0x33);
+  EXPECT_EQ((uint32_t)Y[4], 0x44);
+  EXPECT_EQ((uint32_t)Y[5], 0x55);
+  EXPECT_EQ((uint32_t)Y[6], 0x66);
+  EXPECT_EQ((uint32_t)Y[7], 0x77);
+  EXPECT_EQ((uint32_t)Y[8], 0x88);
+  EXPECT_EQ((uint32_t)Y[9], 0x99);
+  EXPECT_EQ((uint32_t)Y[10], 0xAA);
+  EXPECT_EQ((uint32_t)Y[11], 0xBB);
+  EXPECT_EQ((uint32_t)Y[12], 0xCC);
+  EXPECT_EQ((uint32_t)Y[13], 0xDD);
+  EXPECT_EQ((uint32_t)Y[14], 0xEE);
+  EXPECT_EQ((uint32_t)Y[15], 0xFF);
+  
+  ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
+  EXPECT_EQ(X.get_str(), Z.get_str());
+
+  delete[] Y;
+}
+
+TEST(FFX2, 16to256_1) {
   std::string X = "00000000000000000000000000000000";
   uint32_t sizeInBase256 = 16;
   unsigned char * Y = new unsigned char[sizeInBase256];
@@ -95,6 +155,21 @@ TEST(FFX2, 16to256) {
 
   for (uint32_t i = 0; i<sizeInBase256; ++i) {
     EXPECT_EQ(Y[i], 0);
+  }
+
+  delete[] Y;
+}
+
+
+TEST(FFX2, 16to256_2) {
+  std::string X = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
+  uint32_t sizeInBase256 = 16;
+  unsigned char * Y = new unsigned char[sizeInBase256];
+
+  ffx::Base16ToBase256(X, sizeInBase256, Y);
+
+  for (uint32_t i = 0; i<sizeInBase256; ++i) {
+    EXPECT_EQ(Y[i], 255);
   }
 
   delete[] Y;

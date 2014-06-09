@@ -28,6 +28,10 @@ TARGET_MAIN = bin/main
 TARGET_MAINJS = bin/main.js
 OBJ_MAIN = src/main.o
 
+TARGET_FFX_PERF_TEST = bin/ffx_perf_test
+TARGET_FFX_PERF_TESTJS = bin/perf.js
+OBJ_PERF = src/perf.o
+
 # the build target executable:
 TARGET_TEST = bin/test
 TARGET_TESTJS = bin/test.js
@@ -54,13 +58,16 @@ OBJ_LIBFTE = src/ffx/conversions.o \
 
 TARGET_LIBGTEST = $(GTEST_LIB_DIR)/libgtest.a
 
-default: $(TARGET_TEST) $(TARGET_MAIN)
+default: $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_FFX_PERF_TEST)
 
 %.o: %.c
 	$(CC) $(CFLAGS_) -c -o $@ $<
 
 %.o: %.cc
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
+
+$(TARGET_FFX_PERF_TEST): $(TARGET_LIBFTE) $(OBJ_PERF)
+	$(CXX) $(CXXFLAGS_) $(OBJ_PERF) -o $@ $(LDFLAGS_)
 
 $(TARGET_MAIN): $(TARGET_LIBFTE) $(OBJ_MAIN)
 	$(CXX) $(CXXFLAGS_) $(OBJ_MAIN) -o $@ $(LDFLAGS_)
@@ -103,9 +110,14 @@ clean: cleanlibfte cleanlibgtest
 cleanlibfte:
 	$(RM) $(TARGET_TESTJS)
 	$(RM) $(TARGET_TEST)
+	$(RM) $(TARGET_MAINJS)
+	$(RM) $(TARGET_MAIN)
 	$(RM) $(TARGET_LIBFTE)
 	$(RM) $(OBJ_LIBFTE)
 	$(RM) $(OBJ_TEST)
+	$(RM) $(TARGET_FFX_PERF_TEST)
+	$(RM) */*.o
+	$(RM) */*/*.o
 
 cleanlibgtest:
 	cd $(GTEST_DIR) && $(MAKE) clean
