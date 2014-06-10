@@ -10,15 +10,16 @@
 void FfxExample() {
   // ffx example
   uint32_t radix = 2;
-  ffx::Ffx ffxObj = ffx::Ffx(radix);
   std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
+  ffx::Ffx ffxObj = ffx::Ffx(radix);
+  ffxObj.SetKey(K);
   mpz_class input_plaintext = 1;
   uint32_t input_plaintext_len = 1024 * 8; // in bits
   mpz_class ciphertext, output_plaintext;
 
-  for (uint32_t i = 0; i <1000; ++i) {
-    ffxObj.Encrypt(K, input_plaintext, input_plaintext_len, &ciphertext);
-    ffxObj.Decrypt(K, ciphertext, input_plaintext_len, &output_plaintext);
+  for (uint32_t i = 0; i <100; ++i) {
+    ffxObj.Encrypt(input_plaintext, input_plaintext_len, &ciphertext);
+    ffxObj.Decrypt(ciphertext, input_plaintext_len, &output_plaintext);
   }
 
   assert(input_plaintext == output_plaintext);

@@ -34,8 +34,7 @@ static bool ValidateKey(const std::string & key) {
  * However, this is a direct implementation of the round-function algorithm
  * F_K(n,T,i,B) defined in [FFX2].
  */
-static bool RoundFunction(const std::string & K,
-                          uint32_t n,
+bool Ffx::RoundFunction(uint32_t n,
                           const mpz_class & tweak,
                           uint32_t tweak_len_in_bits,
                           uint32_t i,
@@ -87,7 +86,7 @@ static bool RoundFunction(const std::string & K,
   mpz_class Y = 0;
 
   // [FFX2] pg 3., line 35
-  bool cbc_success = AesCbcMac(K, (P << Q_len) + Q, P_len + Q_len, &Y);
+  bool cbc_success = AesCbcMac(key_, (P << Q_len) + Q, P_len + Q_len, &Y);
   if (!cbc_success) {
     return false;
   }
@@ -98,7 +97,7 @@ static bool RoundFunction(const std::string & K,
   mpz_class counter = 1;
   while (Z_len < (d + 4)) {
     mpz_class ctxt;
-    AesEcbEncrypt(K, (Y + counter), 128, &ctxt);
+    AesEcbEncrypt(key_, (Y + counter), 128, &ctxt);
     Z_len += 16;
     Z = Z << 128;
     Z += ctxt;
@@ -119,17 +118,11 @@ static bool RoundFunction(const std::string & K,
   return true;
 }
 
-bool Ffx::Encrypt(const std::string & key ,
-                  const mpz_class & tweak,
+bool Ffx::Encrypt(const mpz_class & tweak,
                   uint32_t tweak_len_in_bits,
                   const mpz_class & plaintext,
                   uint32_t plaintext_len_in_bits,
                   mpz_class * ciphertext) {
-
-  // [FFX2] pg 3., line 11
-  if (!ValidateKey(key)) {
-    return false;
-  }
 
   mpz_class & retval = *ciphertext;
 
@@ -155,7 +148,7 @@ bool Ffx::Encrypt(const std::string & key ,
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
-    RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m, &D);
+    RoundFunction(n, tweak, tweak_len_in_bits, i, B, m, &D);
     mpz_add(C.get_mpz_t(),
             A.get_mpz_t(),
             D.get_mpz_t());
@@ -174,17 +167,11 @@ bool Ffx::Encrypt(const std::string & key ,
   return true;
 }
 
-bool Ffx::Decrypt(const std::string & key,
-                  const mpz_class & tweak,
+bool Ffx::Decrypt(const mpz_class & tweak,
                   uint32_t tweak_len_in_bits,
                   const mpz_class & cihpertext,
                   uint32_t cihpertext_len_bits,
                   mpz_class * plaintext) {
-
-  // [FFX2] pg 3., line 21
-  if (!ValidateKey(key)) {
-    return false;
-  }
 
   mpz_class & retval = *plaintext;
 
@@ -212,7 +199,7 @@ bool Ffx::Decrypt(const std::string & key,
 
     C = B;
     B = A;
-    RoundFunction(key, n, tweak, tweak_len_in_bits, i, B, m, &D);
+    RoundFunction(n, tweak, tweak_len_in_bits, i, B, m, &D);
     mpz_sub(A.get_mpz_t(),
             C.get_mpz_t(),
             D.get_mpz_t());
@@ -233,19 +220,38 @@ bool Ffx::Decrypt(const std::string & key,
 /*
  * These are the main entry points with NULL tweaks.
  */
-bool Ffx::Encrypt(const std::string & key,
-                  const mpz_class & plaintext,
+bool Ffx::Encrypt(const mpz_class & plaintext,
                   uint32_t plaintext_len_in_bits,
                   mpz_class * ciphertext) {
-  return Ffx::Encrypt(key, 0, 0, plaintext, plaintext_len_in_bits, ciphertext);
+  return Ffx::Encrypt(0, 0, plaintext, plaintext_len_in_bits, ciphertext);
 }
 
-bool Ffx::Decrypt(const std::string & key,
-                  const mpz_class & ciphertext,
+bool Ffx::Decrypt(const mpz_class & ciphertext,
                   uint32_t ciphertext_len_in_bits,
                   mpz_class * plaintext) {
-  return Ffx::Decrypt(key, 0, 0, ciphertext, ciphertext_len_in_bits, plaintext);
+  return Ffx::Decrypt(0, 0, ciphertext, ciphertext_len_in_bits, plaintext);
 }
 
+bool Ffx::SetKey(const std::string & key) {
+  // [FFX2] pg 3., line 21
+  if (!ValidateKey(key)) {
+    return false;
+  }
+  
+  uint32_t key_length_in_bytes = (key.length() + 1) / 2;
+  key_ = new unsigned char[key_length_in_bytes];
+  Base16ToBase256(key, key_length_in_bytes, key_);
+  
+  return true;
+}
+
+Ffx::Ffx()
+  : radix_(kDefaultFfxRadix) {
+}
+
+Ffx::Ffx(const uint32_t radix)
+  : radix_(radix) {
+  
+}
 
 } // namespace ffx
