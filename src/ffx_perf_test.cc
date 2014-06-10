@@ -17,7 +17,7 @@ void FfxExample() {
   uint32_t input_plaintext_len = 1024 * 8; // in bits
   mpz_class ciphertext, output_plaintext;
 
-  for (uint32_t i = 0; i <100; ++i) {
+  for (uint32_t i = 0; i <1000; ++i) {
     ffxObj.Encrypt(input_plaintext, input_plaintext_len, &ciphertext);
     ffxObj.Decrypt(ciphertext, input_plaintext_len, &output_plaintext);
   }

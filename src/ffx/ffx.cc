@@ -35,39 +35,38 @@ static bool ValidateKey(const std::string & key) {
  * F_K(n,T,i,B) defined in [FFX2].
  */
 bool Ffx::RoundFunction(uint32_t n,
-                          const mpz_class & tweak,
-                          uint32_t tweak_len_in_bits,
-                          uint32_t i,
-                          const mpz_class & B,
-                          uint32_t B_len,
-                          mpz_class * retval) {
+                        const mpz_class & tweak,
+                        uint32_t tweak_len_in_bits,
+                        uint32_t i,
+                        const mpz_class & B,
+                        uint32_t B_len,
+                        mpz_class * retval) {
 
   // [FFX2] pg 3., line 31
-  uint32_t vers = 1;
-  uint32_t t = ceil(tweak_len_in_bits / 8.0);
-  uint32_t beta = ceil(n / 2.0);
-  uint32_t b = ceil(beta / 8.0);
-  uint32_t d = 4 * ceil(b / 4.0);
+  uint32_t t = (tweak_len_in_bits + 7) >> 3;
+  uint32_t beta = (n + 1) >> 1;
+  uint32_t b = (beta + 7) >> 3;
+  uint32_t d = 4 * ((b+3) >> 2);
 
 
   // [FFX2] pg 3., line 32
   uint32_t m = 0;
   if ((i & 1) == 0) {
-    m = n / 2;
+    m = n >> 1;
   } else {
-    m = ceil(n / 2.0);
+    m = (n+1) >> 1;
   }
 
   // [FFX2] pg 3., line 33
   mpz_class P = 0;
   uint32_t P_len = (1 + 1 + 1 + 3 + 1 + 1 + 4 + 4) * 8;
-  P += mpz_class(vers)             << (1 + 1 + 3 + 1 + 1 + 4 + 4) * 8;
-  P += mpz_class(2)                << (1 + 3 + 1 + 1 + 4 + 4) * 8;
-  P += mpz_class(1)                << (3 + 1 + 1 + 4 + 4) * 8;
-  P += mpz_class(2)                << (1 + 1 + 4 + 4) * 8;
-  P += mpz_class(10)               << (1 + 4 + 4) * 8;
-  P += mpz_class(n / 2)            << (4 + 4) * 8;
-  P += mpz_class(n)                << (4) * 8;
+  P += mpz_class(1)      << (1 + 1 + 3 + 1 + 1 + 4 + 4) * 8;
+  P += mpz_class(2)      << (1 + 3 + 1 + 1 + 4 + 4) * 8;
+  P += mpz_class(1)      << (3 + 1 + 1 + 4 + 4) * 8;
+  P += mpz_class(2)      << (1 + 1 + 4 + 4) * 8;
+  P += mpz_class(10)     << (1 + 4 + 4) * 8;
+  P += mpz_class(n / 2)  << (4 + 4) * 8;
+  P += mpz_class(n)      << (4) * 8;
   P += t;
 
   uint32_t B_bits = b * 8;
@@ -95,11 +94,12 @@ bool Ffx::RoundFunction(uint32_t n,
   mpz_class Z = Y;
   uint32_t Z_len = 16;
   mpz_class counter = 1;
+  mpz_class ctxt = 0;
   while (Z_len < (d + 4)) {
-    mpz_class ctxt;
+    ctxt = 0;
     AesEcbEncrypt(key_, (Y + counter), 128, &ctxt);
     Z_len += 16;
-    Z = Z << 128;
+    Z <<= 128;
     Z += ctxt;
     ++counter;
   }
@@ -169,19 +169,19 @@ bool Ffx::Encrypt(const mpz_class & tweak,
 
 bool Ffx::Decrypt(const mpz_class & tweak,
                   uint32_t tweak_len_in_bits,
-                  const mpz_class & cihpertext,
-                  uint32_t cihpertext_len_bits,
+                  const mpz_class & ciphertext,
+                  uint32_t ciphertext_len_bits,
                   mpz_class * plaintext) {
 
   mpz_class & retval = *plaintext;
 
   // [FFX2] pg 3., line 24-25
-  uint32_t n = cihpertext_len_bits;
-  uint32_t l = cihpertext_len_bits / 2;
+  uint32_t n = ciphertext_len_bits;
+  uint32_t l = ciphertext_len_bits / 2;
   uint32_t r = kDefaultFfxRounds;
   mpz_class A, B;
-  BitMask(cihpertext, cihpertext_len_bits, 0, l - 1, &A);
-  BitMask(cihpertext, cihpertext_len_bits, l, n - 1, &B);
+  BitMask(ciphertext, ciphertext_len_bits, 0, l - 1, &A);
+  BitMask(ciphertext, ciphertext_len_bits, l, n - 1, &B);
   uint32_t B_len = n - l;
   mpz_class C = 0;
   mpz_class D = 0;
@@ -211,7 +211,7 @@ bool Ffx::Decrypt(const mpz_class & tweak,
   // [FFX2] pg 3., line 29
   retval = (A << B_len) + B;
 
-  mpz_ui_pow_ui(modulus.get_mpz_t(), 2, cihpertext_len_bits);
+  mpz_ui_pow_ui(modulus.get_mpz_t(), 2, ciphertext_len_bits);
   retval = retval % modulus;
 
   return true;
