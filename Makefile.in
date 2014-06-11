@@ -28,8 +28,10 @@ TARGET_MAIN = bin/main
 TARGET_MAINJS = bin/main.js
 OBJ_MAIN = src/main.o
 
+TARGET_FTE_PERF_TEST = bin/fte_perf_test
 TARGET_FFX_PERF_TEST = bin/ffx_perf_test
-OBJ_PERF = src/ffx_perf_test.o
+OBJ_FTE_PERF = src/fte_perf_test.o
+OBJ_FFX_PERF = src/ffx_perf_test.o
 
 # the build target executable:
 TARGET_TEST = bin/test
@@ -57,7 +59,7 @@ OBJ_LIBFTE = src/ffx/conversions.o \
 
 TARGET_LIBGTEST = $(GTEST_LIB_DIR)/libgtest.a
 
-default: $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_FFX_PERF_TEST)
+default: $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_FTE_PERF_TEST) $(TARGET_FFX_PERF_TEST)
 
 %.o: %.c
 	$(CC) $(CFLAGS_) -c -o $@ $<
@@ -65,8 +67,11 @@ default: $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_FFX_PERF_TEST)
 %.o: %.cc
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
 
-$(TARGET_FFX_PERF_TEST): $(TARGET_LIBFTE) $(OBJ_PERF)
-	$(CXX) $(CXXFLAGS_) $(OBJ_PERF) -o $@ $(LDFLAGS_)
+$(TARGET_FFX_PERF_TEST): $(TARGET_LIBFTE) $(OBJ_FFX_PERF)
+	$(CXX) $(CXXFLAGS_) $(OBJ_FFX_PERF) -o $@ $(LDFLAGS_)
+
+$(TARGET_FTE_PERF_TEST): $(TARGET_LIBFTE) $(OBJ_FTE_PERF)
+	$(CXX) $(CXXFLAGS_) $(OBJ_FTE_PERF) -o $@ $(LDFLAGS_)
 
 $(TARGET_MAIN): $(TARGET_LIBFTE) $(OBJ_MAIN)
 	$(CXX) $(CXXFLAGS_) $(OBJ_MAIN) -o $@ $(LDFLAGS_)

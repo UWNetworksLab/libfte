@@ -1,6 +1,8 @@
 #include <assert.h>
 
 #include <iostream>
+#include <cstdio>
+#include <ctime>
 
 #include "fte/fte.h"
 #include "ffx/ffx.h"
@@ -17,11 +19,18 @@ void FfxExample() {
   uint32_t input_plaintext_len = 1024 * 8; // in bits
   mpz_class ciphertext, output_plaintext;
 
+  std::clock_t start;
+  double duration;
+
+  start = std::clock();
   for (uint32_t i = 0; i <1000; ++i) {
     ffxObj.Encrypt(input_plaintext, input_plaintext_len, &ciphertext);
-    ffxObj.Decrypt(ciphertext, input_plaintext_len, &output_plaintext);
   }
+  duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
+  std::cout << "Avg. cost (ms) of FFX[2] encrypt of a 1024-byte string: " << duration << std::endl;
+
+  ffxObj.Decrypt(ciphertext, input_plaintext_len, &output_plaintext);
   assert(input_plaintext == output_plaintext);
 }
 
