@@ -139,7 +139,7 @@ TEST(FFX2, MpzCharConversion5) {
   EXPECT_EQ((uint32_t)Y[13], 0xDD);
   EXPECT_EQ((uint32_t)Y[14], 0xEE);
   EXPECT_EQ((uint32_t)Y[15], 0xFF);
-  
+
   ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
   EXPECT_EQ(X.get_str(), Z.get_str());
 

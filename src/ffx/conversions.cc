@@ -19,7 +19,7 @@ bool BitMask(const mpz_class & in,
 bool MpzClassToBase256(const mpz_class & in,
                        uint32_t out_len_in_bytes,
                        unsigned char * out) {
-  
+
   size_t written_bytes = 0;
   mpz_export(out,             // void *rop
              &written_bytes,  // size_t *countp
@@ -32,20 +32,20 @@ bool MpzClassToBase256(const mpz_class & in,
   uint32_t delta = out_len_in_bytes - written_bytes;
   if (delta>0) {
     for (int32_t i = out_len_in_bytes-1; i>=delta; --i) {
-      out[i] = out[i-delta];    
+      out[i] = out[i-delta];
     }
     for (int32_t i = 0; i < delta; i++) {
-      out[i] = 0x00;    
+      out[i] = 0x00;
     }
   }
-  
+
   return true;
 }
 
 bool Base256ToMpzClass(unsigned char * in,
                        uint32_t in_len_in_bytes,
                        mpz_class * out) {
-    
+
   mpz_import((*out).get_mpz_t(), // mpz_t rop
              in_len_in_bytes,    // size_t count
              1,                  // int order
@@ -60,7 +60,7 @@ bool Base256ToMpzClass(unsigned char * in,
 bool Base16ToBase256(const std::string & in,
                      uint32_t out_len_in_bytes,
                      unsigned char * out) {
-    
+
   mpz_class tmp = mpz_class(in, 16);
   MpzClassToBase256(tmp, out_len_in_bytes, out);
 

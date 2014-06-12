@@ -40,14 +40,14 @@ const uint32_t kFfxKeyLengthInBits = kFfxKeyLengthInBytes * 8;
 
 class Ffx {
  protected:
-   bool RoundFunction(uint32_t n,
-                      const mpz_class & tweak,
-                      uint32_t tweak_len_in_bits,
-                      uint32_t i,
-                      const mpz_class & B,
-                      uint32_t B_len,
-                      mpz_class * retval);
-     
+  bool RoundFunction(uint32_t n,
+                     const mpz_class & tweak,
+                     uint32_t tweak_len_in_bits,
+                     uint32_t i,
+                     const mpz_class & B,
+                     uint32_t B_len,
+                     mpz_class * retval);
+
   uint32_t radix_;
   unsigned char * key_;
 
@@ -63,7 +63,7 @@ class Ffx {
   }
 
   bool SetKey(const std::string & key);
-  
+
   /*
    * On input of plaintext, plaintext_len_in_bits, performs FFX.Encrypt[radix]
    * w.r.t. to the key.

@@ -35,7 +35,7 @@ bool AesCbcMac(unsigned char * key,
   aes_init();
   aes_encrypt_key128(key, pCtx);
   aes_cbc_encrypt(pInBuffer, pOutBuffer, plaintext_len_in_bytes, pIv, pCtx);
-  
+
   unsigned char * mac_offset = pOutBuffer + (ciphertext_len_in_bytes - mac_len_in_bytes);
   Base256ToMpzClass(mac_offset,
                     mac_len_in_bytes,

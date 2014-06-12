@@ -1,5 +1,6 @@
 #include "fte/ranking/dfa_ranker.h"
 
+#include <iostream>
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>
@@ -264,10 +265,10 @@ bool DfaRanker::Unrank(const mpz_class & rank,
       // to mpz_fdiv_qr, which is much faster.
       //   char_index = (c / CachedTable_.at(state).at(n-i));
       //   c = c % CachedTable_.at(state).at(n-i);
-      mpz_fdiv_qr( char_index.get_mpz_t(),
-                   c.get_mpz_t(),
-                   c.get_mpz_t(),
-                   CachedTable_.at(state).at(n-i).get_mpz_t() );
+      mpz_fdiv_qr(char_index.get_mpz_t(),
+                  c.get_mpz_t(),
+                  c.get_mpz_t(),
+                  CachedTable_.at(state).at(n-i).get_mpz_t());
 
       char_cursor = char_index.get_ui();
     } else {

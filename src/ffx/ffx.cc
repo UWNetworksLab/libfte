@@ -237,11 +237,11 @@ bool Ffx::SetKey(const std::string & key) {
   if (!ValidateKey(key)) {
     return false;
   }
-  
+
   uint32_t key_length_in_bytes = (key.length() + 1) / 2;
   key_ = new unsigned char[key_length_in_bytes];
   Base16ToBase256(key, key_length_in_bytes, key_);
-  
+
   return true;
 }
 
@@ -251,7 +251,7 @@ Ffx::Ffx()
 
 Ffx::Ffx(const uint32_t radix)
   : radix_(radix) {
-  
+
 }
 
 } // namespace ffx

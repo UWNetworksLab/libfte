@@ -19,10 +19,8 @@ void FfxExample() {
   uint32_t input_plaintext_len = 1024 * 8; // in bits
   mpz_class ciphertext, output_plaintext;
 
-  std::clock_t start;
   double duration;
-
-  start = std::clock();
+  std::clock_t start = std::clock();
   for (uint32_t i = 0; i <1000; ++i) {
     ffxObj.Encrypt(input_plaintext, input_plaintext_len, &ciphertext);
   }
