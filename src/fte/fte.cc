@@ -82,7 +82,7 @@ bool Fte::Encrypt(const std::string & plaintext,
   while (C >= words_in_ciphertext_language_) {
     ffx_.Encrypt(C, ciphertext_language_capacity_in_bits_, &C);
   }
-  ciphertext_ranker_.Unrank(plaintext_rank, ciphertext);
+  ciphertext_ranker_.Unrank(C, ciphertext);
 
   return true;
 }
@@ -109,7 +109,7 @@ bool Fte::Decrypt(const std::string & ciphertext,
   while (plaintext_rank >= words_in_plaintext_language_) {
     ffx_.Decrypt(plaintext_rank, ciphertext_language_capacity_in_bits_, &plaintext_rank);
   }
-  plaintext_ranker_.Unrank(C, plaintext);
+  plaintext_ranker_.Unrank(plaintext_rank, plaintext);
 
   return true;
 }
