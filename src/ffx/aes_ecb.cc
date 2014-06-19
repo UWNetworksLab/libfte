@@ -15,29 +15,29 @@ bool AesEcbEncrypt(unsigned char * key,
   uint32_t plaintext_len_in_bytes = (plaintext_len_in_bits + 7) / 8;
   uint32_t ciphertext_len_in_bytes = plaintext_len_in_bytes;
 
-  aes_encrypt_ctx * pCtx = new aes_encrypt_ctx[1];
-  unsigned char * pInBuffer = new unsigned char[plaintext_len_in_bytes];
-  unsigned char * pOutBuffer = new unsigned char[ciphertext_len_in_bytes];
+  aes_encrypt_ctx * ctx = new aes_encrypt_ctx[1];
+  unsigned char * in_buffer = new unsigned char[plaintext_len_in_bytes];
+  unsigned char * out_buffer = new unsigned char[ciphertext_len_in_bytes];
 
-  memset(pInBuffer, 0, plaintext_len_in_bytes);
-  memset(pOutBuffer, 0, plaintext_len_in_bytes);
+  memset(in_buffer, 0, plaintext_len_in_bytes);
+  memset(out_buffer, 0, plaintext_len_in_bytes);
 
-  MpzClassToBase256(plaintext, plaintext_len_in_bytes, pInBuffer);
+  MpzClassToBase256(plaintext, plaintext_len_in_bytes, in_buffer);
 
   aes_init();
-  aes_encrypt_key128(key, pCtx);
-  aes_ecb_encrypt(pInBuffer, pOutBuffer, plaintext_len_in_bytes, pCtx);
+  aes_encrypt_key128(key, ctx);
+  aes_ecb_encrypt(in_buffer, out_buffer, plaintext_len_in_bytes, ctx);
 
-  Base256ToMpzClass(pOutBuffer, ciphertext_len_in_bytes, ciphertext);
+  Base256ToMpzClass(out_buffer, ciphertext_len_in_bytes, ciphertext);
 
   // cleanup
-  delete[] pCtx;
-  delete[] pInBuffer;
-  delete[] pOutBuffer;
+  delete[] ctx;
+  delete[] in_buffer;
+  delete[] out_buffer;
 
-  pCtx = NULL;
-  pInBuffer = NULL;
-  pOutBuffer = NULL;
+  ctx = NULL;
+  in_buffer = NULL;
+  out_buffer = NULL;
 
   return true;
 }
