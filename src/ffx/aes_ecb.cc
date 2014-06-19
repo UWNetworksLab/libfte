@@ -35,10 +35,6 @@ bool AesEcbEncrypt(unsigned char * key,
   delete[] in_buffer;
   delete[] out_buffer;
 
-  ctx = NULL;
-  in_buffer = NULL;
-  out_buffer = NULL;
-
   return true;
 }
 

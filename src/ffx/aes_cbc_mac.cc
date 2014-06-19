@@ -16,7 +16,7 @@ bool AesCbcMac(unsigned char * key,
   uint32_t ciphertext_len_in_bytes = plaintext_len_in_bytes;
   uint32_t mac_len_in_bytes = 16;
 
-  aes_encrypt_ctx * pCtx = new aes_encrypt_ctx[1];
+  aes_encrypt_ctx * ctx = new aes_encrypt_ctx[1];
   unsigned char * iv = new unsigned char[kFfxIvLengthInBytes];
   unsigned char * in_buffer = new unsigned char[plaintext_len_in_bytes];
   unsigned char * out_buffer = new unsigned char[ciphertext_len_in_bytes];
@@ -28,8 +28,8 @@ bool AesCbcMac(unsigned char * key,
   MpzClassToBase256(plaintext, plaintext_len_in_bytes, in_buffer);
 
   aes_init();
-  aes_encrypt_key128(key, pCtx);
-  aes_cbc_encrypt(in_buffer, out_buffer, plaintext_len_in_bytes, iv, pCtx);
+  aes_encrypt_key128(key, ctx);
+  aes_cbc_encrypt(in_buffer, out_buffer, plaintext_len_in_bytes, iv, ctx);
 
   unsigned char * mac_ptr = out_buffer + (ciphertext_len_in_bytes - mac_len_in_bytes);
   Base256ToMpzClass(mac_ptr,
@@ -37,15 +37,10 @@ bool AesCbcMac(unsigned char * key,
                     ciphertext);
 
   // cleanup
-  delete[] pCtx;
+  delete[] ctx;
   delete[] iv;
   delete[] in_buffer;
   delete[] out_buffer;
-
-  pCtx = NULL;
-  iv = NULL;
-  in_buffer = NULL;
-  out_buffer = NULL;
 
   return true;
 }
