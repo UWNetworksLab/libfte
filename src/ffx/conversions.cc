@@ -30,7 +30,7 @@ bool MpzClassToBase256(const mpz_class & in,
              in.get_mpz_t()); // const mpz_t op
 
   uint32_t delta = out_len_in_bytes - written_bytes;
-  if (delta>0) {
+  if (delta > 0) {
     for (int32_t i = out_len_in_bytes-1; i>=delta; --i) {
       out[i] = out[i-delta];
     }
