@@ -11,7 +11,7 @@
 
 void FteExample() {
   // fte example
-  std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
+  std::string K("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"); // 128 bits, in hex
   fte::Fte fteObj = fte::Fte();
   fteObj.set_key(K);
   fteObj.SetLanguages(VALID_DFA_5, 1024,

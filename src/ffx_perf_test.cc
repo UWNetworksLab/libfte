@@ -12,7 +12,7 @@
 void FfxExample() {
   // ffx example
   uint32_t radix = 2;
-  std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
+  std::string K("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"); //    128 bits, in hex
   ffx::Ffx ffxObj = ffx::Ffx(radix);
   ffxObj.SetKey(K);
   mpz_class input_plaintext = 1;
