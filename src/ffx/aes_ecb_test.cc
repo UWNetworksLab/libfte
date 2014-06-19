@@ -12,7 +12,7 @@ TEST(AES_ECB, Encrypt1) {
   unsigned char * pKey = new unsigned char[key_length_in_bytes];
   ffx::Base16ToBase256(key, key_length_in_bytes, pKey);
   uint8_t base = 16;
-  mpz_class plaintext = mpz_class("00000000000000000000000000000000",base);
+  mpz_class plaintext = mpz_class("00000000000000000000000000000000", base);
   uint32_t plaintext_len = 128;
   mpz_class ciphertext;
   ffx::AesEcbEncrypt(pKey, plaintext, plaintext_len, &ciphertext);
@@ -25,7 +25,7 @@ TEST(AES_ECB, Encrypt2) {
   unsigned char * pKey = new unsigned char[key_length_in_bytes];
   ffx::Base16ToBase256(key, key_length_in_bytes, pKey);
   uint8_t base = 16;
-  mpz_class plaintext = mpz_class("00000000000000000000000000000000",base);
+  mpz_class plaintext = mpz_class("00000000000000000000000000000000", base);
   uint32_t plaintext_len = 128;
   mpz_class ciphertext;
   ffx::AesEcbEncrypt(pKey, plaintext, plaintext_len, &ciphertext);
@@ -38,7 +38,7 @@ TEST(AES_ECB, Encrypt3) {
   unsigned char * pKey = new unsigned char[key_length_in_bytes];
   ffx::Base16ToBase256(key, key_length_in_bytes, pKey);
   uint8_t base = 16;
-  mpz_class plaintext = mpz_class("00000000000000000000000000000000",base);
+  mpz_class plaintext = mpz_class("00000000000000000000000000000000", base);
   uint32_t plaintext_len = 128;
   mpz_class ciphertext;
   ffx::AesEcbEncrypt(pKey, plaintext, plaintext_len, &ciphertext);
@@ -51,7 +51,7 @@ TEST(AES_ECB, Encrypt4) {
   unsigned char * pKey = new unsigned char[key_length_in_bytes];
   ffx::Base16ToBase256(key, key_length_in_bytes, pKey);
   uint8_t base = 16;
-  mpz_class plaintext = mpz_class("80000000000000000000000000000000",base);
+  mpz_class plaintext = mpz_class("80000000000000000000000000000000", base);
   uint32_t plaintext_len = 128;
   mpz_class ciphertext;
   ffx::AesEcbEncrypt(pKey, plaintext, plaintext_len, &ciphertext);
@@ -64,7 +64,7 @@ TEST(AES_ECB, Encrypt5) {
   unsigned char * pKey = new unsigned char[key_length_in_bytes];
   ffx::Base16ToBase256(key, key_length_in_bytes, pKey);
   uint8_t base = 16;
-  mpz_class plaintext = mpz_class("c0000000000000000000000000000000",base);
+  mpz_class plaintext = mpz_class("c0000000000000000000000000000000", base);
   uint32_t plaintext_len = 128;
   mpz_class ciphertext;
   ffx::AesEcbEncrypt(pKey, plaintext, plaintext_len, &ciphertext);

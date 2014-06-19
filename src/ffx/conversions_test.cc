@@ -87,7 +87,7 @@ TEST(FFX2, MpzCharConversion2) {
 }
 
 TEST(FFX2, MpzCharConversion3) {
-  mpz_class X = mpz_class("c34c052cc0da8d73451afe5f03be297f",16);
+  mpz_class X = mpz_class("c34c052cc0da8d73451afe5f03be297f", 16);
   uint32_t base = 256;
   uint32_t Y_len_in_bytes = mpz_sizeinbase(X.get_mpz_t(), base);
   unsigned char * Y = new unsigned char[Y_len_in_bytes];
@@ -102,7 +102,7 @@ TEST(FFX2, MpzCharConversion3) {
 }
 
 TEST(FFX2, MpzCharConversion4) {
-  mpz_class X = mpz_class("c34c052cc0da8d73451afe5f03be297fc34c052cc0da8d73451afe5f03be297f",16);
+  mpz_class X = mpz_class("c34c052cc0da8d73451afe5f03be297fc34c052cc0da8d73451afe5f03be297f", 16);
   uint32_t base = 256;
   uint32_t Y_len_in_bytes = mpz_sizeinbase(X.get_mpz_t(), base);
   unsigned char * Y = new unsigned char[Y_len_in_bytes];
@@ -117,7 +117,7 @@ TEST(FFX2, MpzCharConversion4) {
 }
 
 TEST(FFX2, MpzCharConversion5) {
-  mpz_class X = mpz_class("00112233445566778899AABBCCDDEEFF",16);
+  mpz_class X = mpz_class("00112233445566778899AABBCCDDEEFF", 16);
   uint32_t Y_len_in_bytes = 16;
   unsigned char * Y = new unsigned char[Y_len_in_bytes];
   mpz_class Z = 0;
@@ -153,7 +153,7 @@ TEST(FFX2, 16to256_1) {
 
   ffx::Base16ToBase256(X, sizeInBase256, Y);
 
-  for (uint32_t i = 0; i<sizeInBase256; ++i) {
+  for (uint32_t i = 0; i < sizeInBase256; ++i) {
     EXPECT_EQ(Y[i], 0);
   }
 
@@ -168,7 +168,7 @@ TEST(FFX2, 16to256_2) {
 
   ffx::Base16ToBase256(X, sizeInBase256, Y);
 
-  for (uint32_t i = 0; i<sizeInBase256; ++i) {
+  for (uint32_t i = 0; i < sizeInBase256; ++i) {
     EXPECT_EQ(Y[i], 255);
   }
 

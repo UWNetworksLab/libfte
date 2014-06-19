@@ -21,7 +21,7 @@ void FfxExample() {
 
   double duration;
   std::clock_t start = std::clock();
-  for (uint32_t i = 0; i <1000; ++i) {
+  for (uint32_t i = 0; i < 1000; ++i) {
     ffxObj.Encrypt(input_plaintext, input_plaintext_len, &ciphertext);
   }
   duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;

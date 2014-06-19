@@ -47,24 +47,24 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
   bool startStateIsntSet = true;
   std::string line;
   std::istringstream my_str_stream(dfa);
-  while ( getline (my_str_stream,line) ) {
+  while ( getline (my_str_stream, line) ) {
     if (line.empty()) {
       break;
     }
 
     StringVectorT split_vec = tokenize(line, '\t');
     if (4 == split_vec.size()) {
-      uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
-      uint32_t new_state = strtol(split_vec.at(1).c_str(),NULL,10);
-      uint32_t symbol = strtol(split_vec.at(2).c_str(),NULL,10);
+      uint32_t current_state = strtol(split_vec.at(0).c_str(), NULL, 10);
+      uint32_t new_state = strtol(split_vec.at(1).c_str(), NULL, 10);
+      uint32_t symbol = strtol(split_vec.at(2).c_str(), NULL, 10);
 
-      if (find(states_.begin(), states_.end(), current_state)==states_.end()) {
+      if (find(states_.begin(), states_.end(), current_state) == states_.end()) {
         states_.push_back( current_state );
       }
-      if (find(states_.begin(), states_.end(), new_state)==states_.end()) {
+      if (find(states_.begin(), states_.end(), new_state) == states_.end()) {
         states_.push_back( new_state );
       }
-      if (find(symbols_.begin(), symbols_.end(), symbol)==symbols_.end()) {
+      if (find(symbols_.begin(), symbols_.end(), symbol) == symbols_.end()) {
         symbols_.push_back( symbol );
       }
 
@@ -72,12 +72,12 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
         start_state_ = current_state;
         startStateIsntSet = false;
       }
-    } else if (1==split_vec.size()) {
-      uint32_t final_state = strtol(split_vec.at(0).c_str(),NULL,10);
-      if (find(final_states_.begin(), final_states_.end(), final_state)==final_states_.end()) {
+    } else if (1 == split_vec.size()) {
+      uint32_t final_state = strtol(split_vec.at(0).c_str(), NULL, 10);
+      if (find(final_states_.begin(), final_states_.end(), final_state) == final_states_.end()) {
         final_states_.push_back( final_state );
       }
-    } else if (split_vec.size()>0) {
+    } else if (split_vec.size() > 0) {
       return false;
     } else {
       // blank line, ignore
@@ -91,28 +91,28 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
 
   // build up our sigma/sigma_reverse tables which enable mappings between
   // bytes/integers
-  for (uint32_t j=0; j<num_symbols_; ++j) {
-    sigma_.insert( std::pair<uint32_t,char>( j, (char)(symbols_.at(j))) );
-    sigma_reverse_.insert( std::pair<char,uint32_t>((char)(symbols_.at(j)), j) );
+  for (uint32_t j = 0; j < num_symbols_; ++j) {
+    sigma_.insert( std::pair<uint32_t, char>( j, (char)(symbols_.at(j))) );
+    sigma_reverse_.insert( std::pair<char, uint32_t>((char)(symbols_.at(j)), j) );
   }
 
   // initialize all transitions in our dfa to our dead state
   delta_.resize(num_states_);
-  for (uint32_t j=0; j<num_states_; ++j) {
+  for (uint32_t j = 0; j < num_states_; ++j) {
     delta_.at(j).resize(num_symbols_);
-    for (uint32_t k=0; k < num_symbols_; ++k) {
+    for (uint32_t k = 0; k < num_symbols_; ++k) {
       delta_.at(j).at(k) = num_states_ - 1;
     }
   }
 
   // fill our our transition function delta
   std::istringstream my_str_stream2(dfa);
-  while (getline (my_str_stream2,line)) {
+  while (getline (my_str_stream2, line)) {
     StringVectorT split_vec = tokenize( line, '\t' );
     if (4 == split_vec.size()) {
-      uint32_t current_state = strtol(split_vec.at(0).c_str(),NULL,10);
-      uint32_t symbol = strtol(split_vec.at(2).c_str(),NULL,10);
-      uint32_t new_state = strtol(split_vec.at(1).c_str(),NULL,10);
+      uint32_t current_state = strtol(split_vec.at(0).c_str(), NULL, 10);
+      uint32_t symbol = strtol(split_vec.at(2).c_str(), NULL, 10);
+      uint32_t new_state = strtol(split_vec.at(1).c_str(), NULL, 10);
 
       symbol = sigma_reverse_.at(symbol);
 
@@ -121,10 +121,10 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
   }
 
   delta_dense_.resize(num_states_);
-  for (uint32_t q=0; q < num_states_; ++q ) {
+  for (uint32_t q = 0; q < num_states_; ++q ) {
     delta_dense_.at(q) = true;
-    for (uint32_t a=1; a < num_symbols_; ++a) {
-      if (delta_.at(q).at(a-1) != delta_.at(q).at(a)) {
+    for (uint32_t a = 1; a < num_symbols_; ++a) {
+      if (delta_.at(q).at(a - 1) != delta_.at(q).at(a)) {
         delta_dense_.at(q) = false;
         break;
       }
@@ -136,8 +136,8 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
   // perform our precalculation to speed up (un)ranking
   DfaRanker::PopulateCachedTable();
 
-  words_in_language_inclusive_.resize(fixed_slice_+1);
-  words_in_language_exclusive_.resize(fixed_slice_+1);
+  words_in_language_inclusive_.resize(fixed_slice_ + 1);
+  words_in_language_exclusive_.resize(fixed_slice_ + 1);
   for (uint32_t max_word_len = 0; max_word_len <= fixed_slice_; ++max_word_len) {
     mpz_class inclusive_dest, exclusive_dest;
     CalculateNumWordsInLanguage(0, max_word_len, &inclusive_dest);
@@ -152,9 +152,9 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
     return false;
   }
 
-  std::sort(symbols_.begin(),symbols_.end());
-  std::sort(states_.begin(),states_.end());
-  std::sort(final_states_.begin(),final_states_.end());
+  std::sort(symbols_.begin(), symbols_.end());
+  std::sort(states_.begin(), states_.end());
+  std::sort(final_states_.begin(), final_states_.end());
 
   return true;
 }
@@ -179,7 +179,7 @@ bool DfaRanker::SanityCheck() {
 
   // ensure we have N states, labeled 0,1,..N-1
   Uint32VectorT::iterator state;
-  for (state=states_.begin(); state!=states_.end(); ++state) {
+  for (state = states_.begin(); state != states_.end(); ++state) {
     if (*state >= states_.size()) {
       return false;
     }
@@ -199,27 +199,27 @@ bool DfaRanker::PopulateCachedTable() {
 
   // ensure our table _T is the correct size
   CachedTable_.resize(num_states_);
-  for (uint32_t q=0; q<num_states_; ++q) {
-    CachedTable_.at(q).resize(fixed_slice_+1);
-    for (uint32_t i=0; i<=fixed_slice_; ++i) {
+  for (uint32_t q = 0; q < num_states_; ++q) {
+    CachedTable_.at(q).resize(fixed_slice_ + 1);
+    for (uint32_t i = 0; i <= fixed_slice_; ++i) {
       CachedTable_.at(q).at(i) = 0;
     }
   }
 
   // set all _T.at(q).at(0) = 1 for all states in _final_states
   Uint32VectorT::iterator state;
-  for (state=final_states_.begin(); state!=final_states_.end(); ++state) {
+  for (state = final_states_.begin(); state != final_states_.end(); ++state) {
     CachedTable_.at(*state).at(0) = 1;
   }
 
   // walk through our table _T
   // we want each entry _T.at(q).at(i) to contain the number of strings that start
   // from state q, terminate in a final state, and are of length i
-  for (uint32_t i=1; i<=fixed_slice_; ++i) {
-    for (uint32_t q=0; q<delta_.size(); ++q) {
-      for (uint32_t a=0; a<delta_.at(0).size(); ++a) {
+  for (uint32_t i = 1; i <= fixed_slice_; ++i) {
+    for (uint32_t q = 0; q < delta_.size(); ++q) {
+      for (uint32_t a = 0; a < delta_.at(0).size(); ++a) {
         uint32_t state = delta_.at(q).at(a);
-        CachedTable_.at(q).at(i) += CachedTable_.at(state).at(i-1);
+        CachedTable_.at(q).at(i) += CachedTable_.at(state).at(i - 1);
       }
     }
   }
@@ -239,7 +239,7 @@ bool DfaRanker::Unrank(const mpz_class & rank,
     WordsInLanguage(0, n, &words_in_slice);
     bool c_lt_words_in_slice = (mpz_cmp(c.get_mpz_t(), words_in_slice.get_mpz_t()) < 0);
     if (c_lt_words_in_slice) {
-      WordsInLanguage(0, n-1, &words_in_slice);
+      WordsInLanguage(0, n - 1, &words_in_slice);
       mpz_sub(c.get_mpz_t(),
               c.get_mpz_t(),
               words_in_slice.get_mpz_t());
@@ -248,7 +248,7 @@ bool DfaRanker::Unrank(const mpz_class & rank,
     ++n;
   }
 
-  if (n>fixed_slice_) {
+  if (n > fixed_slice_) {
     return false;
   }
 
@@ -256,7 +256,7 @@ bool DfaRanker::Unrank(const mpz_class & rank,
   uint32_t char_cursor = 0;
   uint32_t state = 0;
   mpz_class char_index = 0;
-  for (uint32_t i=1; i<=n; ++i) {
+  for (uint32_t i = 1; i <= n; ++i) {
     if (delta_dense_.at(q)) {
       // our optimized version, when _delta[q][i] is equal to n for all symbols i
       state = delta_.at(q).at(0);
@@ -268,7 +268,7 @@ bool DfaRanker::Unrank(const mpz_class & rank,
       mpz_fdiv_qr(char_index.get_mpz_t(),
                   c.get_mpz_t(),
                   c.get_mpz_t(),
-                  CachedTable_.at(state).at(n-i).get_mpz_t());
+                  CachedTable_.at(state).at(n - i).get_mpz_t());
 
       char_cursor = char_index.get_ui();
     } else {
@@ -279,16 +279,16 @@ bool DfaRanker::Unrank(const mpz_class & rank,
       // A call to mpz_cmp is faster than using >= directly.
       // while (c >= _T.at(state).at(n-i)) {
       while (mpz_cmp(c.get_mpz_t(),
-                     CachedTable_.at(state).at(n-i).get_mpz_t() )>=0) {
+                     CachedTable_.at(state).at(n - i).get_mpz_t() ) >= 0) {
 
         // Much faster to call mpz_sub, than -=.
         // c -= _T.at(state).at(n-i);
         mpz_sub(c.get_mpz_t(),
                 c.get_mpz_t(),
-                CachedTable_.at(state).at(n-i).get_mpz_t() );
+                CachedTable_.at(state).at(n - i).get_mpz_t() );
 
         ++char_cursor;
-        state =delta_.at(q).at(char_cursor);
+        state = delta_.at(q).at(char_cursor);
       }
     }
     (*word) += sigma_.at(char_cursor);
@@ -314,9 +314,9 @@ bool DfaRanker::Rank(const std::string & word,
   uint32_t q = start_state_;
   uint32_t state = 0;
   mpz_class tmp = 0;
-  for (uint32_t i=1; i<=n; ++i) {
+  for (uint32_t i = 1; i <= n; ++i) {
     try {
-      symbol_as_int = sigma_reverse_.at(word.at(i-1));
+      symbol_as_int = sigma_reverse_.at(word.at(i - 1));
     } catch (const std::out_of_range& e) {
       return false;
     }
@@ -329,7 +329,7 @@ bool DfaRanker::Rank(const std::string & word,
       // compared to:
       // tmp = _T.at(state).at(n-i) * symbol_as_int
       mpz_mul_ui( tmp.get_mpz_t(),
-                  CachedTable_.at(state).at(n-i).get_mpz_t(),
+                  CachedTable_.at(state).at(n - i).get_mpz_t(),
                   symbol_as_int );
 
       // mpz_add is faster than +=
@@ -339,14 +339,14 @@ bool DfaRanker::Rank(const std::string & word,
                tmp.get_mpz_t() );
     } else {
       // traditional goldberg-sipser ranking
-      for (uint32_t j=1; j<=symbol_as_int; ++j) {
-        state = delta_.at(q).at(j-1);
+      for (uint32_t j = 1; j <= symbol_as_int; ++j) {
+        state = delta_.at(q).at(j - 1);
 
         // mpz_add is faster than +=
         //retval += _T.at(state).at(n-i);
         mpz_add( (*rank).get_mpz_t(),
                  (*rank).get_mpz_t(),
-                 CachedTable_.at(state).at(n-i).get_mpz_t() );
+                 CachedTable_.at(state).at(n - i).get_mpz_t() );
       }
     }
     q = delta_.at(q).at(symbol_as_int);
@@ -360,7 +360,7 @@ bool DfaRanker::Rank(const std::string & word,
   }
 
   mpz_class words_in_language;
-  WordsInLanguage(0, n-1, &words_in_language);
+  WordsInLanguage(0, n - 1, &words_in_language);
   mpz_add( (*rank).get_mpz_t(),
            (*rank).get_mpz_t(),
            words_in_language.get_mpz_t() );
@@ -386,7 +386,7 @@ bool DfaRanker::WordsInLanguage(uint32_t min_word_length,
                                 mpz_class * words_in_language) {
   if (0 == min_word_length) {
     (*words_in_language) = words_in_language_inclusive_.at(max_word_length);
-  } else if (min_word_length==max_word_length) {
+  } else if (min_word_length == max_word_length) {
     (*words_in_language) = words_in_language_exclusive_.at(max_word_length);
   } else {
     return false;

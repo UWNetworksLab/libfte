@@ -46,7 +46,7 @@ bool Ffx::RoundFunction(uint32_t n,
   uint32_t t = (tweak_len_in_bits + 7) >> 3;
   uint32_t beta = (n + 1) >> 1;
   uint32_t b = (beta + 7) >> 3;
-  uint32_t d = 4 * ((b+3) >> 2);
+  uint32_t d = 4 * ((b + 3) >> 2);
 
 
   // [FFX2] pg 3., line 32
@@ -54,7 +54,7 @@ bool Ffx::RoundFunction(uint32_t n,
   if ((i & 1) == 0) {
     m = n >> 1;
   } else {
-    m = (n+1) >> 1;
+    m = (n + 1) >> 1;
   }
 
   // [FFX2] pg 3., line 33

@@ -49,7 +49,7 @@ class Ffx {
                      mpz_class * retval);
 
   uint32_t radix_;
-  unsigned char * key_;
+  unsigned char * key_ = NULL;
 
  public:
   Ffx();
