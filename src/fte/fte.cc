@@ -11,20 +11,6 @@
 
 namespace fte {
 
-static bool ValidateKey(const std::string & key) {
-  if (key.length() != ffx::kFfxKeyLengthInNibbles) {
-    return false;
-  }
-  for (uint32_t i = 0; i < key.length(); ++i) {
-    if (isxdigit(key[i])) {
-      continue;
-    } else {
-      return false;
-    }
-  }
-  return true;
-}
-
 Fte::Fte() {
   ffx_ = ffx::Ffx(kFfxRadix);
   key_is_set_ = false;
@@ -68,13 +54,9 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
 }
 
 bool Fte::set_key(const std::string & key) {
-  if (ValidateKey(key)) {
-    key_ = key;
-    key_is_set_ = true;
-  } else {
-    return false;
-  }
-  return true;
+  bool success = ffx_.SetKey(key);
+  key_is_set_ = success;
+  return success;
 }
 
 /*
@@ -96,9 +78,9 @@ bool Fte::Encrypt(const std::string & plaintext,
   mpz_class plaintext_rank;
   plaintext_ranker_.Rank(plaintext, &plaintext_rank);
   mpz_class C = 0;
-  ffx_.Encrypt(key_, plaintext_rank, ciphertext_language_capacity_in_bits_, &C);
+  ffx_.Encrypt(plaintext_rank, ciphertext_language_capacity_in_bits_, &C);
   while (C >= words_in_ciphertext_language_) {
-    ffx_.Encrypt(key_, C, ciphertext_language_capacity_in_bits_, &C);
+    ffx_.Encrypt(C, ciphertext_language_capacity_in_bits_, &C);
   }
   ciphertext_ranker_.Unrank(C, ciphertext);
 
@@ -123,9 +105,9 @@ bool Fte::Decrypt(const std::string & ciphertext,
   mpz_class C;
   ciphertext_ranker_.Rank(ciphertext, &C);
   mpz_class plaintext_rank = 0;
-  ffx_.Decrypt(key_, C, ciphertext_language_capacity_in_bits_, &plaintext_rank);
+  ffx_.Decrypt(C, ciphertext_language_capacity_in_bits_, &plaintext_rank);
   while (plaintext_rank >= words_in_plaintext_language_) {
-    ffx_.Decrypt(key_, plaintext_rank, ciphertext_language_capacity_in_bits_, &plaintext_rank);
+    ffx_.Decrypt(plaintext_rank, ciphertext_language_capacity_in_bits_, &plaintext_rank);
   }
   plaintext_ranker_.Unrank(plaintext_rank, plaintext);
 

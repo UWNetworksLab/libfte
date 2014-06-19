@@ -19,11 +19,23 @@ bool BitMask(const mpz_class & in,
 bool MpzClassToBase256(const mpz_class & in,
                        uint32_t out_len_in_bytes,
                        unsigned char * out) {
-  mpz_class tmp = in;
-  for (int32_t i = out_len_in_bytes - 1; i >= 0; --i) {
-    mpz_class chunk = tmp & 0xFF;
-    out[i] = mpz_get_ui(chunk.get_mpz_t());
-    tmp = tmp >> 8;
+
+  size_t written_bytes = 0;
+  mpz_export(out,             // void *rop
+             &written_bytes,  // size_t *countp
+             1,               // int order
+             1,               // size_t size
+             1,               // int endian
+             0,               // size_t nails
+             in.get_mpz_t()); // const mpz_t op
+
+  // If mpz_export writes less bytes than specified
+  // by out_len_in_bytes, then we need to padd out
+  // with zeros.
+  uint32_t delta = out_len_in_bytes - written_bytes;
+  if (delta > 0) {
+    memmove(out + delta, out, out_len_in_bytes - delta);
+    memset(out, 0, delta);
   }
 
   return true;
@@ -32,11 +44,14 @@ bool MpzClassToBase256(const mpz_class & in,
 bool Base256ToMpzClass(unsigned char * in,
                        uint32_t in_len_in_bytes,
                        mpz_class * out) {
-  *out = 0;
-  for (uint32_t i = 0; i < in_len_in_bytes; ++i) {
-    mpz_class chunk = static_cast<uint32_t>(in[i]);
-    *out += chunk << (8 * (in_len_in_bytes - 1 - i));
-  }
+
+  mpz_import((*out).get_mpz_t(), // mpz_t rop
+             in_len_in_bytes,    // size_t count
+             1,                  // int order
+             1,                  // size_t size
+             1,                  // int endian
+             0,                  // size_t nails
+             in);                // const void *op
 
   return true;
 }
@@ -44,11 +59,9 @@ bool Base256ToMpzClass(unsigned char * in,
 bool Base16ToBase256(const std::string & in,
                      uint32_t out_len_in_bytes,
                      unsigned char * out) {
-  for (uint32_t i = 0; i < out_len_in_bytes; ++i) {
-    std::string byte_str = in.substr(i * 2, 2);
-    mpz_class chunk = mpz_class(byte_str, 16);
-    out[i] = static_cast<unsigned char>(chunk.get_ui());
-  }
+
+  mpz_class tmp = mpz_class(in, 16);
+  MpzClassToBase256(tmp, out_len_in_bytes, out);
 
   return true;
 }

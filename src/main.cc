@@ -32,11 +32,12 @@ void FfxExample() {
   uint32_t radix = 2;
   ffx::Ffx ffxObj = ffx::Ffx(radix);
   std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; //    128 bits, in hex
+  ffxObj.SetKey(K);
   mpz_class input_plaintext = 65535;
   uint32_t input_plaintext_len = 16; // in bits
   mpz_class ciphertext, output_plaintext;
-  ffxObj.Encrypt(K, input_plaintext, input_plaintext_len, &ciphertext);
-  ffxObj.Decrypt(K, ciphertext, input_plaintext_len, &output_plaintext);
+  ffxObj.Encrypt(input_plaintext, input_plaintext_len, &ciphertext);
+  ffxObj.Decrypt(ciphertext, input_plaintext_len, &output_plaintext);
 
   std::cout << "ffx:" << std::endl;
   std::cout << "- input_plaintext: " << input_plaintext.get_str() << std::endl;

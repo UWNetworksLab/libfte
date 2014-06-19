@@ -33,22 +33,27 @@ namespace ffx {
 
 const uint32_t kDefaultFfxRadix = 2;
 const uint32_t kDefaultFfxRounds = 10;
+const uint32_t kFfxIvLengthInBytes = 16;
 const uint32_t kFfxKeyLengthInBytes = 16;
 const uint32_t kFfxKeyLengthInNibbles = kFfxKeyLengthInBytes * 2;
 const uint32_t kFfxKeyLengthInBits = kFfxKeyLengthInBytes * 8;
 
 class Ffx {
- private:
+ protected:
+  bool RoundFunction(uint32_t n,
+                     const mpz_class & tweak,
+                     uint32_t tweak_len_in_bits,
+                     uint32_t i,
+                     const mpz_class & B,
+                     uint32_t B_len,
+                     mpz_class * retval);
+
   uint32_t radix_;
+  unsigned char * key_;
 
  public:
-  Ffx()
-    : radix_(kDefaultFfxRadix) {
-  }
-
-  Ffx(const uint32_t radix)
-    : radix_(radix) {
-  }
+  Ffx();
+  Ffx(const uint32_t radix);
 
   /*
    * Returns the radix for the current FFX instantiation.
@@ -57,6 +62,8 @@ class Ffx {
     return radix_;
   }
 
+  bool SetKey(const std::string & key);
+
   /*
    * On input of plaintext, plaintext_len_in_bits, performs FFX.Encrypt[radix]
    * w.r.t. to the key.
@@ -64,13 +71,11 @@ class Ffx {
    * This encrypt function preserves the length of the input plaintext. That is,
    * the resultant ciphertext will be a bitstring of length plaintext_len.
    */
-  bool Encrypt(const std::string & key,
-               const mpz_class & plaintext,
+  bool Encrypt(const mpz_class & plaintext,
                uint32_t plaintext_len_in_bits,
                mpz_class * ciphertext);
 
-  bool Encrypt(const std::string & key,
-               const mpz_class & tweak,
+  bool Encrypt(const mpz_class & tweak,
                uint32_t tweak_len_in_bits,
                const mpz_class & plaintext,
                uint32_t plaintext_len_in_bits,
@@ -80,13 +85,11 @@ class Ffx {
    * Given a ciphertext output from FFX.Encrypt[radix], a ciphertext_len and
    * key, recovers the input plaintext.
    */
-  bool Decrypt(const std::string & key,
-               const mpz_class & ciphertext,
+  bool Decrypt(const mpz_class & ciphertext,
                uint32_t ciphertext_len_in_bits,
                mpz_class * plaintext);
 
-  bool Decrypt(const std::string & key,
-               const mpz_class & tweak,
+  bool Decrypt(const mpz_class & tweak,
                uint32_t tweak_len_in_bits,
                const mpz_class & ciphertext,
                uint32_t ciphertext_len_in_bits,

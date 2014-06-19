@@ -124,7 +124,7 @@ LibFTE is based on concepts and algorithms from the following papers.
 * [FTE1] [Protocol Misidentification Made Easy with Format-Transforming Encryption](http://eprint.iacr.org/2012/494.pdf)
 Kevin P. Dyer, Scott E. Coull, Thomas Ristenpart and Thomas Shrimpton.
 In proceedings of the ACM Conference on Computer and Communications Security (CCS), 2013. 
-* [FTE2] LibFTE: A User-Friendly Toolkit for Constructing Practical Format-Abiding Encryption Schemes
+* [FTE2] LibFTE: A Toolkit for Constructing Practical, Format-Abiding Encryption Schemes
 Daniel Luchaup, Kevin P. Dyer, Somesh Jha, Thomas Ristenpart and Thomas Shrimpton.
 To appear in the proceedings of USENIX Security 2014
 * [FPE1] [Format Preserving Encryption](http://eprint.iacr.org/2009/251.pdf)
