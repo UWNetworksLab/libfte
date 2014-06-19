@@ -246,11 +246,13 @@ bool Ffx::SetKey(const std::string & key) {
 }
 
 Ffx::Ffx()
-  : radix_(kDefaultFfxRadix) {
+  : radix_(kDefaultFfxRadix)
+  , key_(NULL) {
 }
 
 Ffx::Ffx(const uint32_t radix)
-  : radix_(radix) {
+  : radix_(radix)
+  , key_(NULL) {
 
 }
 
