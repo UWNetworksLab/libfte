@@ -19,10 +19,8 @@ bool AesEcbEncrypt(unsigned char * key,
   unsigned char * pInBuffer = new unsigned char[plaintext_len_in_bytes];
   unsigned char * pOutBuffer = new unsigned char[ciphertext_len_in_bytes];
 
-  for (uint32_t i = 0; i < plaintext_len_in_bytes; ++i) {
-    pInBuffer[i] = 0x00;
-    pOutBuffer[i] = 0x00;
-  }
+  memset(pInBuffer, 0, plaintext_len_in_bytes);
+  memset(pOutBuffer, 0, plaintext_len_in_bytes);
 
   MpzClassToBase256(plaintext, plaintext_len_in_bytes, pInBuffer);
 

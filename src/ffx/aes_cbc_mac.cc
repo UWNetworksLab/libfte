@@ -21,14 +21,9 @@ bool AesCbcMac(unsigned char * key,
   unsigned char * pInBuffer = new unsigned char[plaintext_len_in_bytes];
   unsigned char * pOutBuffer = new unsigned char[ciphertext_len_in_bytes];
 
-  for (uint32_t i = 0; i < plaintext_len_in_bytes; ++i) {
-    pInBuffer[i] = 0x00;
-    pOutBuffer[i] = 0x00;
-  }
-
-  for (uint32_t i = 0; i < kFfxKeyLengthInBytes; ++i) {
-    pIv[i] = 0x00;
-  }
+  memset(pInBuffer, 0, plaintext_len_in_bytes);
+  memset(pOutBuffer, 0, plaintext_len_in_bytes);
+  memset(pIv, 0, kFfxIvLengthInBytes);
 
   MpzClassToBase256(plaintext, plaintext_len_in_bytes, pInBuffer);
 
