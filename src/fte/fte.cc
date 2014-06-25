@@ -75,6 +75,9 @@ bool Fte::Encrypt(const std::string & plaintext,
     return false;
   }
 
+  // ensure ciphertext is initialized to the empty string
+  (*ciphertext) = "";
+
   mpz_class plaintext_rank;
   plaintext_ranker_.Rank(plaintext, &plaintext_rank);
   mpz_class C = 0;
@@ -101,6 +104,9 @@ bool Fte::Decrypt(const std::string & ciphertext,
   if (!languages_are_set_) {
     return false;
   }
+
+  // ensure plaintext is initialized to the empty string
+  (*plaintext) = "";
 
   mpz_class C;
   ciphertext_ranker_.Rank(ciphertext, &C);
