@@ -678,6 +678,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 with_gmp
+with_regex2dfa
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1300,6 +1301,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-gmp=DIR          The path to your GMP directory
+  --with-regex2dfa=DIR    The path to your regex2dfa directory
 
 Some influential environment variables:
   CC          C compiler command
@@ -2029,6 +2031,16 @@ else
   gmpdir="/usr/local"
 
 fi
+
+
+# Check whether --with-regex2dfa was given.
+if test "${with_regex2dfa+set}" = set; then :
+  withval=$with_regex2dfa; regex2dfadir="$withval"
+else
+  regex2dfadir="/usr/local"
+
+fi
+
 
 
 ac_ext=c
@@ -3340,6 +3352,27 @@ if test "x$ac_cv_file_third_party_gtest_Makefile" = xyes; then :
 
 else
   cd third_party/gtest && ./configure --disable-shared --enable-static && cd ../..
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for third_party/regex2dfa/Makefile" >&5
+$as_echo_n "checking for third_party/regex2dfa/Makefile... " >&6; }
+if ${ac_cv_file_third_party_regex2dfa_Makefile+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "third_party/regex2dfa/Makefile"; then
+  ac_cv_file_third_party_regex2dfa_Makefile=yes
+else
+  ac_cv_file_third_party_regex2dfa_Makefile=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file_third_party_regex2dfa_Makefile" >&5
+$as_echo "$ac_cv_file_third_party_regex2dfa_Makefile" >&6; }
+if test "x$ac_cv_file_third_party_regex2dfa_Makefile" = xyes; then :
+
+else
+  cd third_party/regex2dfa && ./configure && cd ../..
 fi
 
 

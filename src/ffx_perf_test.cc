@@ -7,7 +7,6 @@
 #include "fte/fte.h"
 #include "ffx/ffx.h"
 #include "fte/ranking/dfa_ranker.h"
-#include "fte/ranking/sample_dfas.h"
 
 void FfxExample() {
   // ffx example

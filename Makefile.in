@@ -16,13 +16,17 @@ GTEST_DIR = $(THIRDPARTY_DIR)/gtest
 GTEST_LIB_DIR = $(GTEST_DIR)/lib/.libs
 GTEST_INC_DIR = $(GTEST_DIR)/include
 
+REGEX2DFA_DIR = $(THIRDPARTY_DIR)/regex2dfa
+REGEX2DFA_LIB_DIR = $(REGEX2DFA_DIR)/.libs
+REGEX2DFA_INC_DIR = $(REGEX2DFA_DIR)/src
+
 INSTALL_INC_DIR = @prefix@/include
 INSTALL_LIB_DIR = @prefix@/lib
 
 OPTIMIZATION_FLAGS = -O3
-CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
-CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -Wall -I. -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR)
-LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -lgtest -lgmp -lfte -pthread
+	CFLAGS_ = $(CFLAGS) $(OPTIMIZATION_FLAGS) -Wall
+CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -Wall -I. -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR) -I$(REGEX2DFA_INC_DIR)
+	LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -L$(REGEX2DFA_LIB_DIR) -lgtest -lgmp -lfte -lregex2dfa -pthread
 
 TARGET_MAIN = bin/main
 TARGET_MAINJS = bin/main.js
@@ -50,13 +54,13 @@ OBJ_LIBFTE = src/ffx/conversions.o \
              src/ffx/aes_ecb.o \
              src/ffx/ffx.o \
              src/fte/fte.o \
-             src/fte/ranking/sample_dfas.o \
              src/fte/ranking/dfa_ranker.o \
              $(THIRDPARTY_DIR)/aes/aes_modes.o \
              $(THIRDPARTY_DIR)/aes/aescrypt.o \
              $(THIRDPARTY_DIR)/aes/aeskey.o \
              $(THIRDPARTY_DIR)/aes/aestab.o
 
+TARGET_LIBREGEX2DFA = $(REGEX2DFA_LIB_DIR)/libregex2dfa.a
 TARGET_LIBGTEST = $(GTEST_LIB_DIR)/libgtest.a
 
 default: $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_FTE_PERF_TEST) $(TARGET_FFX_PERF_TEST)
@@ -82,10 +86,13 @@ $(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
 $(TARGET_LIBGTEST):
 	cd $(GTEST_DIR) && $(MAKE)
 
-$(TARGET_TEST): $(TARGET_LIBGTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
+$(TARGET_LIBREGEX2DFA):
+	cd $(REGEX2DFA_DIR) && $(MAKE)
+
+$(TARGET_TEST): $(TARGET_LIBREGEX2DFA) $(TARGET_LIBGTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
 	$(CXX) $(CXXFLAGS_) $(OBJ_TEST) -o $@  $(LDFLAGS_)
 
-$(TARGET_TESTJS): $(TARGET_LIBGTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
+$(TARGET_TESTJS): $(TARGET_LIBREGEX2DFA) $(TARGET_LIBGTEST) $(TARGET_LIBFTE) $(OBJ_TEST)
 	$(CXX) $(CXXFLAGS_) $(OBJ_TEST) -o $@  $(LDFLAGS_)
 
 $(TARGET_LIBFTE): $(OBJ_LIBFTE)
@@ -109,7 +116,7 @@ install: $(INSTALL_LIB_DIR) $(INSTALL_INC_DIR)
 	cp -f src/fte/*.h $(INSTALL_INC_DIR)/fte
 	cp -f src/fte/ranking/*.h $(INSTALL_INC_DIR)/fte/ranking
 
-clean: cleanlibfte cleanlibgtest
+clean: cleanlibfte cleanlibgtest cleanlibregex2dfa
 
 cleanlibfte:
 	$(RM) $(TARGET_TESTJS)
@@ -125,6 +132,9 @@ cleanlibfte:
 
 cleanlibgtest:
 	cd $(GTEST_DIR) && $(MAKE) clean
+
+cleanlibregex2dfa:
+	cd $(REGEX2DFA_DIR) && $(MAKE) clean
 
 distclean:
 	rm -f config.status

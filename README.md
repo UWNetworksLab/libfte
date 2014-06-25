@@ -52,13 +52,18 @@ FTE encryption example
 
 ```c++
 #include "fte/fte.h"
+#include "regex2dfa.h"
 
 void main() {
   std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
   fte::Fte fteObj = fte::Fte();
   fteObj.set_key(K);
-  fteObj.SetLanguages(VALID_DFA_5, 16,   // R_in  = ^.{,16}$
-                      VALID_DFA_1, 128); // R_out =^(a|b){,128}$
+  std::string plaintext_dfa;
+  std::string ciphertext_dfa;
+  regex2dfa::Regex2Dfa("^.+$", &plaintext_dfa);
+  regex2dfa::Regex2Dfa("^(a|b)+$", &plaintext_dfa);
+  fteObj.SetLanguages(plaintext_dfa, 16,
+                      ciphertext_dfa, 128);
   std::string input_plaintext = "Hello, Word!";
   std::string ciphertext, output_plaintext;
   fteObj.Encrypt(input_plaintext, &ciphertext);
