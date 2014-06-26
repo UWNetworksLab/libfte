@@ -2,18 +2,21 @@
 
 #include <iostream>
 
+#include "regex2dfa.h"
+
 #include "fte/fte.h"
 #include "ffx/ffx.h"
 #include "fte/ranking/dfa_ranker.h"
-#include "fte/ranking/sample_dfas.h"
 
 void FteExample() {
   // fte example
   std::string K = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"; // 128 bits, in hex
   fte::Fte fteObj = fte::Fte();
   fteObj.set_key(K);
-  fteObj.SetLanguages(VALID_DFA_5, 16,
-                      VALID_DFA_1, 128);
+  std::string dfa;
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
+  fteObj.SetLanguages(dfa, 128,
+                      dfa, 128);
   std::string input_plaintext = "Hello, Word!";
   std::string ciphertext, output_plaintext;
   fteObj.Encrypt(input_plaintext, &ciphertext);
@@ -52,7 +55,9 @@ void RankingExample() {
   // ranking example
   uint32_t N  = 8;
   fte::ranking::DfaRanker rankerObj = fte::ranking::DfaRanker();
-  rankerObj.SetLanguage(VALID_DFA_1, N);
+  std::string dfa;
+  regex2dfa::Regex2Dfa("^(a|b)+$", &dfa);
+  rankerObj.SetLanguage(dfa, N);
   std::string input_string = "bbbbbbbb";
   mpz_class output_rank;
   std::string output_string;

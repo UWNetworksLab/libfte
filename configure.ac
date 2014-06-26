@@ -9,6 +9,13 @@ AC_ARG_WITH(gmp,
             [gmpdir="$withval"],
             [gmpdir="/usr/local"]
            )
+AC_ARG_WITH(regex2dfa, 
+            AS_HELP_STRING([--with-regex2dfa=DIR],
+                           [The path to your regex2dfa directory]),
+            [regex2dfadir="$withval"],
+            [regex2dfadir="/usr/local"]
+           )
+
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -25,6 +32,9 @@ AX_CXX_COMPILE_STDCXX_11([noext],[optional])
 AC_CHECK_FILE(third_party/gtest/Makefile,
               [],
               cd third_party/gtest && ./configure --disable-shared --enable-static && cd ../..)
+AC_CHECK_FILE(third_party/regex2dfa/Makefile,
+              [],
+              cd third_party/regex2dfa && ./configure && cd ../..)
 
 AC_CHECK_HEADER([gmpxx.h], ,[AC_MSG_ERROR(
 [Couldn't find gmpxx.h...try downloading the source from your package manager.] )])
