@@ -221,6 +221,8 @@ TEST(FteNormalUsage, FteTest2) {
 #endif
 }
 
+// This test is in support of Issue#10:
+//   https://github.com/uProxy/libfte/issues/10
 TEST(FteMultipleEncrypts, FteTest1) {
   std::string K = "00000000000000000000000000000000";
   fte::Fte fteObj;
@@ -237,6 +239,8 @@ TEST(FteMultipleEncrypts, FteTest1) {
   EXPECT_EQ(input_plaintext, output_plaintext);
 }
 
+// This test is in support of Issue#10:
+//   https://github.com/uProxy/libfte/issues/10
 TEST(FteMultipleDecrypts, FteTest1) {
   std::string K = "00000000000000000000000000000000";
   fte::Fte fteObj;
