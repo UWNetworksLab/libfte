@@ -7,15 +7,27 @@
 
 namespace ffx {
 
-bool AesEcbEncrypt(unsigned char * key,
-                   const mpz_class & plaintext,
+static aes_encrypt_ctx * ctx = NULL;
+
+bool AesEcbSetKey(unsigned char * key) {
+  if (ctx == NULL) {
+    ctx = new aes_encrypt_ctx[1];
+  }
+  aes_encrypt_key128(key, ctx);
+  return true;
+}
+
+bool AesEcbEncrypt(const mpz_class & plaintext,
                    uint32_t plaintext_len_in_bits,
                    mpz_class * ciphertext) {
+
+  if (ctx == NULL) {
+    return false;
+  }
 
   uint32_t plaintext_len_in_bytes = (plaintext_len_in_bits + 7) / 8;
   uint32_t ciphertext_len_in_bytes = plaintext_len_in_bytes;
 
-  aes_encrypt_ctx * ctx = new aes_encrypt_ctx[1];
   unsigned char * in_buffer = new unsigned char[plaintext_len_in_bytes];
   unsigned char * out_buffer = new unsigned char[ciphertext_len_in_bytes];
 
@@ -24,14 +36,11 @@ bool AesEcbEncrypt(unsigned char * key,
 
   MpzClassToBase256(plaintext, plaintext_len_in_bytes, in_buffer);
 
-  aes_init();
-  aes_encrypt_key128(key, ctx);
   aes_ecb_encrypt(in_buffer, out_buffer, plaintext_len_in_bytes, ctx);
 
   Base256ToMpzClass(out_buffer, ciphertext_len_in_bytes, ciphertext);
 
   // cleanup
-  delete[] ctx;
   delete[] in_buffer;
   delete[] out_buffer;
 

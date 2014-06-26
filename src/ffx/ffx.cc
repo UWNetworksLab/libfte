@@ -85,7 +85,7 @@ bool Ffx::RoundFunction(uint32_t n,
   mpz_class Y = 0;
 
   // [FFX2] pg 3., line 35
-  bool cbc_success = AesCbcMac(key_, (P << Q_len) + Q, P_len + Q_len, &Y);
+  bool cbc_success = AesCbcMac((P << Q_len) + Q, P_len + Q_len, &Y);
   if (!cbc_success) {
     return false;
   }
@@ -97,7 +97,7 @@ bool Ffx::RoundFunction(uint32_t n,
   mpz_class ctxt = 0;
   while (Z_len < (d + 4)) {
     ctxt = 0;
-    AesEcbEncrypt(key_, (Y + counter), 128, &ctxt);
+    AesEcbEncrypt((Y + counter), 128, &ctxt);
     Z_len += 16;
     Z <<= 128;
     Z += ctxt;
@@ -241,6 +241,9 @@ bool Ffx::SetKey(const std::string & key) {
   uint32_t key_length_in_bytes = (key.length() + 1) / 2;
   key_ = new unsigned char[key_length_in_bytes];
   Base16ToBase256(key, key_length_in_bytes, key_);
+
+  AesEcbSetKey(key_);
+  AesCbcSetKey(key_);
 
   return true;
 }
