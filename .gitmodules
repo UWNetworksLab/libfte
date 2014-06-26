@@ -1,3 +1,0 @@
-[submodule "third_party/regex2dfa"]
-	path = third_party/regex2dfa
-	url = https://github.com/kpdyer/regex2dfa.git
