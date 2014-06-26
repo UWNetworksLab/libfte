@@ -238,3 +238,39 @@ TEST(FteNormalUsage, FteTest2) {
   EXPECT_EQ(true, match);
 #endif
 }
+
+// This test is in support of Issue#10:
+//   https://github.com/uProxy/libfte/issues/10
+TEST(FteMultipleEncrypts, FteTest1) {
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_1, 32,
+                      VALID_DFA_5, 32);
+
+  std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
+
+  EXPECT_EQ(input_plaintext, output_plaintext);
+}
+
+// This test is in support of Issue#10:
+//   https://github.com/uProxy/libfte/issues/10
+TEST(FteMultipleDecrypts, FteTest1) {
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  fteObj.SetLanguages(VALID_DFA_1, 32,
+                      VALID_DFA_5, 32);
+
+  std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
+
+  EXPECT_EQ(input_plaintext, output_plaintext);
+}
