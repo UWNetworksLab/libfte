@@ -245,8 +245,12 @@ TEST(FteMultipleEncrypts, FteTest1) {
   std::string K = "00000000000000000000000000000000";
   fte::Fte fteObj;
   fteObj.set_key(K);
-  fteObj.SetLanguages(VALID_DFA_1, 32,
-                      VALID_DFA_5, 32);
+  std::string plaintext_dfa;
+  std::string ciphertext_dfa;
+  regex2dfa::Regex2Dfa("^(a|b)+$", &plaintext_dfa);
+  regex2dfa::Regex2Dfa("^.+$", &ciphertext_dfa);
+  fteObj.SetLanguages(plaintext_dfa, 32,
+                      ciphertext_dfa, 32);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   std::string ciphertext, output_plaintext;
@@ -263,8 +267,12 @@ TEST(FteMultipleDecrypts, FteTest1) {
   std::string K = "00000000000000000000000000000000";
   fte::Fte fteObj;
   fteObj.set_key(K);
-  fteObj.SetLanguages(VALID_DFA_1, 32,
-                      VALID_DFA_5, 32);
+  std::string plaintext_dfa;
+  std::string ciphertext_dfa;
+  regex2dfa::Regex2Dfa("^(a|b)+$", &plaintext_dfa);
+  regex2dfa::Regex2Dfa("^.+$", &ciphertext_dfa);
+  fteObj.SetLanguages(plaintext_dfa, 32,
+                      ciphertext_dfa, 32);
 
   std::string input_plaintext = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   std::string ciphertext, output_plaintext;
