@@ -54,6 +54,8 @@ OBJ_LIBFTE = src/ffx/conversions.o \
              src/ffx/aes_ecb.o \
              src/ffx/ffx.o \
              src/fte/fte.o \
+             src/fte/ranking/dot_star_ranker.o \
+             src/fte/ranking/dot_plus_ranker.o \
              src/fte/ranking/dfa_ranker.o \
              $(THIRDPARTY_DIR)/aes/aes_modes.o \
              $(THIRDPARTY_DIR)/aes/aescrypt.o \

@@ -8,6 +8,7 @@
 
 #include "fte/fte.h"
 #include "ffx/ffx.h"
+#include "fte/ranking/dot_star_ranker.h"
 #include "fte/ranking/dot_plus_ranker.h"
 
 namespace fte {
@@ -41,7 +42,9 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
                        const std::string & ciphertext_dfa,
                        uint32_t ciphertext_max_len) {
 
-  if (plaintext_dfa == fte::ranking::DOT_PLUS_DFA) {
+  if (plaintext_dfa == fte::ranking::DOT_STAR_DFA) {
+    plaintext_ranker_ = new ranking::DotStarRanker();
+  } else if (plaintext_dfa == fte::ranking::DOT_PLUS_DFA) {
     plaintext_ranker_ = new ranking::DotPlusRanker();
   } else {
     plaintext_ranker_ = new ranking::DfaRanker();
@@ -55,7 +58,9 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
   if (languages_are_the_same) {
     ciphertext_ranker_ = plaintext_ranker_;
   } else {
-    if (ciphertext_dfa == fte::ranking::DOT_PLUS_DFA) {
+    if (ciphertext_dfa == fte::ranking::DOT_STAR_DFA) {
+      ciphertext_ranker_ = new ranking::DotStarRanker();
+    } else if (ciphertext_dfa == fte::ranking::DOT_PLUS_DFA) {
       ciphertext_ranker_ = new ranking::DotPlusRanker();
     } else {
       ciphertext_ranker_ = new ranking::DfaRanker();
