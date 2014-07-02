@@ -15,9 +15,10 @@ bool DotPlusRanker::SetLanguage(const std::string & dfa, uint32_t max_word_lengt
 bool DotPlusRanker::Unrank(const mpz_class & rank,
                            std::string * word) {
   mpz_class c = rank;
-  mpz_class e;
   
   uint32_t num_symbols = mpz_sizeinbase(rank.get_mpz_t(), 256);
+  
+  mpz_class e;
   mpz_ui_pow_ui (e.get_mpz_t(), 256, num_symbols - 1);
   mpz_sub(c.get_mpz_t(), c.get_mpz_t(), e.get_mpz_t());
     
@@ -39,7 +40,7 @@ bool DotPlusRanker::Rank(const std::string & word,
   const unsigned char * const_input = reinterpret_cast<const unsigned char *>(word.c_str());
   unsigned char * input = const_cast<unsigned char *>(const_input);
   ffx::Base256ToMpzClass(input, word.length(), &in_slice_rank);
-  (*rank) += in_slice_rank;
+  mpz_add(rank->get_mpz_t(), rank->get_mpz_t(), in_slice_rank.get_mpz_t());
 }
 
 bool DotPlusRanker::WordsInLanguage(mpz_class * words_in_language) {
@@ -57,7 +58,7 @@ bool DotPlusRanker::WordsInLanguage(uint32_t min_word_length,
   mpz_class e;
   for (uint32_t i = min_word_length; i <= max_word_length; ++i) {
     mpz_ui_pow_ui (e.get_mpz_t(), 256, i);
-    (*words_in_language) += e;
+    mpz_add(words_in_language->get_mpz_t(), words_in_language->get_mpz_t(), e.get_mpz_t());
   }
 }
 

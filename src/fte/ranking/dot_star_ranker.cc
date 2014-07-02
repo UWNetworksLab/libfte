@@ -10,6 +10,7 @@ namespace ranking {
   
 bool DotStarRanker::SetLanguage(const std::string & dfa, uint32_t max_word_length) {
   max_word_len_ = max_word_length;
+  ranker_.SetLanguage(dfa, max_word_length);
 }
 
 bool DotStarRanker::Unrank(const mpz_class & rank,
@@ -17,7 +18,9 @@ bool DotStarRanker::Unrank(const mpz_class & rank,
   if (rank == 0) {
     (*word) = "";
   } else {
-    DotPlusRanker::Unrank(rank-1, word);
+    mpz_class c = rank;
+    mpz_sub_ui(c.get_mpz_t(), c.get_mpz_t(), 1);
+    ranker_.Unrank(c, word);
   }
 }
 
@@ -26,8 +29,8 @@ bool DotStarRanker::Rank(const std::string & word,
   if (word == "") {
     (*rank) = 0;
   } else {
-    DotPlusRanker::Rank(word, rank);
-    ++(*rank);
+    ranker_.Rank(word, rank);
+    mpz_add_ui(rank->get_mpz_t(), rank->get_mpz_t(), 1);
   }
 }
 
@@ -43,7 +46,7 @@ bool DotStarRanker::WordsInLanguage(uint32_t max_word_length,
 bool DotStarRanker::WordsInLanguage(uint32_t min_word_length,
                                     uint32_t max_word_length,
                                     mpz_class * words_in_language ) {
-  DotPlusRanker::WordsInLanguage(min_word_length, max_word_length, words_in_language);
+  ranker_.WordsInLanguage(min_word_length, max_word_length, words_in_language);
   ++(*words_in_language);
 }
 
@@ -58,8 +61,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	7	7\n"
                            "0	0	8	8\n"
                            "0	0	9	9\n"
-                           "0	0	10	00\n"
-                           "0	0	10	01\n"
+                           "0	0	10	10\n"
+                           "0	0	11	11\n"
                            "0	0	12	12\n"
                            "0	0	13	13\n"
                            "0	0	14	14\n"
@@ -148,8 +151,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	97	97\n"
                            "0	0	98	98\n"
                            "0	0	99	99\n"
-                           "0	0	100	000\n"
-                           "0	0	100	001\n"
+                           "0	0	100	100\n"
+                           "0	0	101	101\n"
                            "0	0	102	102\n"
                            "0	0	103	103\n"
                            "0	0	104	104\n"
@@ -158,8 +161,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	107	107\n"
                            "0	0	108	108\n"
                            "0	0	109	109\n"
-                           "0	0	110	010\n"
-                           "0	0	110	011\n"
+                           "0	0	110	110\n"
+                           "0	0	111	111\n"
                            "0	0	112	112\n"
                            "0	0	113	113\n"
                            "0	0	114	114\n"
@@ -168,8 +171,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	117	117\n"
                            "0	0	118	118\n"
                            "0	0	119	119\n"
-                           "0	0	120	020\n"
-                           "0	0	120	021\n"
+                           "0	0	120	120\n"
+                           "0	0	121	121\n"
                            "0	0	122	122\n"
                            "0	0	123	123\n"
                            "0	0	124	124\n"
@@ -178,8 +181,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	127	127\n"
                            "0	0	128	128\n"
                            "0	0	129	129\n"
-                           "0	0	130	030\n"
-                           "0	0	130	031\n"
+                           "0	0	130	130\n"
+                           "0	0	131	131\n"
                            "0	0	132	132\n"
                            "0	0	133	133\n"
                            "0	0	134	134\n"
@@ -188,8 +191,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	137	137\n"
                            "0	0	138	138\n"
                            "0	0	139	139\n"
-                           "0	0	140	040\n"
-                           "0	0	140	041\n"
+                           "0	0	140	140\n"
+                           "0	0	141	141\n"
                            "0	0	142	142\n"
                            "0	0	143	143\n"
                            "0	0	144	144\n"
@@ -198,8 +201,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	147	147\n"
                            "0	0	148	148\n"
                            "0	0	149	149\n"
-                           "0	0	150	050\n"
-                           "0	0	150	051\n"
+                           "0	0	150	150\n"
+                           "0	0	151	151\n"
                            "0	0	152	152\n"
                            "0	0	153	153\n"
                            "0	0	154	154\n"
@@ -208,8 +211,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	157	157\n"
                            "0	0	158	158\n"
                            "0	0	159	159\n"
-                           "0	0	160	060\n"
-                           "0	0	160	061\n"
+                           "0	0	160	160\n"
+                           "0	0	161	161\n"
                            "0	0	162	162\n"
                            "0	0	163	163\n"
                            "0	0	164	164\n"
@@ -218,8 +221,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	167	167\n"
                            "0	0	168	168\n"
                            "0	0	169	169\n"
-                           "0	0	170	070\n"
-                           "0	0	170	071\n"
+                           "0	0	170	170\n"
+                           "0	0	171	171\n"
                            "0	0	172	172\n"
                            "0	0	173	173\n"
                            "0	0	174	174\n"
@@ -228,8 +231,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	177	177\n"
                            "0	0	178	178\n"
                            "0	0	179	179\n"
-                           "0	0	180	080\n"
-                           "0	0	180	081\n"
+                           "0	0	180	180\n"
+                           "0	0	181	181\n"
                            "0	0	182	182\n"
                            "0	0	183	183\n"
                            "0	0	184	184\n"
@@ -238,8 +241,8 @@ std::string DOT_STAR_DFA = "0	0	0	0\n"
                            "0	0	187	187\n"
                            "0	0	188	188\n"
                            "0	0	189	189\n"
-                           "0	0	190	090\n"
-                           "0	0	190	091\n"
+                           "0	0	190	190\n"
+                           "0	0	191	191\n"
                            "0	0	192	192\n"
                            "0	0	193	193\n"
                            "0	0	194	194\n"

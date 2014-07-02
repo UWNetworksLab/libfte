@@ -6,6 +6,8 @@
 
 #include <math.h>
 
+#include <iostream>
+
 #include "fte/fte.h"
 #include "ffx/ffx.h"
 #include "fte/ranking/dot_star_ranker.h"

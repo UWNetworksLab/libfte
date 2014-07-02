@@ -14,11 +14,12 @@ namespace fte {
 
 namespace ranking {
 
-class DotStarRanker : public DotPlusRanker {
+class DotStarRanker : public Ranker {
 
  private:
-  uint32_t max_word_len_;
-
+   DotPlusRanker ranker_;
+   uint32_t max_word_len_;
+ 
  public:
      
   // Specify the DFA of the language and the maximum word length that we'll be (un)ranking.
