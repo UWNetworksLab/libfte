@@ -21,6 +21,8 @@
 
 #include <gmpxx.h>
 
+#include "fte/ranking/ranker.h"
+
 namespace fte {
 
 namespace ranking {
@@ -34,7 +36,7 @@ typedef std::vector< std::string > StringVectorT;
 typedef std::vector< Uint32VectorT > Uint32MatrixT;
 typedef std::vector< MpzClassVectorT > MpzClassMatrixT;
 
-class DfaRanker {
+class DfaRanker : public Ranker {
 
  private:
   // the maximum value for which buildTable is computed

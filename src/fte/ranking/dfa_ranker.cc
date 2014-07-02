@@ -1,6 +1,5 @@
 #include "fte/ranking/dfa_ranker.h"
 
-#include <iostream>
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>

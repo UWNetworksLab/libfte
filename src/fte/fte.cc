@@ -8,13 +8,28 @@
 
 #include "fte/fte.h"
 #include "ffx/ffx.h"
+#include "fte/ranking/dot_plus_ranker.h"
 
 namespace fte {
 
 Fte::Fte() {
+  plaintext_ranker_ = NULL;
+  ciphertext_ranker_ = NULL;
   ffx_ = ffx::Ffx(kFfxRadix);
   key_is_set_ = false;
   languages_are_set_ = false;
+}
+
+Fte::~Fte() {
+  if (plaintext_ranker_ != NULL) {
+    if (plaintext_ranker_==ciphertext_ranker_) {
+      ciphertext_ranker_ = NULL;
+    }
+    delete plaintext_ranker_;
+  }
+  if (ciphertext_ranker_ != NULL) {
+    delete ciphertext_ranker_;
+  }
 }
 
 /*
@@ -26,9 +41,13 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
                        const std::string & ciphertext_dfa,
                        uint32_t ciphertext_max_len) {
 
-  plaintext_ranker_ = ranking::DfaRanker();
-  plaintext_ranker_.SetLanguage(plaintext_dfa, plaintext_max_len);
-  plaintext_ranker_.WordsInLanguage(&words_in_plaintext_language_);
+  if (plaintext_dfa == fte::ranking::DOT_PLUS_DFA) {
+    plaintext_ranker_ = new ranking::DotPlusRanker();
+  } else {
+    plaintext_ranker_ = new ranking::DfaRanker();
+  }
+  plaintext_ranker_->SetLanguage(plaintext_dfa, plaintext_max_len);
+  plaintext_ranker_->WordsInLanguage(&words_in_plaintext_language_);
   plaintext_language_capacity_in_bits_ = mpz_sizeinbase(words_in_plaintext_language_.get_mpz_t(),
                                          kFfxRadix);
 
@@ -36,11 +55,15 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
   if (languages_are_the_same) {
     ciphertext_ranker_ = plaintext_ranker_;
   } else {
-    ciphertext_ranker_ = ranking::DfaRanker();
-    ciphertext_ranker_.SetLanguage(ciphertext_dfa, ciphertext_max_len);
+    if (ciphertext_dfa == fte::ranking::DOT_PLUS_DFA) {
+      ciphertext_ranker_ = new ranking::DotPlusRanker();
+    } else {
+      ciphertext_ranker_ = new ranking::DfaRanker();
+    }
+    ciphertext_ranker_->SetLanguage(ciphertext_dfa, ciphertext_max_len);
   }
 
-  ciphertext_ranker_.WordsInLanguage(&words_in_ciphertext_language_);
+  ciphertext_ranker_->WordsInLanguage(&words_in_ciphertext_language_);
   ciphertext_language_capacity_in_bits_ = mpz_sizeinbase(
       words_in_ciphertext_language_.get_mpz_t(), kFfxRadix);
 
@@ -79,13 +102,13 @@ bool Fte::Encrypt(const std::string & plaintext,
   (*ciphertext) = "";
 
   mpz_class plaintext_rank;
-  plaintext_ranker_.Rank(plaintext, &plaintext_rank);
+  plaintext_ranker_->Rank(plaintext, &plaintext_rank);
   mpz_class C = 0;
   ffx_.Encrypt(plaintext_rank, plaintext_language_capacity_in_bits_, &C);
   while (C >= words_in_ciphertext_language_) {
     ffx_.Encrypt(C, plaintext_language_capacity_in_bits_, &C);
   }
-  ciphertext_ranker_.Unrank(C, ciphertext);
+  ciphertext_ranker_->Unrank(C, ciphertext);
 
   return true;
 }
@@ -109,13 +132,13 @@ bool Fte::Decrypt(const std::string & ciphertext,
   (*plaintext) = "";
 
   mpz_class C;
-  ciphertext_ranker_.Rank(ciphertext, &C);
+  ciphertext_ranker_->Rank(ciphertext, &C);
   mpz_class plaintext_rank = 0;
   ffx_.Decrypt(C, plaintext_language_capacity_in_bits_, &plaintext_rank);
   while (plaintext_rank >= words_in_plaintext_language_) {
     ffx_.Decrypt(plaintext_rank, plaintext_language_capacity_in_bits_, &plaintext_rank);
   }
-  plaintext_ranker_.Unrank(plaintext_rank, plaintext);
+  plaintext_ranker_->Unrank(plaintext_rank, plaintext);
 
   return true;
 }

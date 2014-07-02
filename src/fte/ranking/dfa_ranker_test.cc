@@ -287,7 +287,7 @@ TEST(ErrorTest, InvalidInputNoAcceptingPaths1) {
 TEST(ErrorTest, InvalidRankInput) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa("^(a|b)+$", &dfa);  
+  regex2dfa::Regex2Dfa("^(a|b)+$", &dfa);
   rankerObj.SetLanguage(dfa, 16);
   mpz_class rank;
   bool success = rankerObj.Rank("xxx", &rank);

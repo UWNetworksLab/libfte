@@ -30,8 +30,8 @@ const uint32_t kFfxRadix = 2;
 class Fte {
  private:
   // our rankers
-  ranking::DfaRanker plaintext_ranker_;
-  ranking::DfaRanker ciphertext_ranker_;
+  ranking::Ranker * plaintext_ranker_;
+  ranking::Ranker * ciphertext_ranker_;
 
   // the key and ffx encrypter
   std::string key_;
@@ -51,6 +51,7 @@ class Fte {
  public:
   // default constructor
   Fte();
+  ~Fte();
 
   /*
    * Specify the input key.
