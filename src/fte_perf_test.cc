@@ -15,10 +15,10 @@ void FteExample() {
   std::string K("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"); // 128 bits, in hex
   fte::Fte fteObj = fte::Fte();
   fteObj.set_key(K);
-  std::string regex = "^.*$";
+  std::string regex = "^.+$";
   std::string dfa;
   regex2dfa::Regex2Dfa(regex, &dfa);
-  fteObj.SetLanguages(dfa, 32,
+  fteObj.SetLanguages(dfa, 1024,
                       dfa, 1024);
   std::string input_plaintext = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
   std::string ciphertext, output_plaintext;

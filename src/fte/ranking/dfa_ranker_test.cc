@@ -126,7 +126,7 @@ TEST(RankerNormalUsage, Test9) {
 TEST(RankerNormalUsage, Test10) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa(".+$", &dfa);
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
   rankerObj.SetLanguage(dfa, 16);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 16, &words_in_language);
@@ -142,7 +142,7 @@ TEST(RankerNormalUsage, Test10) {
 TEST(RankerNormalUsage, Test11) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa(".+$", &dfa);
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
   rankerObj.SetLanguage(dfa, 32);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 32, &words_in_language);
@@ -158,7 +158,7 @@ TEST(RankerNormalUsage, Test11) {
 TEST(RankerNormalUsage, Test12) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa(".+$", &dfa);
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
   rankerObj.SetLanguage(dfa, 64);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 32, &words_in_language);
@@ -174,7 +174,7 @@ TEST(RankerNormalUsage, Test12) {
 TEST(RankerNormalUsage, Test13) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa(".+$", &dfa);
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
   rankerObj.SetLanguage(dfa, 128);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 128, &words_in_language);
@@ -190,7 +190,7 @@ TEST(RankerNormalUsage, Test13) {
 TEST(RankerNormalUsage, Test14) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa(".+$", &dfa);
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
   rankerObj.SetLanguage(dfa, 256);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 256, &words_in_language);
@@ -206,7 +206,7 @@ TEST(RankerNormalUsage, Test14) {
 TEST(RankerNormalUsage, Test15) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa(".+$", &dfa);
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
   rankerObj.SetLanguage(dfa, 512);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 512, &words_in_language);
@@ -222,7 +222,7 @@ TEST(RankerNormalUsage, Test15) {
 TEST(RankerNormalUsage, Test16) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa(".+$", &dfa);
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
   rankerObj.SetLanguage(dfa, 1024);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 1024, &words_in_language);
@@ -238,7 +238,7 @@ TEST(RankerNormalUsage, Test16) {
 TEST(RankerNormalUsage, Test17) {
   fte::ranking::DfaRanker rankerObj;
   std::string dfa;
-  regex2dfa::Regex2Dfa(".+$", &dfa);
+  regex2dfa::Regex2Dfa("^.+$", &dfa);
   rankerObj.SetLanguage(dfa, 2048);
   mpz_class words_in_language;
   rankerObj.WordsInLanguage(0, 2048, &words_in_language);
