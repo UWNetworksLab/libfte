@@ -14,7 +14,7 @@ void FfxExample() {
   std::string K("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"); //    128 bits, in hex
   ffx::Ffx ffxObj = ffx::Ffx(radix);
   ffxObj.SetKey(K);
-  mpz_class input_plaintext = 1;
+  mpz_class input_plaintext = 1000;
   uint32_t input_plaintext_len = 1024 * 8; // in bits
   mpz_class ciphertext, output_plaintext;
 
