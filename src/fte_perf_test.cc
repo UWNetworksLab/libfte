@@ -20,12 +20,20 @@ void FteExample() {
   regex2dfa::Regex2Dfa(regex, &dfa);
   fteObj.SetLanguages(dfa, 1024,
                       dfa, 1024);
-  std::string input_plaintext = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
   std::string ciphertext, output_plaintext;
+  mpz_class max_plaintext;
+  mpz_class base = 2;
+  mpz_pow_ui(max_plaintext.get_mpz_t(), base.get_mpz_t(), 1024*8);
 
+  gmp_randstate_t state;
+  gmp_randinit_default(state);
+  mpz_class input_plaintext_as_int;
+  std::string input_plaintext;
   double duration;
   std::clock_t start = std::clock();
   for (uint32_t i = 0; i < 1000; ++i) {
+    mpz_urandomm(input_plaintext_as_int.get_mpz_t(), state, max_plaintext.get_mpz_t());
+    ffx::MpzClassToBase256(input_plaintext_as_int, 1024, &input_plaintext);
     fteObj.Encrypt(input_plaintext, &ciphertext);
   }
   duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
