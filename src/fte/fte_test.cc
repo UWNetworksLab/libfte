@@ -80,7 +80,7 @@ TEST(FteNormalUsage, FpeTest2) {
   std::string K = "00000000000000000000000000000000";
   fte::Fte fteObj;
   fteObj.set_key(K);
-  std::string dfa = "";
+  std::string dfa;
   regex2dfa::Regex2Dfa("^.+$", &dfa);
   fteObj.SetLanguages(dfa, 128,
                       dfa, 128);
