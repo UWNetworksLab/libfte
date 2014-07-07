@@ -10,44 +10,51 @@ namespace ranking {
   
 bool DotStarRanker::SetLanguage(const std::string & dfa, uint32_t max_word_length) {
   max_word_len_ = max_word_length;
-  ranker_.SetLanguage(dfa, max_word_length);
+  return ranker_.SetLanguage(dfa, max_word_length);
 }
 
 bool DotStarRanker::Unrank(const mpz_class & rank,
                            std::string * word) {
+  bool retval = false;
   if (rank == 0) {
     (*word) = "";
+    retval = true;
   } else {
     mpz_class c = rank;
     mpz_sub_ui(c.get_mpz_t(), c.get_mpz_t(), 1);
-    ranker_.Unrank(c, word);
+    retval = ranker_.Unrank(c, word);
   }
+  return retval;
 }
 
 bool DotStarRanker::Rank(const std::string & word,
                          mpz_class * rank) {
+  bool retval = false;
   if (word == "") {
     (*rank) = 0;
+    retval = true;
   } else {
-    ranker_.Rank(word, rank);
+    retval = ranker_.Rank(word, rank);
     mpz_add_ui(rank->get_mpz_t(), rank->get_mpz_t(), 1);
   }
+  return retval;
 }
 
 bool DotStarRanker::WordsInLanguage(mpz_class * words_in_language) {
-  WordsInLanguage(0, max_word_len_, words_in_language);
+  return WordsInLanguage(0, max_word_len_, words_in_language);
 }
 
 bool DotStarRanker::WordsInLanguage(uint32_t max_word_length,
                                     mpz_class * words_in_language) {
-  WordsInLanguage(0, max_word_length, words_in_language);
+  return WordsInLanguage(0, max_word_length, words_in_language);
 }
 
 bool DotStarRanker::WordsInLanguage(uint32_t min_word_length,
                                     uint32_t max_word_length,
                                     mpz_class * words_in_language ) {
-  ranker_.WordsInLanguage(min_word_length, max_word_length, words_in_language);
+  bool retval = ranker_.WordsInLanguage(min_word_length, max_word_length, words_in_language);
   ++(*words_in_language);
+  return retval;
 }
 
 
