@@ -41,6 +41,17 @@ bool MpzClassToBase256(const mpz_class & in,
   return true;
 }
 
+bool MpzClassToBase256(const mpz_class & in,
+                       uint32_t out_len_in_bytes,
+                       std::string * out) {
+  unsigned char* out_uc = new unsigned char[out_len_in_bytes];
+  bool retval = MpzClassToBase256(in, out_len_in_bytes, out_uc);
+  if (retval) {
+    out->assign(reinterpret_cast<char *>(out_uc), out_len_in_bytes);
+  }
+  return retval;
+}
+
 bool Base256ToMpzClass(unsigned char * in,
                        uint32_t in_len_in_bytes,
                        mpz_class * out) {
@@ -54,6 +65,17 @@ bool Base256ToMpzClass(unsigned char * in,
              in);                // const void *op
 
   return true;
+}
+
+bool Base256ToMpzClass(const std::string & in,
+                       uint32_t in_len_in_bytes,
+                       mpz_class * out) {
+  
+  unsigned char* in_uc = new unsigned char[in_len_in_bytes];
+  memcpy(in_uc, in.c_str(), in_len_in_bytes);
+  bool retval = Base256ToMpzClass(in_uc, in_len_in_bytes, out);
+  delete[] in_uc;
+  return retval;
 }
 
 bool Base16ToBase256(const std::string & in,

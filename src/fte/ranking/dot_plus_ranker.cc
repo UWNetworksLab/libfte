@@ -22,24 +22,19 @@ bool DotPlusRanker::Unrank(const mpz_class & rank,
   mpz_ui_pow_ui (e.get_mpz_t(), 256, num_symbols - 1);
   mpz_sub(c.get_mpz_t(), c.get_mpz_t(), e.get_mpz_t());
     
-  unsigned char * retval = new unsigned char[num_symbols];
-  ffx::MpzClassToBase256(c, num_symbols, retval);
-  (*word) = new std::string((char*)retval, num_symbols);
-  delete[] retval;
+  ffx::MpzClassToBase256(c, num_symbols, word);
 }
 
 bool DotPlusRanker::Rank(const std::string & word,
                          mpz_class * rank) {
-  (*rank) = 0;
+  mpz_set_ui(rank->get_mpz_t(), 0);
 
   mpz_class e;
   mpz_ui_pow_ui(e.get_mpz_t(), 256, word.length() - 1);
   mpz_add(rank->get_mpz_t(), rank->get_mpz_t(), e.get_mpz_t());
 
   mpz_class in_slice_rank;
-  const unsigned char * const_input = reinterpret_cast<const unsigned char *>(word.c_str());
-  unsigned char * input = const_cast<unsigned char *>(const_input);
-  ffx::Base256ToMpzClass(input, word.length(), &in_slice_rank);
+  ffx::Base256ToMpzClass(word, word.length(), &in_slice_rank);
   mpz_add(rank->get_mpz_t(), rank->get_mpz_t(), in_slice_rank.get_mpz_t());
 }
 

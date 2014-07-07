@@ -50,7 +50,15 @@ bool MpzClassToBase256(const mpz_class & in,
                        uint32_t out_len_in_bytes,
                        unsigned char * out);
 
+bool MpzClassToBase256(const mpz_class & in,
+                       uint32_t out_len_in_bytes,
+                       std::string * out);
+
 bool Base256ToMpzClass(unsigned char * in,
+                       uint32_t in_len_in_bytes,
+                       mpz_class * out);
+
+bool Base256ToMpzClass(const std::string & in,
                        uint32_t in_len_in_bytes,
                        mpz_class * out);
 
