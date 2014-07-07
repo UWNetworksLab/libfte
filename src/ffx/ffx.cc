@@ -142,9 +142,9 @@ bool Ffx::Encrypt(const mpz_class & tweak,
   // [FFX2] pg 3., line 16
   for (uint32_t i = 0; i <= (r - 1); ++i) {
     if ((i & 1) == 0) {
-      m = n / 2;
+      m = n >> 1;
     } else {
-      m = (n+1) / 2;
+      m = (n+1) >> 1;
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
@@ -191,9 +191,9 @@ bool Ffx::Decrypt(const mpz_class & tweak,
   // [FFX2] pg 3., line 26
   for (int32_t i = r - 1; i >= 0; --i) {
     if ((i & 1) == 0) {
-      m = n / 2;
+      m = n >> 1;
     } else {
-      m = (n+1) / 2;
+      m = (n+1) >> 1;
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
