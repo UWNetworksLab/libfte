@@ -24,7 +24,7 @@ bool DotPlusRanker::Unrank(const mpz_class & rank,
     
   unsigned char * retval = new unsigned char[num_symbols];
   ffx::MpzClassToBase256(c, num_symbols, retval);
-  (*word) = std::string((char*)retval, num_symbols);
+  (*word) = new std::string((char*)retval, num_symbols);
   delete[] retval;
 }
 
