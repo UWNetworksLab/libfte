@@ -100,14 +100,14 @@ bool Ffx::RoundFunction(uint32_t n,
     AesEcbEncrypt((Y + counter), 128, &ctxt);
     Z_len += 16;
     Z <<= 128;
-    Z += ctxt;
+    mpz_add(Z.get_mpz_t(), Z.get_mpz_t(), ctxt.get_mpz_t());
     ++counter;
   }
 
   // [FFX2] pg 3., line 37
   BitMask(Z, Z_len * 8, 0, ((d + 4) * 8) - 1, &Y);
 
-  // [FFX2] pg 3., line 3=8
+  // [FFX2] pg 3., line 38
   mpz_class modulus = 0;
   mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
   Y = Y % modulus;
@@ -144,7 +144,7 @@ bool Ffx::Encrypt(const mpz_class & tweak,
     if ((i & 1) == 0) {
       m = n / 2;
     } else {
-      m = ceil(n / 2.0);
+      m = (n+1) / 2;
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
@@ -193,7 +193,7 @@ bool Ffx::Decrypt(const mpz_class & tweak,
     if ((i & 1) == 0) {
       m = n / 2;
     } else {
-      m = ceil(n / 2.0);
+      m = (n+1) / 2;
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
