@@ -27,7 +27,7 @@ bool DotPlusRanker::Unrank(const mpz_class & rank,
 
 bool DotPlusRanker::Rank(const std::string & word,
                          mpz_class * rank) {
-  mpz_set_ui(rank->get_mpz_t(), 0);
+  (*rank) = 0;
 
   mpz_class e;
   mpz_ui_pow_ui(e.get_mpz_t(), 256, word.length() - 1);
