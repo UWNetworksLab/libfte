@@ -49,6 +49,7 @@ bool MpzClassToBase256(const mpz_class & in,
   if (retval) {
     out->assign(reinterpret_cast<char *>(out_uc), out_len_in_bytes);
   }
+  delete[] out_uc;
   return retval;
 }
 
