@@ -4,12 +4,13 @@
  *   [FTE2] (to appear summer 2014)
  */
 
+#include "fte.h"
+
 #include <math.h>
 
 #include <iostream>
 
-#include "fte/fte.h"
-#include "ffx/ffx.h"
+#include "src/fte/encrypting/ffx/ffx.h"
 #include "fte/ranking/dot_star_ranker.h"
 #include "fte/ranking/dot_plus_ranker.h"
 

@@ -7,7 +7,7 @@
 #include "regex2dfa.h"
 
 #include "fte/fte.h"
-#include "ffx/ffx.h"
+#include "fte/encrypting/ffx/ffx.h"
 #include "fte/ranking/dfa_ranker.h"
 
 void FteExample() {

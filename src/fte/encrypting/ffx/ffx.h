@@ -25,9 +25,9 @@
 
 #include <gmpxx.h>
 
-#include "ffx/conversions.h"
-#include "ffx/aes_ecb.h"
-#include "ffx/aes_cbc_mac.h"
+#include "conversions.h"
+#include "aes_ecb.h"
+#include "aes_cbc_mac.h"
 
 namespace ffx {
 

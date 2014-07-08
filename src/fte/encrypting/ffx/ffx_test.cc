@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "ffx/ffx.h"
+#include "ffx.h"
 
 const uint32_t kFfxRadix = 2;
 

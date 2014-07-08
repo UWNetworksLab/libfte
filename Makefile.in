@@ -28,31 +28,25 @@ OPTIMIZATION_FLAGS = -O3
 CXXFLAGS_  = $(CXXFLAGS) $(OPTIMIZATION_FLAGS) -Wall -I. -Isrc -I$(THIRDPARTY_DIR) -I$(GTEST_INC_DIR) -I$(GMP_INC_DIR) -I$(REGEX2DFA_INC_DIR)
 	LDFLAGS_ = $(LDFLAGS) $(OPTIMIZATION_FLAGS) -L.libs -L$(GTEST_LIB_DIR) -L$(GMP_LIB_DIR) -L$(REGEX2DFA_LIB_DIR) -lgtest -lfte -lgmp -lregex2dfa -ldl -pthread
 
-TARGET_MAIN = bin/main
-TARGET_MAINJS = bin/main.js
-OBJ_MAIN = src/main.o
-
 TARGET_FTE_PERF_TEST = bin/fte_perf_test
-TARGET_FFX_PERF_TEST = bin/ffx_perf_test
 OBJ_FTE_PERF = src/fte_perf_test.o
-OBJ_FFX_PERF = src/ffx_perf_test.o
 
 # the build target executable:
 TARGET_TEST = bin/test
 TARGET_TESTJS = bin/test.js
 OBJ_TEST = src/tests.o \
            src/fte/fte_test.o \
-           src/ffx/ffx_test.o \
-           src/ffx/aes_ecb_test.o \
-           src/ffx/aes_cbc_mac_test.o \
-           src/ffx/conversions_test.o \
+           src/fte/encrypting/ffx/ffx_test.o \
+           src/fte/encrypting/ffx/aes_ecb_test.o \
+           src/fte/encrypting/ffx/aes_cbc_mac_test.o \
+           src/fte/encrypting/ffx/conversions_test.o \
            src/fte/ranking/dfa_ranker_test.o
 
 TARGET_LIBFTE = .libs/libfte.a
-OBJ_LIBFTE = src/ffx/conversions.o \
-             src/ffx/aes_cbc_mac.o \
-             src/ffx/aes_ecb.o \
-             src/ffx/ffx.o \
+OBJ_LIBFTE = src/fte/encrypting/ffx/conversions.o \
+             src/fte/encrypting/ffx/aes_cbc_mac.o \
+             src/fte/encrypting/ffx/aes_ecb.o \
+             src/fte/encrypting/ffx/ffx.o \
              src/fte/fte.o \
              src/fte/ranking/dot_star_ranker.o \
              src/fte/ranking/dot_plus_ranker.o \
@@ -65,7 +59,7 @@ OBJ_LIBFTE = src/ffx/conversions.o \
 TARGET_LIBREGEX2DFA = $(REGEX2DFA_LIB_DIR)/libregex2dfa.a
 TARGET_LIBGTEST = $(GTEST_LIB_DIR)/libgtest.a
 
-default: $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_FTE_PERF_TEST) $(TARGET_FFX_PERF_TEST)
+default: $(TARGET_TEST) $(TARGET_FTE_PERF_TEST)
 
 %.o: %.c
 	$(CC) $(CFLAGS_) -c -o $@ $<
@@ -73,17 +67,8 @@ default: $(TARGET_TEST) $(TARGET_MAIN) $(TARGET_FTE_PERF_TEST) $(TARGET_FFX_PERF
 %.o: %.cc
 	$(CXX) $(CXXFLAGS_) -c -o $@ $<
 
-$(TARGET_FFX_PERF_TEST): $(TARGET_LIBFTE) $(OBJ_FFX_PERF)
-	$(CXX) $(CXXFLAGS_) $(OBJ_FFX_PERF) -o $@ $(LDFLAGS_)
-
 $(TARGET_FTE_PERF_TEST): $(TARGET_LIBFTE) $(OBJ_FTE_PERF)
 	$(CXX) $(CXXFLAGS_) $(OBJ_FTE_PERF) -o $@ $(LDFLAGS_)
-
-$(TARGET_MAIN): $(TARGET_LIBFTE) $(OBJ_MAIN)
-	$(CXX) $(CXXFLAGS_) $(OBJ_MAIN) -o $@ $(LDFLAGS_)
-
-$(TARGET_MAINJS): $(TARGET_LIBFTE) $(OBJ_MAIN)
-	$(CXX) $(CXXFLAGS_) $(OBJ_MAIN) -o $@  $(LDFLAGS_)
 
 $(TARGET_LIBGTEST):
 	cd $(GTEST_DIR) && $(MAKE)
@@ -114,7 +99,7 @@ install: $(INSTALL_LIB_DIR) $(INSTALL_INC_DIR)
 	mkdir -p $(INSTALL_INC_DIR)/fte
 	mkdir -p $(INSTALL_INC_DIR)/fte/ranking
 	cp -f $(TARGET_LIBFTE) $(INSTALL_LIB_DIR)
-	cp -f src/ffx/*.h $(INSTALL_INC_DIR)/ffx
+	cp -f src/fte/encrypting/ffx/*.h $(INSTALL_INC_DIR)/ffx
 	cp -f src/fte/*.h $(INSTALL_INC_DIR)/fte
 	cp -f src/fte/ranking/*.h $(INSTALL_INC_DIR)/fte/ranking
 
@@ -128,7 +113,6 @@ cleanlibfte:
 	$(RM) $(TARGET_LIBFTE)
 	$(RM) $(OBJ_LIBFTE)
 	$(RM) $(OBJ_TEST)
-	$(RM) $(TARGET_FFX_PERF_TEST)
 	$(RM) */*.o
 	$(RM) */*/*.o
 

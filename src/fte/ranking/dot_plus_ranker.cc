@@ -1,8 +1,6 @@
-#include <iostream>
+#include "dot_plus_ranker.h"
 
-#include "fte/ranking/dot_plus_ranker.h"
-
-#include "ffx/conversions.h"
+#include "fte/encrypting/ffx/conversions.h"
 
 namespace fte {
 

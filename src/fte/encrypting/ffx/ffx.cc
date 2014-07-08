@@ -5,7 +5,7 @@
  *   [FFX2] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/ffx/ffx-spec2.pdf
  */
 
-#include "ffx/ffx.h"
+#include "ffx.h"
 
 #include <math.h>
 

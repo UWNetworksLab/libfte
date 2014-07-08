@@ -20,7 +20,7 @@
 
 #include <string>
 
-#include "ffx/ffx.h"
+#include "fte/encrypting/ffx/ffx.h"
 #include "fte/ranking/dfa_ranker.h"
 
 namespace fte {

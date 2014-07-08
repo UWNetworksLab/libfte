@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "ffx/ffx.h"
+#include "ffx.h"
 
 TEST(FFX2, ExtractBits1) {
   // X is the 4-bit string 0b1000
