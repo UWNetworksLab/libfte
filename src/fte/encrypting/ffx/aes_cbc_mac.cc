@@ -5,7 +5,9 @@
 #include "fte/encrypting/ffx/ffx.h"
 #include "fte/encrypting/ffx/conversions.h"
 
-namespace ffx {
+namespace fte {
+   
+namespace encrypting {
 
 static aes_encrypt_ctx * ctx = NULL;
 
@@ -54,4 +56,6 @@ bool AesCbcMac(const mpz_class & plaintext,
   return true;
 }
 
-} // namespace ffx
+} // namespace encrypting
+
+} // namespace fte

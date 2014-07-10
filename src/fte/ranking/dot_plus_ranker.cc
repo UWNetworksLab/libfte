@@ -21,7 +21,7 @@ bool DotPlusRanker::Unrank(const mpz_class & rank,
   mpz_ui_pow_ui (e.get_mpz_t(), 256, num_symbols - 1);
   mpz_sub(c.get_mpz_t(), c.get_mpz_t(), e.get_mpz_t());
     
-  return ffx::MpzClassToBase256(c, num_symbols, word);
+  return fte::encrypting::MpzClassToBase256(c, num_symbols, word);
 }
 
 bool DotPlusRanker::Rank(const std::string & word,
@@ -33,7 +33,7 @@ bool DotPlusRanker::Rank(const std::string & word,
   mpz_add(rank->get_mpz_t(), rank->get_mpz_t(), e.get_mpz_t());
 
   mpz_class in_slice_rank;
-  bool retval = ffx::Base256ToMpzClass(word, word.length(), &in_slice_rank);
+  bool retval = fte::encrypting::Base256ToMpzClass(word, word.length(), &in_slice_rank);
   mpz_add(rank->get_mpz_t(), rank->get_mpz_t(), in_slice_rank.get_mpz_t());
   
   return retval;

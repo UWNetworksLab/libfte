@@ -9,7 +9,7 @@ TEST(FFX2, ExtractBits1) {
 
   // should return exactly 1000b (bits in index 0 to 3)
   mpz_class retval;
-  ffx::BitMask(X, X_len_in_bits, 0, 3, &retval);
+  fte::encrypting::BitMask(X, X_len_in_bits, 0, 3, &retval);
 
   EXPECT_EQ(retval.get_ui(), 0x8);
 }
@@ -21,8 +21,8 @@ TEST(FFX2, ExtractBits2) {
 
   // should return exactly 1000b for left/right
   mpz_class retval_left, retval_right;
-  ffx::BitMask(X, X_len_in_bits, 0, 3, &retval_left);
-  ffx::BitMask(X, X_len_in_bits, 4, 7, &retval_right);
+  fte::encrypting::BitMask(X, X_len_in_bits, 0, 3, &retval_left);
+  fte::encrypting::BitMask(X, X_len_in_bits, 4, 7, &retval_right);
 
   EXPECT_EQ(retval_left.get_ui(), 0x8);
   EXPECT_EQ(retval_right.get_ui(), 0x7);
@@ -35,7 +35,7 @@ TEST(FFX2, ExtractBits3) {
 
   // should return exactly 00001111b
   mpz_class retval;
-  ffx::BitMask(X, X_len_in_bits, 0, 7, &retval);
+  fte::encrypting::BitMask(X, X_len_in_bits, 0, 7, &retval);
 
   EXPECT_EQ(retval.get_ui(), 0x0F);
 }
@@ -46,8 +46,8 @@ TEST(FFX2, ExtractBits4) {
   uint8_t X_len_in_bits = 32;
 
   mpz_class retval_left, retval_right;
-  ffx::BitMask(X, X_len_in_bits, 0, 15, &retval_left);
-  ffx::BitMask(X, X_len_in_bits, 16, 31, &retval_right);
+  fte::encrypting::BitMask(X, X_len_in_bits, 0, 15, &retval_left);
+  fte::encrypting::BitMask(X, X_len_in_bits, 16, 31, &retval_right);
 
   EXPECT_EQ(retval_left.get_ui(), 0xFFFF);
   EXPECT_EQ(retval_right.get_ui(), 0x0000);
@@ -59,12 +59,12 @@ TEST(FFX2, MpzCharConversion1) {
   unsigned char * Y = new unsigned char[Y_len_in_bytes];
   mpz_class Z = 0;
 
-  ffx::MpzClassToBase256(X, Y_len_in_bytes, Y);
+  fte::encrypting::MpzClassToBase256(X, Y_len_in_bytes, Y);
 
   EXPECT_EQ(Y[1], 0x00);
   EXPECT_EQ(Y[0], 0x04);
 
-  ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
+  fte::encrypting::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
 
   EXPECT_EQ(X.get_str(), Z.get_str());
 
@@ -78,8 +78,8 @@ TEST(FFX2, MpzCharConversion2) {
   unsigned char * Y = new unsigned char[Y_len_in_bytes];
   mpz_class Z = 0;
 
-  ffx::MpzClassToBase256(X, Y_len_in_bytes, Y);
-  ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
+  fte::encrypting::MpzClassToBase256(X, Y_len_in_bytes, Y);
+  fte::encrypting::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
 
   EXPECT_EQ(X.get_str(), Z.get_str());
 
@@ -93,8 +93,8 @@ TEST(FFX2, MpzCharConversion3) {
   unsigned char * Y = new unsigned char[Y_len_in_bytes];
   mpz_class Z = 0;
 
-  ffx::MpzClassToBase256(X, Y_len_in_bytes, Y);
-  ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
+  fte::encrypting::MpzClassToBase256(X, Y_len_in_bytes, Y);
+  fte::encrypting::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
 
   EXPECT_EQ(X.get_str(), Z.get_str());
 
@@ -108,8 +108,8 @@ TEST(FFX2, MpzCharConversion4) {
   unsigned char * Y = new unsigned char[Y_len_in_bytes];
   mpz_class Z = 0;
 
-  ffx::MpzClassToBase256(X, Y_len_in_bytes, Y);
-  ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
+  fte::encrypting::MpzClassToBase256(X, Y_len_in_bytes, Y);
+  fte::encrypting::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
 
   EXPECT_EQ(X.get_str(), Z.get_str());
 
@@ -122,7 +122,7 @@ TEST(FFX2, MpzCharConversion5) {
   unsigned char * Y = new unsigned char[Y_len_in_bytes];
   mpz_class Z = 0;
 
-  ffx::MpzClassToBase256(X, Y_len_in_bytes, Y);
+  fte::encrypting::MpzClassToBase256(X, Y_len_in_bytes, Y);
   EXPECT_EQ((uint32_t)Y[0], 0x00);
   EXPECT_EQ((uint32_t)Y[1], 0x11);
   EXPECT_EQ((uint32_t)Y[2], 0x22);
@@ -140,7 +140,7 @@ TEST(FFX2, MpzCharConversion5) {
   EXPECT_EQ((uint32_t)Y[14], 0xEE);
   EXPECT_EQ((uint32_t)Y[15], 0xFF);
 
-  ffx::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
+  fte::encrypting::Base256ToMpzClass(Y, Y_len_in_bytes, &Z);
   EXPECT_EQ(X.get_str(), Z.get_str());
 
   delete[] Y;
@@ -151,7 +151,7 @@ TEST(FFX2, 16to256_1) {
   uint32_t sizeInBase256 = 16;
   unsigned char * Y = new unsigned char[sizeInBase256];
 
-  ffx::Base16ToBase256(X, sizeInBase256, Y);
+  fte::encrypting::Base16ToBase256(X, sizeInBase256, Y);
 
   for (uint32_t i = 0; i < sizeInBase256; ++i) {
     EXPECT_EQ(Y[i], 0);
@@ -166,7 +166,7 @@ TEST(FFX2, 16to256_2) {
   uint32_t sizeInBase256 = 16;
   unsigned char * Y = new unsigned char[sizeInBase256];
 
-  ffx::Base16ToBase256(X, sizeInBase256, Y);
+  fte::encrypting::Base16ToBase256(X, sizeInBase256, Y);
 
   for (uint32_t i = 0; i < sizeInBase256; ++i) {
     EXPECT_EQ(Y[i], 255);

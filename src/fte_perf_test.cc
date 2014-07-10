@@ -33,7 +33,7 @@ void FteExample() {
   std::clock_t start = std::clock();
   for (uint32_t i = 0; i < 1000; ++i) {
     mpz_urandomm(input_plaintext_as_int.get_mpz_t(), state, max_plaintext.get_mpz_t());
-    ffx::MpzClassToBase256(input_plaintext_as_int, 1024, &input_plaintext);
+    fte::encrypting::MpzClassToBase256(input_plaintext_as_int, 1024, &input_plaintext);
     fteObj.Encrypt(input_plaintext, &ciphertext);
   }
   duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;

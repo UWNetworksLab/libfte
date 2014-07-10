@@ -6,7 +6,7 @@ const uint32_t kFfxRadix = 2;
 
 
 TEST(FFX2, EncryptDecrypt1) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "00000000000000000000000000000000";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = 1191613746;
@@ -18,7 +18,7 @@ TEST(FFX2, EncryptDecrypt1) {
 }
 
 TEST(FFX2, EncryptDecrypt2) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "00000000000000000000000000000000";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = mpz_class("19531846666280701709");
@@ -30,7 +30,7 @@ TEST(FFX2, EncryptDecrypt2) {
 }
 
 TEST(FFX2, TestVector1) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "00000000000000000000000000000000";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = 1191613746;
@@ -43,7 +43,7 @@ TEST(FFX2, TestVector1) {
 }
 
 TEST(FFX2, TestVector2) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "00000000000000000000000000000000";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = 1546594394;
@@ -56,7 +56,7 @@ TEST(FFX2, TestVector2) {
 }
 
 TEST(FFX2, TestVector3) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = 1191613746;
@@ -69,7 +69,7 @@ TEST(FFX2, TestVector3) {
 }
 
 TEST(FFX2, TestVector4) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = 1546594394;
@@ -82,7 +82,7 @@ TEST(FFX2, TestVector4) {
 }
 
 TEST(FFX2, TestVector5) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "0000000000000000FFFFFFFFFFFFFFFF";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = 1191613746;
@@ -95,7 +95,7 @@ TEST(FFX2, TestVector5) {
 }
 
 TEST(FFX2, TestVector6) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "0000000000000000FFFFFFFFFFFFFFFF";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = 1546594394;
@@ -109,7 +109,7 @@ TEST(FFX2, TestVector6) {
 }
 
 TEST(FFX2, TestVector7) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "00000000000000000000000000000000";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = mpz_class("19531846666280701709");
@@ -122,7 +122,7 @@ TEST(FFX2, TestVector7) {
 }
 
 TEST(FFX2, TestVector8) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "00000000000000000000000000000000";
   ffxObj.SetKey(key);
   mpz_class input_plaintext =
@@ -137,7 +137,7 @@ TEST(FFX2, TestVector8) {
 }
 
 TEST(FFX2, TestVector9) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "0000000000000000FFFFFFFFFFFFFFFF";
   ffxObj.SetKey(key);
   mpz_class input_plaintext =
@@ -152,7 +152,7 @@ TEST(FFX2, TestVector9) {
 }
 
 TEST(FFX2, TestBig1) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "00000000000000000000000000000000";
   ffxObj.SetKey(key);
   mpz_class input_plaintext = 0;
@@ -165,21 +165,21 @@ TEST(FFX2, TestBig1) {
 
 TEST(FFX2Malicous, Shortkeyey1) {
 
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "00";
   bool success = ffxObj.SetKey(key);
   EXPECT_FALSE(success);
 }
 
 TEST(FFX2Malicous, Longkeyey1) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "0000000000000000000000000000000000000000";
   bool success = ffxObj.SetKey(key);
   EXPECT_FALSE(success);
 }
 
 TEST(FFX2Malicous, Badkeyey1) {
-  ffx::Ffx ffxObj = ffx::Ffx(kFfxRadix);
+  fte::encrypting::Ffx ffxObj = fte::encrypting::Ffx(kFfxRadix);
   std::string key = "0000000000000000000000000000000BADKEY";
   bool success = ffxObj.SetKey(key);
   EXPECT_FALSE(success);

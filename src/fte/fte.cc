@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "src/fte/encrypting/ffx/ffx.h"
+#include "fte/ranking/dfa_ranker.h"
 #include "fte/ranking/dot_star_ranker.h"
 #include "fte/ranking/dot_plus_ranker.h"
 
@@ -19,7 +20,7 @@ namespace fte {
 Fte::Fte() {
   plaintext_ranker_ = NULL;
   ciphertext_ranker_ = NULL;
-  ffx_ = ffx::Ffx(kFfxRadix);
+  encrypter_ = NULL;
   key_is_set_ = false;
   languages_are_set_ = false;
 }
@@ -33,6 +34,9 @@ Fte::~Fte() {
   }
   if (ciphertext_ranker_ != NULL) {
     delete ciphertext_ranker_;
+  }
+  if (encrypter_ != NULL) {
+    delete encrypter_;
   }
 }
 
@@ -80,14 +84,25 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
   }
 
   languages_are_set_ = true;
+  
+  encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
+  if (key_!="") {
+    encrypter_->SetKey(key_);
+    key_is_set_ = true;
+  }
 
   return true;
 }
 
 bool Fte::set_key(const std::string & key) {
-  bool success = ffx_.SetKey(key);
-  key_is_set_ = success;
-  return success;
+  key_ = key;
+  
+  if (encrypter_ != NULL) {
+    bool success = encrypter_->SetKey(key);
+    key_is_set_ = true;
+  }
+  
+  return true;
 }
 
 /*
@@ -112,9 +127,9 @@ bool Fte::Encrypt(const std::string & plaintext,
   mpz_class plaintext_rank;
   plaintext_ranker_->Rank(plaintext, &plaintext_rank);
   mpz_class C = 0;
-  ffx_.Encrypt(plaintext_rank, plaintext_language_capacity_in_bits_, &C);
+  encrypter_->Encrypt(plaintext_rank, plaintext_language_capacity_in_bits_, &C);
   while (C >= words_in_ciphertext_language_) {
-    ffx_.Encrypt(C, plaintext_language_capacity_in_bits_, &C);
+    encrypter_->Encrypt(C, plaintext_language_capacity_in_bits_, &C);
   }
   ciphertext_ranker_->Unrank(C, ciphertext);
 
@@ -142,9 +157,9 @@ bool Fte::Decrypt(const std::string & ciphertext,
   mpz_class C;
   ciphertext_ranker_->Rank(ciphertext, &C);
   mpz_class plaintext_rank = 0;
-  ffx_.Decrypt(C, plaintext_language_capacity_in_bits_, &plaintext_rank);
+  encrypter_->Decrypt(C, plaintext_language_capacity_in_bits_, &plaintext_rank);
   while (plaintext_rank >= words_in_plaintext_language_) {
-    ffx_.Decrypt(plaintext_rank, plaintext_language_capacity_in_bits_, &plaintext_rank);
+    encrypter_->Decrypt(plaintext_rank, plaintext_language_capacity_in_bits_, &plaintext_rank);
   }
   plaintext_ranker_->Unrank(plaintext_rank, plaintext);
 

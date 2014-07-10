@@ -5,7 +5,9 @@
 
 #include <gmpxx.h>
 
-namespace ffx {
+namespace fte {
+   
+namespace encrypting {
 
 bool AesCbcSetKey(unsigned char * key);
 
@@ -17,6 +19,8 @@ bool AesCbcMac(const mpz_class & plaintext,
                uint32_t plaintext_len_in_bits,
                mpz_class * ciphertext);
 
-} // namespace ffx
+} // namespace encrypting
+
+} // namespace fte
 
 #endif /* _FFX_AES_CBC_MAC_H */

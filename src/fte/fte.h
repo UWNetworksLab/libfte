@@ -20,8 +20,8 @@
 
 #include <string>
 
-#include "fte/encrypting/ffx/ffx.h"
-#include "fte/ranking/dfa_ranker.h"
+#include "fte/encrypting/encrypter.h"
+#include "fte/ranking/ranker.h"
 
 namespace fte {
 
@@ -33,9 +33,9 @@ class Fte {
   ranking::Ranker * plaintext_ranker_;
   ranking::Ranker * ciphertext_ranker_;
 
-  // the key and ffx encrypter
+  // the key and encrypter
   std::string key_;
-  ffx::Ffx ffx_;
+  encrypting::Encrypter * encrypter_;
 
   // the capacity of our plaintext|ciphertext language
   uint32_t plaintext_language_capacity_in_bits_;

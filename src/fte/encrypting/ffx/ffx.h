@@ -23,13 +23,17 @@
 #ifndef _FFX_FFX_H
 #define _FFX_FFX_H
 
+#include "../encrypter.h"
+
 #include <gmpxx.h>
 
 #include "conversions.h"
 #include "aes_ecb.h"
 #include "aes_cbc_mac.h"
 
-namespace ffx {
+namespace fte {
+   
+namespace encrypting {
 
 const uint32_t kDefaultFfxRadix = 2;
 const uint32_t kDefaultFfxRounds = 10;
@@ -38,7 +42,7 @@ const uint32_t kFfxKeyLengthInBytes = 16;
 const uint32_t kFfxKeyLengthInNibbles = kFfxKeyLengthInBytes * 2;
 const uint32_t kFfxKeyLengthInBits = kFfxKeyLengthInBytes * 8;
 
-class Ffx {
+class Ffx : public fte::encrypting::Encrypter {
  protected:
   bool RoundFunction(uint32_t n,
                      const mpz_class & tweak,
@@ -96,6 +100,8 @@ class Ffx {
                mpz_class * plaintext);
 };
 
-}
+} // namespace fte
+
+} // namespace encrypting
 
 #endif /* _FTE_ENCRYPTER_H */

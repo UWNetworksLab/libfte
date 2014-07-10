@@ -5,7 +5,9 @@
 
 #include <gmpxx.h>
 
-namespace ffx {
+namespace fte {
+    
+namespace encrypting {
 
 /*
  * Given a bitstring in of length in_len_in_bits, BitMask extracts
@@ -70,6 +72,8 @@ bool Base16ToBase256(const std::string & in,
                      uint32_t out_len_in_bytes,
                      unsigned char * out);
 
-} // namespace ffx
+} // namespace encrypting
+
+} // namespace fte
 
 #endif /* _FFX_CONVERSIONS_H */

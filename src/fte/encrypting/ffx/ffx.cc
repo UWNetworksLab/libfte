@@ -13,7 +13,9 @@
 
 #include "third_party/aes/aes.h"
 
-namespace ffx {
+namespace fte {
+   
+namespace encrypting {
 
 static bool ValidateKey(const std::string & key) {
   if (key.length() != kFfxKeyLengthInNibbles) {
@@ -259,4 +261,6 @@ Ffx::Ffx(const uint32_t radix)
 
 }
 
-} // namespace ffx
+} // namespace encrypting
+
+} // namespace fte

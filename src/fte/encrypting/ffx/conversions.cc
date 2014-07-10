@@ -1,6 +1,8 @@
 #include "conversions.h"
 
-namespace ffx {
+namespace fte {
+   
+namespace encrypting {
 
 bool BitMask(const mpz_class & in,
              uint32_t in_len_in_bits,
@@ -96,4 +98,6 @@ bool Base16ToBase256(const std::string & in,
   return true;
 }
 
-} // namespace ffx
+} // namespace encrypting
+
+} // namespace fte
