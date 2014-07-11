@@ -17,11 +17,11 @@ namespace ranking {
 class DotStarRanker : public Ranker {
 
  private:
-   DotPlusRanker ranker_;
-   uint32_t max_word_len_;
- 
+  DotPlusRanker ranker_;
+  uint32_t max_word_len_;
+
  public:
-     
+
   // Specify the DFA of the language and the maximum word length that we'll be (un)ranking.
   bool SetLanguage(const std::string & dfa, uint32_t max_word_length);
 

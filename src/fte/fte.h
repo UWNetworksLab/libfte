@@ -26,6 +26,7 @@
 namespace fte {
 
 const uint32_t kFfxRadix = 2;
+const uint32_t kMaxCycles = 128;
 
 class Fte {
  private:
@@ -47,6 +48,7 @@ class Fte {
 
   bool key_is_set_;
   bool languages_are_set_;
+  uint32_t max_cycles_;
 
  public:
   // default constructor

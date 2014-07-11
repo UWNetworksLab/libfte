@@ -32,7 +32,7 @@
 #include "aes_cbc_mac.h"
 
 namespace fte {
-   
+
 namespace encrypting {
 
 const uint32_t kDefaultFfxRadix = 2;

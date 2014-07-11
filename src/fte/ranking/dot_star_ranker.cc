@@ -5,7 +5,7 @@
 namespace fte {
 
 namespace ranking {
-  
+
 bool DotStarRanker::SetLanguage(const std::string & dfa, uint32_t max_word_length) {
   max_word_len_ = max_word_length;
   return ranker_.SetLanguage(dfa, max_word_length);

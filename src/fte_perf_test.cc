@@ -23,7 +23,7 @@ void FteExample() {
   std::string ciphertext, output_plaintext;
   mpz_class max_plaintext;
   mpz_class base = 2;
-  mpz_pow_ui(max_plaintext.get_mpz_t(), base.get_mpz_t(), 1023*8);
+  mpz_pow_ui(max_plaintext.get_mpz_t(), base.get_mpz_t(), 1023 * 8);
 
   gmp_randstate_t state;
   gmp_randinit_default(state);

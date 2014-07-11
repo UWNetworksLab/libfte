@@ -14,7 +14,7 @@
 #include "third_party/aes/aes.h"
 
 namespace fte {
-   
+
 namespace encrypting {
 
 static bool ValidateKey(const std::string & key) {
@@ -147,7 +147,7 @@ bool Ffx::Encrypt(uint32_t step,
     if ((i & 1) == 0) {
       m = n >> 1;
     } else {
-      m = (n+1) >> 1;
+      m = (n + 1) >> 1;
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 
@@ -197,7 +197,7 @@ bool Ffx::Decrypt(uint32_t step,
     if ((i & 1) == 0) {
       m = n >> 1;
     } else {
-      m = (n+1) >> 1;
+      m = (n + 1) >> 1;
     }
     mpz_ui_pow_ui(modulus.get_mpz_t(), 2, m);
 

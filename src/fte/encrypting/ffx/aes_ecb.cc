@@ -6,7 +6,7 @@
 #include "fte/encrypting/ffx/conversions.h"
 
 namespace fte {
-   
+
 namespace encrypting {
 
 static aes_encrypt_ctx * ctx = NULL;

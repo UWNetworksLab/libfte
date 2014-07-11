@@ -5,7 +5,7 @@
 namespace fte {
 
 namespace ranking {
-  
+
 bool DotPlusRanker::SetLanguage(const std::string & dfa, uint32_t max_word_length) {
   max_word_len_ = max_word_length;
   return true;
@@ -14,13 +14,13 @@ bool DotPlusRanker::SetLanguage(const std::string & dfa, uint32_t max_word_lengt
 bool DotPlusRanker::Unrank(const mpz_class & rank,
                            std::string * word) {
   mpz_class c = rank;
-  
+
   uint32_t num_symbols = mpz_sizeinbase(rank.get_mpz_t(), 256);
-  
+
   mpz_class e;
   mpz_ui_pow_ui (e.get_mpz_t(), 256, num_symbols - 1);
   mpz_sub(c.get_mpz_t(), c.get_mpz_t(), e.get_mpz_t());
-    
+
   return fte::encrypting::MpzClassToBase256(c, num_symbols, word);
 }
 
@@ -35,7 +35,7 @@ bool DotPlusRanker::Rank(const std::string & word,
   mpz_class in_slice_rank;
   bool retval = fte::encrypting::Base256ToMpzClass(word, word.length(), &in_slice_rank);
   mpz_add(rank->get_mpz_t(), rank->get_mpz_t(), in_slice_rank.get_mpz_t());
-  
+
   return retval;
 }
 
@@ -56,7 +56,7 @@ bool DotPlusRanker::WordsInLanguage(uint32_t min_word_length,
     mpz_ui_pow_ui (e.get_mpz_t(), 256, i);
     mpz_add(words_in_language->get_mpz_t(), words_in_language->get_mpz_t(), e.get_mpz_t());
   }
-  
+
   return true;
 }
 

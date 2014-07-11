@@ -4,11 +4,11 @@
 #include <gmpxx.h>
 
 namespace fte {
-    
+
 namespace encrypting {
 
 class Encrypter {
-public:
+ public:
   virtual bool SetKey(const std::string & key) = 0;
 
   virtual bool Encrypt(uint32_t step,

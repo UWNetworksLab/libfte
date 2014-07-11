@@ -143,7 +143,7 @@ void RabbitCryptor::keysetup(const uint8_t *key, uint32_t keysize,
 void RabbitCryptor::ivsetup(const uint8_t *iv) {
   /* Temporary variables */
   uint32_t i0, i1, i2, i3, i;
-  
+
   /* Generate four subvectors */
   i0 = U8TO32_LITTLE(iv + 0);
   i2 = U8TO32_LITTLE(iv + 4);

@@ -6,7 +6,7 @@
 #include "fte/encrypting/ffx/conversions.h"
 
 namespace fte {
-   
+
 namespace encrypting {
 
 static aes_encrypt_ctx * ctx = NULL;
@@ -22,7 +22,7 @@ bool AesCbcSetKey(unsigned char * key) {
 bool AesCbcMac(const mpz_class & plaintext,
                uint32_t plaintext_len_in_bits,
                mpz_class * ciphertext) {
- 
+
   if (ctx == NULL) {
     return false;
   }

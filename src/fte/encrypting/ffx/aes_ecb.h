@@ -6,7 +6,7 @@
 #include <gmpxx.h>
 
 namespace fte {
-   
+
 namespace encrypting {
 
 bool AesEcbSetKey(unsigned char * key);

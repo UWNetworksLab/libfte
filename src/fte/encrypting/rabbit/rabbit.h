@@ -8,24 +8,24 @@
 #include <gmpxx.h>
 
 namespace fte {
-    
+
 namespace encrypting {
-    
+
 const uint32_t kRabbitIvLengthInBytes = 16;
 const uint32_t kRabbitKeyLengthInBytes = 16;
 const uint32_t kRabbitIvLengthInNibbles = kRabbitIvLengthInBytes * 2;
 const uint32_t kRabbitKeyLengthInNibbles = kRabbitKeyLengthInBytes * 2;
 
 class Rabbit : public Encrypter {
-    
-protected:
+
+ protected:
   std::string key_;
   std::string init_vector_;
   RabbitCryptor cryptor_;
-    
-public:
+
+ public:
   Rabbit();
-    
+
   bool SetKey(const std::string & key);
 
   bool Encrypt(uint32_t step,

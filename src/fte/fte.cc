@@ -23,11 +23,12 @@ Fte::Fte() {
   encrypter_ = NULL;
   key_is_set_ = false;
   languages_are_set_ = false;
+  max_cycles_ = kMaxCycles;
 }
 
 Fte::~Fte() {
   if (plaintext_ranker_ != NULL) {
-    if (plaintext_ranker_==ciphertext_ranker_) {
+    if (plaintext_ranker_ == ciphertext_ranker_) {
       ciphertext_ranker_ = NULL;
     }
     delete plaintext_ranker_;
@@ -84,14 +85,14 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
   }
 
   languages_are_set_ = true;
-  
+
   // At this point we have a Rabbit implementation that always
-  // outperforms Ffx. We may want to enable Ffx in some cases
+  // outperforms Ffx. We may want to enable Ffx in some cases,
   // in future.
   // encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
   encrypter_ = new fte::encrypting::Rabbit();
-  
-  if (key_!="") {
+
+  if (key_ != "") {
     encrypter_->SetKey(key_);
     key_is_set_ = true;
   }
@@ -101,12 +102,12 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
 
 bool Fte::set_key(const std::string & key) {
   key_ = key;
-  
+
   if (encrypter_ != NULL) {
     bool success = encrypter_->SetKey(key);
     key_is_set_ = true;
   }
-  
+
   return true;
 }
 
@@ -132,7 +133,7 @@ bool Fte::Encrypt(const std::string & plaintext,
   mpz_class plaintext_rank;
   plaintext_ranker_->Rank(plaintext, &plaintext_rank);
   mpz_class C;
-  for (uint32_t j = 0; j < 128; ++j) {
+  for (uint32_t j = 0; j < max_cycles_; ++j) {
     C = 0;
     int32_t i = j;
     encrypter_->Encrypt(i, plaintext_rank, plaintext_language_capacity_in_bits_, &C);
@@ -140,7 +141,7 @@ bool Fte::Encrypt(const std::string & plaintext,
       --i;
       encrypter_->Encrypt(i, C, plaintext_language_capacity_in_bits_, &C);
     }
-    if (i==0 && C < words_in_ciphertext_language_) {
+    if (i == 0 && C < words_in_ciphertext_language_) {
       break;
     }
   }
@@ -175,7 +176,7 @@ bool Fte::Decrypt(const std::string & ciphertext,
   while (plaintext_rank >= words_in_plaintext_language_) {
     ++i;
     encrypter_->Decrypt(i, plaintext_rank, plaintext_language_capacity_in_bits_, &plaintext_rank);
-    
+
   }
   plaintext_ranker_->Unrank(plaintext_rank, plaintext);
 
