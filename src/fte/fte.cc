@@ -176,7 +176,6 @@ bool Fte::Decrypt(const std::string & ciphertext,
   while (plaintext_rank >= words_in_plaintext_language_) {
     ++i;
     encrypter_->Decrypt(i, plaintext_rank, plaintext_language_capacity_in_bits_, &plaintext_rank);
-
   }
   plaintext_ranker_->Unrank(plaintext_rank, plaintext);
 

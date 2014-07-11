@@ -8,19 +8,17 @@ namespace fte {
 
 namespace encrypting {
 
-Rabbit::Rabbit() {
-  uint32_t keysize = 16;
-  uint32_t ivsize = 8;
-  uint8_t key[keysize];
-  std::memset(key, 0, keysize);
-
-  cryptor_.keysetup(key, keysize, ivsize);
-}
-
 bool Rabbit::SetKey(const std::string & key) {
   if (key.size() != kRabbitKeyLengthInNibbles) {
     return false;
   }
+  
+  uint8_t key_as_uint8[kRabbitKeyLengthInBytes];
+  Base16ToBase256(key, kRabbitKeyLengthInBytes, key_as_uint8);
+
+  cryptor_.keysetup(key_as_uint8,
+                    kRabbitKeyLengthInBytes, kRabbitIvLengthInBytes);
+  
   return true;
 }
 

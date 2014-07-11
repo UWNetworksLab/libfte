@@ -11,10 +11,10 @@ namespace fte {
 
 namespace encrypting {
 
-const uint32_t kRabbitIvLengthInBytes = 16;
 const uint32_t kRabbitKeyLengthInBytes = 16;
-const uint32_t kRabbitIvLengthInNibbles = kRabbitIvLengthInBytes * 2;
+const uint32_t kRabbitIvLengthInBytes = 8;
 const uint32_t kRabbitKeyLengthInNibbles = kRabbitKeyLengthInBytes * 2;
+const uint32_t kRabbitIvLengthInNibbles = kRabbitIvLengthInBytes * 2;
 
 class Rabbit : public Encrypter {
 
@@ -24,7 +24,6 @@ class Rabbit : public Encrypter {
   RabbitCryptor cryptor_;
 
  public:
-  Rabbit();
 
   bool SetKey(const std::string & key);
 
