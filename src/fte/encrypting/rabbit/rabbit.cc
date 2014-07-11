@@ -9,7 +9,6 @@ namespace fte {
 namespace encrypting {
 
 Rabbit::Rabbit() {
-  
   uint32_t keysize = 16;
   uint32_t ivsize = 8;
   uint8_t key[keysize];
@@ -36,7 +35,7 @@ bool Rabbit::Encrypt(uint32_t step,
   //
   uint32_t ivsize = 8;
   uint8_t iv[ivsize];
-  std::memset(iv, step, ivsize);
+  MpzClassToBase256(step, ivsize, iv);
   cryptor_.ivsetup(iv);
   //
   uint8_t * output_ciphertext = new uint8_t[msglen];
@@ -44,6 +43,11 @@ bool Rabbit::Encrypt(uint32_t step,
   cryptor_.encrypt_bytes(input_plaintext, output_ciphertext, msglen);
 
   Base256ToMpzClass(output_ciphertext, msglen, ciphertext);
+  
+  mpz_class modulus;
+  mpz_class base = 2;
+  mpz_pow_ui(modulus.get_mpz_t(), base.get_mpz_t(), plaintext_len_in_bits);
+  (*ciphertext) = (*ciphertext) % modulus;
   
   delete[] input_plaintext;
   delete[] output_ciphertext;
@@ -75,13 +79,18 @@ bool Rabbit::Decrypt(uint32_t step,
   //
   uint32_t ivsize = 8;
   uint8_t iv[ivsize];
-  std::memset(iv, step, ivsize);
+  MpzClassToBase256(step, ivsize, iv);
   cryptor_.ivsetup(iv);
   //
   cryptor_.decrypt_bytes(input_ciphertext,
                          output_plaintext, msglen);
   
   Base256ToMpzClass(output_plaintext, msglen, plaintext);
+  
+  mpz_class modulus;
+  mpz_class base = 2;
+  mpz_pow_ui(modulus.get_mpz_t(), base.get_mpz_t(), ciphertext_len_in_bits);
+  (*plaintext) = (*plaintext) % modulus;
   
   delete[] input_ciphertext;
   delete[] output_plaintext;

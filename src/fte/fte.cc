@@ -8,8 +8,6 @@
 
 #include <math.h>
 
-#include <iostream>
-
 #include "src/fte/encrypting/ffx/ffx.h"
 #include "src/fte/encrypting/rabbit/rabbit.h"
 
@@ -87,7 +85,10 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
 
   languages_are_set_ = true;
   
-  //encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
+  // At this point we have a Rabbit implementation that always
+  // outperforms Ffx. We may want to enable Ffx in some cases
+  // in future.
+  // encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
   encrypter_ = new fte::encrypting::Rabbit();
   
   if (key_!="") {
@@ -130,12 +131,18 @@ bool Fte::Encrypt(const std::string & plaintext,
 
   mpz_class plaintext_rank;
   plaintext_ranker_->Rank(plaintext, &plaintext_rank);
-  mpz_class C = 0;
-  uint32_t i = 0;
-  encrypter_->Encrypt(i, plaintext_rank, plaintext_language_capacity_in_bits_, &C);
-  while (C >= words_in_ciphertext_language_) {
-    ++i;
-    encrypter_->Encrypt(i, C, plaintext_language_capacity_in_bits_, &C);
+  mpz_class C;
+  for (uint32_t j = 0; j < 128; ++j) {
+    C = 0;
+    int32_t i = j;
+    encrypter_->Encrypt(i, plaintext_rank, plaintext_language_capacity_in_bits_, &C);
+    while (i > 0 && C >= words_in_ciphertext_language_) {
+      --i;
+      encrypter_->Encrypt(i, C, plaintext_language_capacity_in_bits_, &C);
+    }
+    if (i==0 && C < words_in_ciphertext_language_) {
+      break;
+    }
   }
   ciphertext_ranker_->Unrank(C, ciphertext);
 
@@ -163,11 +170,12 @@ bool Fte::Decrypt(const std::string & ciphertext,
   mpz_class C;
   ciphertext_ranker_->Rank(ciphertext, &C);
   mpz_class plaintext_rank = 0;
-  uint32_t i = 0;
+  int32_t i = 0;
   encrypter_->Decrypt(i, C, plaintext_language_capacity_in_bits_, &plaintext_rank);
   while (plaintext_rank >= words_in_plaintext_language_) {
     ++i;
     encrypter_->Decrypt(i, plaintext_rank, plaintext_language_capacity_in_bits_, &plaintext_rank);
+    
   }
   plaintext_ranker_->Unrank(plaintext_rank, plaintext);
 
