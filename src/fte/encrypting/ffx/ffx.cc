@@ -120,7 +120,8 @@ bool Ffx::RoundFunction(uint32_t n,
   return true;
 }
 
-bool Ffx::Encrypt(const mpz_class & tweak,
+bool Ffx::Encrypt(uint32_t step,
+                  const mpz_class & tweak,
                   uint32_t tweak_len_in_bits,
                   const mpz_class & plaintext,
                   uint32_t plaintext_len_in_bits,
@@ -169,7 +170,8 @@ bool Ffx::Encrypt(const mpz_class & tweak,
   return true;
 }
 
-bool Ffx::Decrypt(const mpz_class & tweak,
+bool Ffx::Decrypt(uint32_t step,
+                  const mpz_class & tweak,
                   uint32_t tweak_len_in_bits,
                   const mpz_class & ciphertext,
                   uint32_t ciphertext_len_bits,
@@ -222,16 +224,18 @@ bool Ffx::Decrypt(const mpz_class & tweak,
 /*
  * These are the main entry points with NULL tweaks.
  */
-bool Ffx::Encrypt(const mpz_class & plaintext,
+bool Ffx::Encrypt(uint32_t step,
+                  const mpz_class & plaintext,
                   uint32_t plaintext_len_in_bits,
                   mpz_class * ciphertext) {
-  return Ffx::Encrypt(0, 0, plaintext, plaintext_len_in_bits, ciphertext);
+  return Ffx::Encrypt(step, 0, 0, plaintext, plaintext_len_in_bits, ciphertext);
 }
 
-bool Ffx::Decrypt(const mpz_class & ciphertext,
+bool Ffx::Decrypt(uint32_t step,
+                  const mpz_class & ciphertext,
                   uint32_t ciphertext_len_in_bits,
                   mpz_class * plaintext) {
-  return Ffx::Decrypt(0, 0, ciphertext, ciphertext_len_in_bits, plaintext);
+  return Ffx::Decrypt(step, 0, 0, ciphertext, ciphertext_len_in_bits, plaintext);
 }
 
 bool Ffx::SetKey(const std::string & key) {
