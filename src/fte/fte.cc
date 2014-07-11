@@ -11,6 +11,8 @@
 #include <iostream>
 
 #include "src/fte/encrypting/ffx/ffx.h"
+#include "src/fte/encrypting/rabbit/rabbit.h"
+
 #include "fte/ranking/dfa_ranker.h"
 #include "fte/ranking/dot_star_ranker.h"
 #include "fte/ranking/dot_plus_ranker.h"
@@ -85,7 +87,8 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
 
   languages_are_set_ = true;
   
-  encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
+  //encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
+  encrypter_ = new fte::encrypting::Rabbit();
   if (key_!="") {
     encrypter_->SetKey(key_);
     key_is_set_ = true;

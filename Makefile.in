@@ -37,6 +37,7 @@ TARGET_TESTJS = bin/test.js
 OBJ_TEST = src/tests.o \
            src/fte/fte_test.o \
            src/fte/encrypting/ffx/ffx_test.o \
+           src/fte/encrypting/rabbit/rabbit_test.o \
            src/fte/encrypting/ffx/aes_ecb_test.o \
            src/fte/encrypting/ffx/aes_cbc_mac_test.o \
            src/fte/encrypting/ffx/conversions_test.o \
@@ -47,6 +48,8 @@ OBJ_LIBFTE = src/fte/encrypting/ffx/conversions.o \
              src/fte/encrypting/ffx/aes_cbc_mac.o \
              src/fte/encrypting/ffx/aes_ecb.o \
              src/fte/encrypting/ffx/ffx.o \
+	     src/fte/encrypting/rabbit/rabbit.o \
+	     src/fte/encrypting/rabbit/rabbit_impl.o \
              src/fte/fte.o \
              src/fte/ranking/dot_star_ranker.o \
              src/fte/ranking/dot_plus_ranker.o \

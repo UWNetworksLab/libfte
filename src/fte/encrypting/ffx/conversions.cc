@@ -32,7 +32,7 @@ bool MpzClassToBase256(const mpz_class & in,
              in.get_mpz_t()); // const mpz_t op
 
   // If mpz_export writes less bytes than specified
-  // by out_len_in_bytes, then we need to padd out
+  // by out_len_in_bytes, then we need to pad out
   // with zeros.
   uint32_t delta = out_len_in_bytes - written_bytes;
   if (delta > 0) {
