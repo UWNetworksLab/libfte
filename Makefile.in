@@ -98,13 +98,13 @@ test: $(TARGET_TEST)
 	$(TARGET_TEST)
 
 install: $(INSTALL_LIB_DIR) $(INSTALL_INC_DIR)
-	mkdir -p $(INSTALL_INC_DIR)/ffx
 	mkdir -p $(INSTALL_INC_DIR)/fte
 	mkdir -p $(INSTALL_INC_DIR)/fte/ranking
+	mkdir -p $(INSTALL_INC_DIR)/fte/encrypting
 	cp -f $(TARGET_LIBFTE) $(INSTALL_LIB_DIR)
-	cp -f src/fte/encrypting/ffx/*.h $(INSTALL_INC_DIR)/ffx
 	cp -f src/fte/*.h $(INSTALL_INC_DIR)/fte
 	cp -f src/fte/ranking/*.h $(INSTALL_INC_DIR)/fte/ranking
+	cp -f src/fte/encrypting/*.h $(INSTALL_INC_DIR)/fte/encrypting
 
 clean: cleanlibfte cleanlibgtest cleanlibregex2dfa
 
