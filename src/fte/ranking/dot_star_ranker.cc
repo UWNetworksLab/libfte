@@ -15,7 +15,7 @@ bool DotStarRanker::Unrank(const mpz_class & rank,
                            std::string * word) {
   bool retval = false;
   if (rank == 0) {
-    (*word) = "";
+    word->clear();
     retval = true;
   } else {
     mpz_class c = rank;
@@ -28,7 +28,7 @@ bool DotStarRanker::Unrank(const mpz_class & rank,
 bool DotStarRanker::Rank(const std::string & word,
                          mpz_class * rank) {
   bool retval = false;
-  if (word == "") {
+  if (word.empty()) {
     (*rank) = 0;
     retval = true;
   } else {
