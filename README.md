@@ -61,7 +61,7 @@ void main() {
   std::string plaintext_dfa;
   std::string ciphertext_dfa;
   regex2dfa::Regex2Dfa("^.+$", &plaintext_dfa);
-  regex2dfa::Regex2Dfa("^(a|b)+$", &plaintext_dfa);
+  regex2dfa::Regex2Dfa("^(a|b)+$", &ciphertext_dfa);
   fteObj.SetLanguages(plaintext_dfa, 16,
                       ciphertext_dfa, 128);
   std::string input_plaintext = "Hello, Word!";

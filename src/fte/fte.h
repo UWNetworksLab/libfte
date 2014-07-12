@@ -20,22 +20,23 @@
 
 #include <string>
 
-#include "ffx/ffx.h"
-#include "fte/ranking/dfa_ranker.h"
+#include "fte/encrypting/encrypter.h"
+#include "fte/ranking/ranker.h"
 
 namespace fte {
 
 const uint32_t kFfxRadix = 2;
+const uint32_t kMaxCycles = 128;
 
 class Fte {
  private:
   // our rankers
-  ranking::DfaRanker plaintext_ranker_;
-  ranking::DfaRanker ciphertext_ranker_;
+  ranking::Ranker * plaintext_ranker_;
+  ranking::Ranker * ciphertext_ranker_;
 
-  // the key and ffx encrypter
+  // the key and encrypter
   std::string key_;
-  ffx::Ffx ffx_;
+  encrypting::Encrypter * encrypter_;
 
   // the capacity of our plaintext|ciphertext language
   uint32_t plaintext_language_capacity_in_bits_;
@@ -47,10 +48,12 @@ class Fte {
 
   bool key_is_set_;
   bool languages_are_set_;
+  uint32_t max_cycles_;
 
  public:
   // default constructor
   Fte();
+  ~Fte();
 
   /*
    * Specify the input key.

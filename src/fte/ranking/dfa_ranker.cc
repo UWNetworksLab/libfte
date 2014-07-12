@@ -1,6 +1,5 @@
 #include "fte/ranking/dfa_ranker.h"
 
-#include <iostream>
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>
@@ -202,14 +201,14 @@ bool DfaRanker::PopulateCachedTable() {
   for (uint32_t q = 0; q < num_states_; ++q) {
     CachedTable_.at(q).resize(fixed_slice_ + 1);
     for (uint32_t i = 0; i <= fixed_slice_; ++i) {
-      CachedTable_.at(q).at(i) = 0;
+      mpz_set_ui(CachedTable_.at(q).at(i).get_mpz_t(), 0);
     }
   }
 
   // set all _T.at(q).at(0) = 1 for all states in _final_states
   Uint32VectorT::iterator state;
   for (state = final_states_.begin(); state != final_states_.end(); ++state) {
-    CachedTable_.at(*state).at(0) = 1;
+    mpz_set_ui(CachedTable_.at(*state).at(0).get_mpz_t(), 1);
   }
 
   // walk through our table _T
@@ -219,7 +218,9 @@ bool DfaRanker::PopulateCachedTable() {
     for (uint32_t q = 0; q < delta_.size(); ++q) {
       for (uint32_t a = 0; a < delta_.at(0).size(); ++a) {
         uint32_t state = delta_.at(q).at(a);
-        CachedTable_.at(q).at(i) += CachedTable_.at(state).at(i - 1);
+        mpz_add(CachedTable_.at(q).at(i).get_mpz_t(),
+                CachedTable_.at(q).at(i).get_mpz_t(),
+                CachedTable_.at(state).at(i - 1).get_mpz_t());
       }
     }
   }
