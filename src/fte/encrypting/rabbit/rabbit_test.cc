@@ -7,7 +7,7 @@ TEST(RABBIT2, EncryptDecrypt1) {
   fte::encrypting::Rabbit rabbitObj = fte::encrypting::Rabbit();
   std::string key = "00000000000000000000000000000000";
   rabbitObj.SetKey(key);
-  mpz_class input_plaintext = 8589934591;
+  mpz_class input_plaintext = mpz_class("8589934591");
   uint32_t input_plaintext_len_in_bits = 33;
   mpz_class ciphertext, output_plaintext;
   rabbitObj.Encrypt(0, input_plaintext, input_plaintext_len_in_bits, &ciphertext);
