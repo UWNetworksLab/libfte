@@ -10,8 +10,8 @@ TEST(RABBIT2, EncryptDecrypt1) {
   mpz_class input_plaintext = mpz_class("8589934591");
   uint32_t input_plaintext_len_in_bits = 33;
   mpz_class ciphertext, output_plaintext;
-  rabbitObj.Encrypt(0, input_plaintext, input_plaintext_len_in_bits, &ciphertext);
-  rabbitObj.Decrypt(0, ciphertext, input_plaintext_len_in_bits, &output_plaintext);
+  rabbitObj.Encrypt(input_plaintext, input_plaintext_len_in_bits, &ciphertext);
+  rabbitObj.Decrypt(ciphertext, input_plaintext_len_in_bits, &output_plaintext);
   EXPECT_EQ(input_plaintext.get_str(), output_plaintext.get_str());
 }
 
@@ -22,8 +22,8 @@ TEST(RABBIT2, EncryptDecrypt2) {
   mpz_class input_plaintext = mpz_class("36893488147419103231");
   uint32_t input_plaintext_len_in_bits = 65;
   mpz_class ciphertext, output_plaintext;
-  rabbitObj.Encrypt(0, input_plaintext, input_plaintext_len_in_bits, &ciphertext);
-  rabbitObj.Decrypt(0, ciphertext, input_plaintext_len_in_bits, &output_plaintext);
+  rabbitObj.Encrypt(input_plaintext, input_plaintext_len_in_bits, &ciphertext);
+  rabbitObj.Decrypt(ciphertext, input_plaintext_len_in_bits, &output_plaintext);
   EXPECT_EQ(input_plaintext.get_str(), output_plaintext.get_str());
 }
 
@@ -34,8 +34,8 @@ TEST(RABBIT2, TestBig1) {
   mpz_class input_plaintext = 0;
   uint32_t input_plaintext_len_in_bits = 1024 * 8;
   mpz_class ciphertext, output_plaintext;
-  rabbitObj.Encrypt(0, input_plaintext, input_plaintext_len_in_bits, &ciphertext);
-  rabbitObj.Decrypt(0, ciphertext, input_plaintext_len_in_bits, &output_plaintext);
+  rabbitObj.Encrypt(input_plaintext, input_plaintext_len_in_bits, &ciphertext);
+  rabbitObj.Decrypt(ciphertext, input_plaintext_len_in_bits, &output_plaintext);
   EXPECT_EQ(input_plaintext.get_str(), output_plaintext.get_str());
 }
 

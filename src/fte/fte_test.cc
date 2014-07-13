@@ -191,6 +191,30 @@ TEST(FteNormalUsage, FpeTest6) {
 #endif
 }
 
+TEST(FteNormalUsage, FpeTest7) {
+  std::string K = "00000000000000000000000000000000";
+  fte::Fte fteObj;
+  fteObj.set_key(K);
+  std::string dfa;
+  regex2dfa::Regex2Dfa("^[a-zA-Z0-9]+$", &dfa);
+  fteObj.SetLanguages(dfa, 128,
+                      dfa, 128);
+
+  std::string input_plaintext = "HelloWorld";
+  std::string ciphertext, output_plaintext;
+  fteObj.Encrypt(input_plaintext, &ciphertext);
+  fteObj.Decrypt(ciphertext, &output_plaintext);
+
+  EXPECT_EQ(input_plaintext, output_plaintext);
+
+#if HAVE_CXX11
+  std::regex rx("^[\\x00-\\xFF]{1,2048}$");
+  bool match = regex_match(ciphertext.begin(), ciphertext.end(), rx);
+  EXPECT_EQ(true, match);
+#endif
+}
+
+
 TEST(FteNormalUsage, FteTest1) {
   std::string K = "00000000000000000000000000000000";
   fte::Fte fteObj;
