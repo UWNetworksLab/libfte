@@ -86,11 +86,23 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
 
   languages_are_set_ = true;
 
-  // At this point we have a Rabbit implementation that always
-  // outperforms Ffx. We may want to enable Ffx in some cases,
-  // in future.
-  // encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
-  encrypter_ = new fte::encrypting::Rabbit();
+  // Automatically determine which encrypter we'll use.
+  //   * rabbit is a stream cipher
+  //   * ffx is a variable input length blockcipher
+  // For rabbit, the encrypt and decrypt functions are the same. So,
+  // we can't use it for cycle walking. We only need cycle walking when the
+  // plaintext/ciphertext language are the same size. Hence, we can only
+  // use rabbit when we know we won't cyclewalk. This positively correlates with
+  // the use_rabbit condition.
+  bool ptxt_smaller = plaintext_language_capacity_in_bits_ < ciphertext_language_capacity_in_bits_;
+  bool dot_star_mode = (ciphertext_dfa == fte::ranking::DOT_STAR_DFA);
+  bool dot_plus_mode = (ciphertext_dfa == fte::ranking::DOT_PLUS_DFA);
+  bool use_rabbit = ptxt_smaller || dot_star_mode || dot_plus_mode;
+  if (use_rabbit) {
+    encrypter_ = new fte::encrypting::Rabbit();
+  } else {
+    encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
+  }
 
   if (key_ != "") {
     encrypter_->SetKey(key_);
@@ -128,23 +140,20 @@ bool Fte::Encrypt(const std::string & plaintext,
   }
 
   // ensure ciphertext is initialized to the empty string
-  (*ciphertext) = "";
+  ciphertext->clear();
 
+  // rank
   mpz_class plaintext_rank;
   plaintext_ranker_->Rank(plaintext, &plaintext_rank);
-  mpz_class C;
-  for (uint32_t j = 0; j < max_cycles_; ++j) {
-    C = 0;
-    int32_t i = j;
-    encrypter_->Encrypt(i, plaintext_rank, plaintext_language_capacity_in_bits_, &C);
-    while (i > 0 && C >= words_in_ciphertext_language_) {
-      --i;
-      encrypter_->Encrypt(i, C, plaintext_language_capacity_in_bits_, &C);
-    }
-    if (i == 0 && C < words_in_ciphertext_language_) {
-      break;
-    }
+
+  // encrypt
+  mpz_class C = 0;
+  encrypter_->Encrypt(plaintext_rank, plaintext_language_capacity_in_bits_, &C);
+  while (C >= words_in_ciphertext_language_) {
+    encrypter_->Encrypt(C, plaintext_language_capacity_in_bits_, &C);
   }
+
+  // unrank
   ciphertext_ranker_->Unrank(C, ciphertext);
 
   return true;
@@ -166,17 +175,20 @@ bool Fte::Decrypt(const std::string & ciphertext,
   }
 
   // ensure plaintext is initialized to the empty string
-  (*plaintext) = "";
+  plaintext->clear();
 
+  // rank
   mpz_class C;
   ciphertext_ranker_->Rank(ciphertext, &C);
+
+  // encrypt
   mpz_class plaintext_rank = 0;
-  int32_t i = 0;
-  encrypter_->Decrypt(i, C, plaintext_language_capacity_in_bits_, &plaintext_rank);
+  encrypter_->Decrypt(C, plaintext_language_capacity_in_bits_, &plaintext_rank);
   while (plaintext_rank >= words_in_plaintext_language_) {
-    ++i;
-    encrypter_->Decrypt(i, plaintext_rank, plaintext_language_capacity_in_bits_, &plaintext_rank);
+    encrypter_->Decrypt(plaintext_rank, plaintext_language_capacity_in_bits_, &plaintext_rank);
   }
+
+  // unrank
   plaintext_ranker_->Unrank(plaintext_rank, plaintext);
 
   return true;

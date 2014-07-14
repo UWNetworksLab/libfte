@@ -12,18 +12,17 @@ bool Rabbit::SetKey(const std::string & key) {
   if (key.size() != kRabbitKeyLengthInNibbles) {
     return false;
   }
-  
+
   uint8_t key_as_uint8[kRabbitKeyLengthInBytes];
   Base16ToBase256(key, kRabbitKeyLengthInBytes, key_as_uint8);
 
   cryptor_.keysetup(key_as_uint8,
                     kRabbitKeyLengthInBytes, kRabbitIvLengthInBytes);
-  
+
   return true;
 }
 
-bool Rabbit::Encrypt(uint32_t step,
-                     const mpz_class & plaintext,
+bool Rabbit::Encrypt(const mpz_class & plaintext,
                      uint32_t plaintext_len_in_bits,
                      mpz_class * ciphertext) {
 
@@ -33,7 +32,7 @@ bool Rabbit::Encrypt(uint32_t step,
   //
   uint32_t ivsize = 8;
   uint8_t iv[ivsize];
-  MpzClassToBase256(step, ivsize, iv);
+  MpzClassToBase256(0, ivsize, iv);
   cryptor_.ivsetup(iv);
   //
   uint8_t * output_ciphertext = new uint8_t[msglen];
@@ -53,18 +52,16 @@ bool Rabbit::Encrypt(uint32_t step,
   return true;
 }
 
-bool Rabbit::Encrypt(uint32_t step,
-                     const mpz_class & tweak,
+bool Rabbit::Encrypt(const mpz_class & tweak,
                      uint32_t tweak_len_in_bits,
                      const mpz_class & plaintext,
                      uint32_t plaintext_len_in_bits,
                      mpz_class * ciphertext) {
-  return Encrypt(step, plaintext, plaintext_len_in_bits, ciphertext);
+  return Encrypt(plaintext, plaintext_len_in_bits, ciphertext);
 }
 
 
-bool Rabbit::Decrypt(uint32_t step,
-                     const mpz_class & ciphertext,
+bool Rabbit::Decrypt(const mpz_class & ciphertext,
                      uint32_t ciphertext_len_in_bits,
                      mpz_class * plaintext) {
 
@@ -77,7 +74,7 @@ bool Rabbit::Decrypt(uint32_t step,
   //
   uint32_t ivsize = 8;
   uint8_t iv[ivsize];
-  MpzClassToBase256(step, ivsize, iv);
+  MpzClassToBase256(0, ivsize, iv);
   cryptor_.ivsetup(iv);
   //
   cryptor_.decrypt_bytes(input_ciphertext,
@@ -96,13 +93,12 @@ bool Rabbit::Decrypt(uint32_t step,
   return true;
 }
 
-bool Rabbit::Decrypt(uint32_t step,
-                     const mpz_class & tweak,
+bool Rabbit::Decrypt(const mpz_class & tweak,
                      uint32_t tweak_len_in_bits,
                      const mpz_class & ciphertext,
                      uint32_t ciphertext_len_in_bits,
                      mpz_class * plaintext) {
-  return Decrypt(step, ciphertext, ciphertext_len_in_bits, plaintext);
+  return Decrypt(ciphertext, ciphertext_len_in_bits, plaintext);
 }
 
 } // namespace encrypting
