@@ -77,13 +77,11 @@ class Ffx : public fte::encrypting::Encrypter {
    * This encrypt function preserves the length of the input plaintext. That is,
    * the resultant ciphertext will be a bitstring of length plaintext_len.
    */
-  bool Encrypt(uint32_t step,
-               const mpz_class & plaintext,
+  bool Encrypt(const mpz_class & plaintext,
                uint32_t plaintext_len_in_bits,
                mpz_class * ciphertext);
 
-  bool Encrypt(uint32_t step,
-               const mpz_class & tweak,
+  bool Encrypt(const mpz_class & tweak,
                uint32_t tweak_len_in_bits,
                const mpz_class & plaintext,
                uint32_t plaintext_len_in_bits,
@@ -93,13 +91,11 @@ class Ffx : public fte::encrypting::Encrypter {
    * Given a ciphertext output from FFX.Encrypt[radix], a ciphertext_len and
    * key, recovers the input plaintext.
    */
-  bool Decrypt(uint32_t step,
-               const mpz_class & ciphertext,
+  bool Decrypt(const mpz_class & ciphertext,
                uint32_t ciphertext_len_in_bits,
                mpz_class * plaintext);
 
-  bool Decrypt(uint32_t step,
-               const mpz_class & tweak,
+  bool Decrypt(const mpz_class & tweak,
                uint32_t tweak_len_in_bits,
                const mpz_class & ciphertext,
                uint32_t ciphertext_len_in_bits,
