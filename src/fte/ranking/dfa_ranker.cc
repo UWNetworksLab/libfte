@@ -426,7 +426,8 @@ bool DfaRanker::WordsInLanguage(uint32_t min_word_length,
 
 bool DfaRanker::InSlice(mpz_class & rank,
                         uint32_t word_length) {
-  if (word_length <= fixed_slice_) {
+  // By definition, words_in_language_inclusive_.size() == fixed_slice_
+  if (word_length >= 0 && word_length <= fixed_slice_) {
     bool in_prev = (rank < words_in_language_inclusive_.at(word_length - 1));
     bool in_current = (rank < words_in_language_inclusive_.at(word_length));
     return (!in_prev && in_current);
