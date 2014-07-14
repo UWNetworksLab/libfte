@@ -123,6 +123,11 @@ class DfaRanker : public Ranker {
   bool WordsInLanguage(uint32_t min_word_length,
                        uint32_t max_word_length,
                        mpz_class * words_in_language );
+
+  // For a given rank, determine if it is in the language slice
+  // of length word_length
+  bool InSlice(mpz_class & rank,
+               uint32_t word_length);
 };
 
 } // namespace ranking

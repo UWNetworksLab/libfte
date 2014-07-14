@@ -1,3 +1,4 @@
+#include "fte/encrypting/ffx/conversions.h"
 #include "fte/ranking/dfa_ranker.h"
 
 #include <algorithm>
@@ -88,6 +89,8 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
   num_symbols_ = symbols_.size();
   num_states_ = states_.size();
 
+  std::sort(symbols_.begin(), symbols_.end());
+
   // build up our sigma/sigma_reverse tables which enable mappings between
   // bytes/integers
   for (uint32_t j = 0; j < num_symbols_; ++j) {
@@ -151,7 +154,6 @@ bool DfaRanker::SetLanguage(const std::string & dfa,
     return false;
   }
 
-  std::sort(symbols_.begin(), symbols_.end());
   std::sort(states_.begin(), states_.end());
   std::sort(final_states_.begin(), final_states_.end());
 
@@ -234,12 +236,10 @@ bool DfaRanker::Unrank(const mpz_class & rank,
 
   // walk the dfa subtracting values from c until we have our n symbols
   mpz_class c = rank;
-  uint32_t n = 0;
+  uint32_t n = 1;
   while (true) {
-    mpz_class words_in_slice;
-    WordsInLanguage(0, n, &words_in_slice);
-    bool c_lt_words_in_slice = (mpz_cmp(c.get_mpz_t(), words_in_slice.get_mpz_t()) < 0);
-    if (c_lt_words_in_slice) {
+    if (InSlice(c, n)) {
+      mpz_class words_in_slice;
       WordsInLanguage(0, n - 1, &words_in_slice);
       mpz_sub(c.get_mpz_t(),
               c.get_mpz_t(),
@@ -258,7 +258,20 @@ bool DfaRanker::Unrank(const mpz_class & rank,
   uint32_t state = 0;
   mpz_class char_index = 0;
   for (uint32_t i = 1; i <= n; ++i) {
-    if (delta_dense_.at(q)) {
+
+    bool q_in_final_states = std::binary_search(final_states_.begin(),
+                             final_states_.end(), q);
+    bool q_is_dense = (delta_dense_.at(q) == 1);
+    bool dense_is_loop = (delta_.at(q).at(0) == q);
+    bool base256 = (symbols_.size() == 256);
+    bool final_state_loop = (q_in_final_states && q_is_dense
+                             && base256 && dense_is_loop);
+    if (final_state_loop) {
+      std::string remaining_symbols;
+      fte::encrypting::MpzClassToBase256(c, n - i + 1, &remaining_symbols);
+      (*word) += remaining_symbols;
+      break;
+    } else if (delta_dense_.at(q)) {
       // our optimized version, when _delta[q][i] is equal to n for all symbols i
       state = delta_.at(q).at(0);
 
@@ -315,6 +328,7 @@ bool DfaRanker::Rank(const std::string & word,
   uint32_t q = start_state_;
   uint32_t state = 0;
   mpz_class tmp = 0;
+  bool final_state_loop = false;
   for (uint32_t i = 1; i <= n; ++i) {
     try {
       symbol_as_int = sigma_reverse_.at(word.at(i - 1));
@@ -322,22 +336,36 @@ bool DfaRanker::Rank(const std::string & word,
       return false;
     }
 
-    if (delta_dense_.at(q)) {
+    bool q_in_final_states = std::binary_search(final_states_.begin(),
+                             final_states_.end(), q);
+    bool q_is_dense = (delta_dense_.at(q) == 1);
+    bool dense_is_loop = (delta_.at(q).at(0) == q);
+    bool base256 = (symbols_.size() == 256);
+    final_state_loop = (q_in_final_states && q_is_dense && base256 && dense_is_loop);
+    if (final_state_loop) {
+      mpz_class remaining_bits;
+      fte::encrypting::Base256ToMpzClass(word.substr(i - 1, n - i + 1),
+                                         n - i + 1, &remaining_bits);
+      mpz_add(rank->get_mpz_t(),
+              rank->get_mpz_t(),
+              remaining_bits.get_mpz_t());
+      break;
+    } else if (delta_dense_.at(q)) {
       // our optimized version, when _delta[q][i] is equal to some value state for all symbols i
       state = delta_.at(q).at(0);
 
       // Orders of magnitude faster to use mpz_mul_ui,
       // compared to:
       // tmp = _T.at(state).at(n-i) * symbol_as_int
-      mpz_mul_ui( tmp.get_mpz_t(),
-                  CachedTable_.at(state).at(n - i).get_mpz_t(),
-                  symbol_as_int );
+      mpz_mul_ui(tmp.get_mpz_t(),
+                 CachedTable_.at(state).at(n - i).get_mpz_t(),
+                 symbol_as_int);
 
       // mpz_add is faster than +=
       //retval += tmp.get_mpz_t();
-      mpz_add( (*rank).get_mpz_t(),
-               (*rank).get_mpz_t(),
-               tmp.get_mpz_t() );
+      mpz_add((*rank).get_mpz_t(),
+              (*rank).get_mpz_t(),
+              tmp.get_mpz_t());
     } else {
       // traditional goldberg-sipser ranking
       for (uint32_t j = 1; j <= symbol_as_int; ++j) {
@@ -345,9 +373,9 @@ bool DfaRanker::Rank(const std::string & word,
 
         // mpz_add is faster than +=
         //retval += _T.at(state).at(n-i);
-        mpz_add( (*rank).get_mpz_t(),
-                 (*rank).get_mpz_t(),
-                 CachedTable_.at(state).at(n - i).get_mpz_t() );
+        mpz_add((*rank).get_mpz_t(),
+                (*rank).get_mpz_t(),
+                CachedTable_.at(state).at(n - i).get_mpz_t());
       }
     }
     q = delta_.at(q).at(symbol_as_int);
@@ -362,9 +390,9 @@ bool DfaRanker::Rank(const std::string & word,
 
   mpz_class words_in_language;
   WordsInLanguage(0, n - 1, &words_in_language);
-  mpz_add( (*rank).get_mpz_t(),
-           (*rank).get_mpz_t(),
-           words_in_language.get_mpz_t() );
+  mpz_add(rank->get_mpz_t(),
+          rank->get_mpz_t(),
+          words_in_language.get_mpz_t());
 
   return true;
 }
@@ -394,6 +422,17 @@ bool DfaRanker::WordsInLanguage(uint32_t min_word_length,
   }
 
   return true;
+}
+
+bool DfaRanker::InSlice(mpz_class & rank,
+                        uint32_t word_length) {
+  if (word_length <= fixed_slice_) {
+    bool in_prev = (rank < words_in_language_inclusive_.at(word_length - 1));
+    bool in_current = (rank < words_in_language_inclusive_.at(word_length));
+    return (!in_prev && in_current);
+  } else {
+    return false;
+  }
 }
 
 bool DfaRanker::CalculateNumWordsInLanguage( uint32_t min_word_length,
