@@ -26,8 +26,7 @@
 namespace fte {
 
 const uint32_t kFfxRadix = 2;
-const uint32_t kFfxRounds = 2;
-const uint32_t kMaxCycles = 1024;
+const uint32_t kMaxCycles = 128;
 
 class Fte {
  private:

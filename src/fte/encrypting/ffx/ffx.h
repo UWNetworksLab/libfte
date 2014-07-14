@@ -53,13 +53,11 @@ class Ffx : public fte::encrypting::Encrypter {
                      mpz_class * retval);
 
   uint32_t radix_;
-  uint32_t rounds_;
   unsigned char * key_;
 
  public:
   Ffx();
   Ffx(const uint32_t radix);
-  Ffx(const uint32_t radix, const uint32_t rounds);
 
   /*
    * Returns the radix for the current FFX instantiation.

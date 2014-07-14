@@ -132,7 +132,7 @@ bool Ffx::Encrypt(uint32_t step,
   // [FFX2] pg 3., line 14-15
   uint32_t n = plaintext_len_in_bits;
   uint32_t l = plaintext_len_in_bits / 2;
-  uint32_t r = rounds_;
+  uint32_t r = kDefaultFfxRounds;
   mpz_class A, B;
   BitMask(plaintext, plaintext_len_in_bits, 0, l - 1, &A);
   BitMask(plaintext, plaintext_len_in_bits, l, n - 1, &B);
@@ -182,7 +182,7 @@ bool Ffx::Decrypt(uint32_t step,
   // [FFX2] pg 3., line 24-25
   uint32_t n = ciphertext_len_bits;
   uint32_t l = ciphertext_len_bits / 2;
-  uint32_t r = rounds_;
+  uint32_t r = kDefaultFfxRounds;
   mpz_class A, B;
   BitMask(ciphertext, ciphertext_len_bits, 0, l - 1, &A);
   BitMask(ciphertext, ciphertext_len_bits, l, n - 1, &B);
@@ -256,20 +256,13 @@ bool Ffx::SetKey(const std::string & key) {
 
 Ffx::Ffx()
   : radix_(kDefaultFfxRadix)
-  , rounds_(kDefaultFfxRounds)
   , key_(NULL) {
 }
 
 Ffx::Ffx(const uint32_t radix)
   : radix_(radix)
-  , rounds_(kDefaultFfxRounds)
   , key_(NULL) {
-}
 
-Ffx::Ffx(const uint32_t radix, const uint32_t rounds)
-  : radix_(radix)
-  , rounds_(rounds)
-  , key_(NULL) {
 }
 
 } // namespace encrypting
