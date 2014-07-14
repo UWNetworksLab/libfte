@@ -86,11 +86,23 @@ bool Fte::SetLanguages(const std::string & plaintext_dfa,
 
   languages_are_set_ = true;
 
-  // At this point we have a Rabbit implementation that always
-  // outperforms Ffx. We may want to enable Ffx in some cases,
-  // in future.
-  // encrypter_ = new fte::encrypting::Ffx(kFfxRadix);
-  encrypter_ = new fte::encrypting::Rabbit();
+  // Automatically determine which encrypter we'll use.
+  //   * rabbit is a stream cipher
+  //   * ffx is a variable input length blockcipher
+  // For rabbit, the encrypt and decrypt functions are the same. So,
+  // we can't use it for cycle walking. We only need cycle walking when the
+  // plaintext/ciphertext language are the same size. Hence, we can only
+  // use rabbit when we know we won't cyclewalk. This positively correlates with
+  // the use_rabbit condition.
+  bool ptxt_smaller = plaintext_language_capacity_in_bits_ < ciphertext_language_capacity_in_bits_;
+  bool dot_star_mode = (ciphertext_dfa == fte::ranking::DOT_STAR_DFA);
+  bool dot_plus_mode = (ciphertext_dfa == fte::ranking::DOT_PLUS_DFA);
+  bool use_rabbit = ptxt_smaller || dot_star_mode || dot_plus_mode;
+  if (use_rabbit) {
+    encrypter_ = new fte::encrypting::Rabbit();
+  } else {
+    encrypter_ = new fte::encrypting::Ffx(kFfxRadix, kFfxRounds);
+  }
 
   if (key_ != "") {
     encrypter_->SetKey(key_);
